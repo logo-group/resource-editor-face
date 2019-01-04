@@ -28,15 +28,19 @@ import org.springframework.stereotype.Service;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.localization.LocaleConstants;
 import com.lbs.re.model.ReUser;
+import com.lbs.re.routing.DataSourceRouter;
+import com.lbs.re.routing.DatabaseEnvironment;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final REUserService userService;
+	private final DataSourceRouter dataSourceRouter;
 
 	@Autowired
-	public UserDetailsServiceImpl(REUserService userService) {
+	public UserDetailsServiceImpl(REUserService userService, DataSourceRouter dataSourceRouter) {
 		this.userService = userService;
+		this.dataSourceRouter = dataSourceRouter;
 	}
 
 	@Override
@@ -46,6 +50,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (null == reUser) {
 			throw new UsernameNotFoundException("No user present with username: " + username);
 		}
+		reUser.setPreferredDb(DatabaseEnvironment.JPLATFORM);
+		dataSourceRouter.setREUser(reUser);
+
 		Locale locale = getLocale();
 		return new UserSessionAttr(reUser, locale);
 	}

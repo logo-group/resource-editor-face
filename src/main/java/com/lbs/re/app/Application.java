@@ -17,23 +17,24 @@
 
 package com.lbs.re.app;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
 import org.vaadin.spring.events.annotation.EnableEventBus;
 
 import com.lbs.re.app.security.SecurityConfig;
-import com.lbs.re.data.config.DataConfig;
 import com.lbs.re.data.service.impl.REUserServiceImpl;
+import com.lbs.re.routing.DataSourceConfiguration;
 import com.lbs.re.ui.AppUI;
 import com.lbs.re.util.DataInitializationUtil;
 
-@SpringBootApplication(scanBasePackageClasses = { AppUI.class, Application.class, REUserServiceImpl.class, SecurityConfig.class, DataConfig.class, TedamFaceDataConfig.class,
-		DataInitializationUtil.class })
+@SpringBootApplication(scanBasePackageClasses = { AppUI.class, Application.class, REUserServiceImpl.class, SecurityConfig.class, DataSourceConfiguration.class,
+		DataInitializationUtil.class }, exclude = { DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 @EnableEventBus
 public class Application extends SpringBootServletInitializer {
 
@@ -54,12 +55,5 @@ public class Application extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(Application.class);
-	}
-
-	@Bean
-	public InitializingBean initializeDatabase() {
-		return () -> {
-			dataInitUtil.loadInitialData();
-		};
 	}
 }
