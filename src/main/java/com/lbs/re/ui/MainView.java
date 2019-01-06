@@ -39,12 +39,14 @@ import com.lbs.re.ui.view.usersettings.UserSettingsView;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
+import com.vaadin.navigator.ViewLeaveAction;
 import com.vaadin.spring.access.SecuredViewAccessControl;
 import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -72,6 +74,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 
 	private REButton users;
 	private REButton userSettings;
+	private REButton logout;
 
 	@Autowired
 	public MainView(NavigationManager navigationManager, SecuredViewAccessControl viewAccessControl, REUserService userService) throws LocalizedException {
@@ -150,7 +153,12 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 
 		userSettings = new REButton("view.mainview.usersettingsview", VaadinIcons.USER);
 		userSettings.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-		menu.addComponents(userLabel, userSettings, users);
+
+		logout = new REButton("view.mainview.logout", VaadinIcons.EXIT);
+		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+		logout.addClickListener(e -> logout());
+
+		menu.addComponents(userLabel, userSettings, users, logout);
 		return menu;
 	}
 
@@ -171,5 +179,17 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		navigationButtons.forEach((viewClass, button) -> button.setStyleName("selected", viewClass == view.getClass()));
 	}
 
+	/**
+	 * Logs the user out after ensuring the currently open view has no unsaved changes.
+	 */
+	public void logout() {
+		ViewLeaveAction doLogout = () -> {
+			UI ui = getUI();
+			ui.getSession().getSession().invalidate();
+			ui.getPage().reload();
+		};
+
+		navigationManager.runAfterLeaveConfirmation(doLogout);
+	}
 
 }
