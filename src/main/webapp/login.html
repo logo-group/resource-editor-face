@@ -123,7 +123,7 @@ html, body {
 		justify-content: center;
 	}
 	#info, #form {
-		height: 500px;
+		height: 600px;
 		box-shadow: 0 2px 3px rgba(0, 0, 0, .2);
 	}
 	#info {
@@ -166,6 +166,20 @@ label {
 input[type='text'], input[type='password'] {
 	width: 100%;
 	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+	font: inherit;
+	font-size: 14px;
+	height: 37px;
+	border-radius: 4px;
+	padding: 4px 9px;
+	border: 1px solid rgba(0, 0, 0, .2);
+}
+
+select {
+	width: 100%;
 	-moz-appearance: none;
 	-ms-appearance: none;
 	-o-appearance: none;
@@ -238,8 +252,9 @@ button {
 				aria-labelledby="login-label" autofocus> <label
 				id="password-label" for="password">&#351;ifre</label> <input
 				type="password" id="password" name="password"
-				aria-labelledby="password-label"> 
-				<select name="dbParam">
+				aria-labelledby="password-label">
+				<label class="db" id="login-label" for="prefferedDb">Veritabanı</label>
+				<select name="prefferedDb">
 					<option value="jplatform">JPLATFORM</option>
 					<option value="tiger">TIGER</option>
 				</select>

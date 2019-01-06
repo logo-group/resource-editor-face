@@ -18,7 +18,6 @@
 package com.lbs.re.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,8 +27,6 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.lbs.re.app.Application;
 
@@ -73,14 +70,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		login = login.loginPage(Application.LOGIN_URL).loginProcessingUrl(Application.LOGIN_PROCESSING_URL).failureUrl(Application.LOGIN_FAILURE_URL)
 				.successHandler(successHandler);
 		login.and().logout().logoutSuccessUrl(Application.LOGOUT_URL);
-		http.addFilterBefore(webAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
-	@Bean
-	public ExUsernamePasswordAuthenticationFilter webAuthenticationFilter() throws Exception {
-		ExUsernamePasswordAuthenticationFilter auth = new ExUsernamePasswordAuthenticationFilter();
-		auth.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
-		auth.setAuthenticationManager(authenticationManagerBean());
-		return auth;
-	}
 }

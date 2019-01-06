@@ -32,34 +32,26 @@ import com.lbs.re.data.service.REUserService;
 import com.lbs.re.localization.LocaleConstants;
 import com.lbs.re.model.ReUser;
 import com.lbs.re.routing.DatabaseEnvironment;
-import com.lbs.re.routing.SessionDatabase;
+import com.lbs.re.routing.PreferredDatabaseSession;
+import com.lbs.re.util.Constants;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final REUserService userService;
 	private HttpServletRequest request;
-	private SessionDatabase db;
+	private PreferredDatabaseSession db;
 
 	@Autowired
-	public UserDetailsServiceImpl(REUserService userService, HttpServletRequest request, SessionDatabase db) {
+	public UserDetailsServiceImpl(REUserService userService, HttpServletRequest request, PreferredDatabaseSession db) {
 		this.userService = userService;
 		this.request = request;
 		this.db = db;
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
-		String dbParam = (String) request.getSession().getAttribute("dbValue");
-		if (dbParam.equalsIgnoreCase("jplatform")) {
-			// DatabaseContextHolder.set(DatabaseEnvironment.JPLATFORM);
-			db.setPreferredDb(DatabaseEnvironment.JPLATFORM);
-			// dataSourceRouter.setPreferredDatabase(DatabaseEnvironment.JPLATFORM);
-		} else if (dbParam.equalsIgnoreCase("tiger")) {
-			// DatabaseContextHolder.set(DatabaseEnvironment.TIGER);
-			db.setPreferredDb(DatabaseEnvironment.TIGER);
-			// dataSourceRouter.setPreferredDatabase(DatabaseEnvironment.TIGER);
-		}
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		setPreferredDatabase();
 		ReUser reUser;
 		reUser = userService.getUserListByUsername(username);
 		if (null == reUser) {
@@ -75,4 +67,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return locale;
 	}
 
+	private void setPreferredDatabase() throws DataAccessException {
+		// String prefferedDb = (String) request.getSession().getAttribute("prefferedDb");
+		String prefferedDb = request.getParameter("prefferedDb");
+		if (prefferedDb.equals(Constants.JPLATFORM)) {
+			db.setPreferredDb(DatabaseEnvironment.JPLATFORM);
+		} else if (prefferedDb.equals(Constants.TIGER)) {
+			db.setPreferredDb(DatabaseEnvironment.TIGER);
+		}
+	}
 }
