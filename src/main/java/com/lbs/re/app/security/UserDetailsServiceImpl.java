@@ -29,10 +29,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.lbs.re.data.service.REUserService;
+import com.lbs.re.db.routing.DatabaseEnvironment;
+import com.lbs.re.db.routing.PreferredDatabaseSession;
 import com.lbs.re.localization.LocaleConstants;
 import com.lbs.re.model.ReUser;
-import com.lbs.re.routing.DatabaseEnvironment;
-import com.lbs.re.routing.PreferredDatabaseSession;
 import com.lbs.re.util.Constants;
 
 @Service
@@ -40,13 +40,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final REUserService userService;
 	private HttpServletRequest request;
-	private PreferredDatabaseSession db;
+	private PreferredDatabaseSession userDatabaseSession;
 
 	@Autowired
-	public UserDetailsServiceImpl(REUserService userService, HttpServletRequest request, PreferredDatabaseSession db) {
+	public UserDetailsServiceImpl(REUserService userService, HttpServletRequest request, PreferredDatabaseSession userDatabaseSession) {
 		this.userService = userService;
 		this.request = request;
-		this.db = db;
+		this.userDatabaseSession = userDatabaseSession;
 	}
 
 	@Override
@@ -71,9 +71,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		// String prefferedDb = (String) request.getSession().getAttribute("prefferedDb");
 		String prefferedDb = request.getParameter("prefferedDb");
 		if (prefferedDb.equals(Constants.JPLATFORM)) {
-			db.setPreferredDb(DatabaseEnvironment.JPLATFORM);
+			userDatabaseSession.setPreferredDb(DatabaseEnvironment.JPLATFORM);
 		} else if (prefferedDb.equals(Constants.TIGER)) {
-			db.setPreferredDb(DatabaseEnvironment.TIGER);
+			userDatabaseSession.setPreferredDb(DatabaseEnvironment.TIGER);
 		}
 	}
 }

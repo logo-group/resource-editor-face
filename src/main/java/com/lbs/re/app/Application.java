@@ -29,7 +29,7 @@ import org.vaadin.spring.events.annotation.EnableEventBus;
 
 import com.lbs.re.app.security.SecurityConfig;
 import com.lbs.re.data.service.impl.REUserServiceImpl;
-import com.lbs.re.routing.DataSourceConfiguration;
+import com.lbs.re.db.routing.DataSourceConfiguration;
 import com.lbs.re.ui.AppUI;
 import com.lbs.re.util.DataInitializationUtil;
 
