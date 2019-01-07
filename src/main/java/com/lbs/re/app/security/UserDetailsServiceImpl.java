@@ -28,9 +28,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.lbs.re.app.routing.DatabaseEnvironment;
+import com.lbs.re.app.routing.PreferredDatabaseSession;
 import com.lbs.re.data.service.REUserService;
-import com.lbs.re.db.routing.DatabaseEnvironment;
-import com.lbs.re.db.routing.PreferredDatabaseSession;
 import com.lbs.re.localization.LocaleConstants;
 import com.lbs.re.model.ReUser;
 import com.lbs.re.util.Constants;
