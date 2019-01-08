@@ -1,15 +1,9 @@
 package com.lbs.re.ui.components.grid;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import com.lbs.re.ui.components.grid.GridColumns.DataType;
 import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.view.AbstractDataProvider;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateTimeField;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
 
 public class REFilterGrid<T> extends REGrid<T> {
 
@@ -101,58 +95,6 @@ public class REFilterGrid<T> extends REGrid<T> {
 			default:
 				break;
 			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private Object getColumnFilterValue(String columnId, DataType dataType) {
-		switch (dataType) {
-		case TEXT:
-		case TEXT_AREA:
-			return ((TextField) getFilter().getCellFilter(columnId).getComponent()).getValue();
-		case SELECT_ENUM:
-		case BOOLEAN:
-			return ((ComboBox<T>) getFilter().getCellFilter(columnId).getComponent()).getValue();
-		case INTEGER:
-			String startIntValue = ((TextField) ((HorizontalLayout) getFilter().getCellFilter(columnId).getComponent()).getComponent(0)).getValue();
-			String endIntValue = ((TextField) ((HorizontalLayout) getFilter().getCellFilter(columnId).getComponent()).getComponent(1)).getValue();
-			return new Object[] { startIntValue, endIntValue };
-		case DATE:
-		case DATE_TIME:
-			LocalDateTime startDateValue = ((DateTimeField) ((HorizontalLayout) getFilter().getCellFilter(columnId).getComponent()).getComponent(0)).getValue();
-			LocalDateTime endDateValue = ((DateTimeField) ((HorizontalLayout) getFilter().getCellFilter(columnId).getComponent()).getComponent(1)).getValue();
-			return new Object[] { startDateValue, endDateValue };
-		default:
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void setColumnFilterValue(ColumnFilterValue columnFilterValue) {
-		switch (columnFilterValue.getDataType()) {
-		case TEXT:
-		case TEXT_AREA:
-			((TextField) getFilter().getCellFilter(columnFilterValue.getColumnId()).getComponent()).setValue((String) columnFilterValue.getFilterValue());
-			break;
-		case SELECT_ENUM:
-		case BOOLEAN:
-			((ComboBox<T>) getFilter().getCellFilter(columnFilterValue.getColumnId()).getComponent()).setValue((T) columnFilterValue.getFilterValue());
-			break;
-		case INTEGER:
-			((TextField) ((HorizontalLayout) getFilter().getCellFilter(columnFilterValue.getColumnId()).getComponent()).getComponent(0))
-					.setValue((String) ((Object[]) columnFilterValue.getFilterValue())[0]);
-			((TextField) ((HorizontalLayout) getFilter().getCellFilter(columnFilterValue.getColumnId()).getComponent()).getComponent(1))
-					.setValue((String) ((Object[]) columnFilterValue.getFilterValue())[1]);
-			break;
-		case DATE:
-		case DATE_TIME:
-			((DateTimeField) ((HorizontalLayout) getFilter().getCellFilter(columnFilterValue.getColumnId()).getComponent()).getComponent(0))
-					.setValue((LocalDateTime) ((Object[]) columnFilterValue.getFilterValue())[0]);
-			((DateTimeField) ((HorizontalLayout) getFilter().getCellFilter(columnFilterValue.getColumnId()).getComponent()).getComponent(1))
-					.setValue((LocalDateTime) ((Object[]) columnFilterValue.getFilterValue())[1]);
-			break;
-		default:
-			break;
 		}
 	}
 

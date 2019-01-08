@@ -11,6 +11,8 @@ import com.vaadin.spring.annotation.SpringComponent;
 @PrototypeScope
 public class OwnerProductComboBox extends REComboBox<OwnerProduct> implements ResourceEditorLocalizerWrapper {
 
+	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	public OwnerProductComboBox(OwnerProductComboBoxDataProvider dataProvider) {
 		super();

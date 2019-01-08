@@ -28,7 +28,6 @@ import com.vaadin.annotations.Viewport;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
 
 @Theme("apptheme")
@@ -39,13 +38,11 @@ public class AppUI extends UI implements HasLogger {
 
     private static final long serialVersionUID = 1L;
 
-    private final SpringViewProvider viewProvider;
     private final NavigationManager navigationManager;
     private final MainView mainView;
 
     @Autowired
-    public AppUI(LocalizationManager localizationManager, SpringViewProvider viewProvider, NavigationManager navigationManager, MainView mainView) {
-        this.viewProvider = viewProvider;
+	public AppUI(LocalizationManager localizationManager, NavigationManager navigationManager, MainView mainView) {
         this.navigationManager = navigationManager;
         this.mainView = mainView;
     }

@@ -143,10 +143,6 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	 */
 	protected abstract Class<? extends View> getEditView();
 
-	private Class<? extends View> getGridView() {
-		return this.getClass();
-	}
-
 	/**
 	 * Inits base vertical layout.
 	 */

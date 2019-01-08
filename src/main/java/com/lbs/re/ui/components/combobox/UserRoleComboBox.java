@@ -11,6 +11,8 @@ import com.vaadin.spring.annotation.SpringComponent;
 @PrototypeScope
 public class UserRoleComboBox extends REComboBox<UserType> implements ResourceEditorLocalizerWrapper {
 
+	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	public UserRoleComboBox(UserRoleComboBoxDataProvider dataProvider) {
 		super();

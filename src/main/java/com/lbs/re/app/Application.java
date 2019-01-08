@@ -17,7 +17,6 @@
 
 package com.lbs.re.app;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -37,9 +36,6 @@ import com.lbs.re.util.DataInitializationUtil;
 		DataInitializationUtil.class }, exclude = { DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 @EnableEventBus
 public class Application extends SpringBootServletInitializer {
-
-	@Autowired
-	private DataInitializationUtil dataInitUtil;
 
 	public static final String APP_URL = "/";
 	public static final String LOGIN_URL = "/login.html";

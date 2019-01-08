@@ -25,7 +25,6 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lbs.re.app.security.SecurityUtils;
-import com.lbs.re.app.security.UserSessionAttr;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
@@ -68,13 +67,13 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 	private final NavigationManager navigationManager;
 	private final SecuredViewAccessControl viewAccessControl;
 	private final REUserService userService;
-	private UserSessionAttr userSession;
 
 	private REVerticalLayout content;
 	private RECssLayout menu;
 
 	private REButton users;
 	private REButton resources;
+	private REButton messages;
 	private REButton userSettings;
 	private REButton logout;
 
@@ -83,7 +82,6 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		this.navigationManager = navigationManager;
 		this.viewAccessControl = viewAccessControl;
 		this.userService = userService;
-		userSession = SecurityUtils.getCurrentUser(userService);
 	}
 
 	@PostConstruct
@@ -92,6 +90,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		attachNavigation(userSettings, UserSettingsView.class, SecurityUtils.getCurrentUser(userService).getReUser().getId());
 		attachNavigation(users, UserGridView.class, "");
 		attachNavigation(resources, ResourceGridView.class, "");
+		attachNavigation(messages, ResourceGridView.class, "");
 	}
 
 	private void initComponents() throws LocalizedException {
@@ -154,6 +153,9 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		resources = new REButton("view.mainview.resources", VaadinIcons.FOLDER);
 		resources.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 
+		messages = new REButton("view.mainview.messages", VaadinIcons.COMMENT_ELLIPSIS);
+		messages.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+
 		users = new REButton("view.mainview.usersview", VaadinIcons.USERS);
 		users.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 
@@ -164,7 +166,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		logout.addClickListener(e -> logout());
 
-		menu.addComponents(resources, userLabel, userSettings, users, logout);
+		menu.addComponents(resources, messages, userLabel, userSettings, users, logout);
 		return menu;
 	}
 

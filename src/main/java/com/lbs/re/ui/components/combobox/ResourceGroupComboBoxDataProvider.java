@@ -18,11 +18,8 @@ public class ResourceGroupComboBoxDataProvider extends AbstractDataProvider<ReRe
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final ResourceGroupService resourceGroupService;
-
 	@Autowired
 	public ResourceGroupComboBoxDataProvider(ResourceGroupService resourceGroupService) throws LocalizedException {
-		this.resourceGroupService = resourceGroupService;
 		buildListDataProvider(resourceGroupService.getAll());
 	}
 

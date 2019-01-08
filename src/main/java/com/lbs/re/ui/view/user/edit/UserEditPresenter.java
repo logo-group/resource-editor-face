@@ -47,7 +47,6 @@ public class UserEditPresenter extends AbstractEditPresenter<ReUser, REUserServi
 	 */
 	private static final long serialVersionUID = 1L;
 	private BCryptPasswordEncoder passwordEncoder;
-	private ReUser editedUser;
 
 	@Autowired
 	public UserEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, REUserService userService, BeanFactory beanFactory,
@@ -66,8 +65,6 @@ public class UserEditPresenter extends AbstractEditPresenter<ReUser, REUserServi
 			if (reUser == null) {
 				getView().showNotFound();
 				return;
-			} else {
-				editedUser = reUser;
 			}
 		}
 		refreshView(reUser, (ViewMode) parameters.get(UIParameter.MODE));
