@@ -33,6 +33,7 @@ import com.lbs.re.ui.components.basic.RELabel;
 import com.lbs.re.ui.components.layout.RECssLayout;
 import com.lbs.re.ui.components.layout.REVerticalLayout;
 import com.lbs.re.ui.navigation.NavigationManager;
+import com.lbs.re.ui.view.message.MessageGridView;
 import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.lbs.re.ui.view.user.UserGridView;
 import com.lbs.re.ui.view.usersettings.UserSettingsView;
@@ -90,7 +91,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		attachNavigation(userSettings, UserSettingsView.class, SecurityUtils.getCurrentUser(userService).getReUser().getId());
 		attachNavigation(users, UserGridView.class, "");
 		attachNavigation(resources, ResourceGridView.class, "");
-		attachNavigation(messages, ResourceGridView.class, "");
+		attachNavigation(messages, MessageGridView.class, "");
 	}
 
 	private void initComponents() throws LocalizedException {

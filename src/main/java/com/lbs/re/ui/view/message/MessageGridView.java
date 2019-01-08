@@ -1,4 +1,4 @@
-package com.lbs.re.ui.view.resource;
+package com.lbs.re.ui.view.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,8 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.lbs.re.data.service.ResourceService;
-import com.lbs.re.model.ReResource;
+import com.lbs.re.data.service.MessageService;
+import com.lbs.re.model.ReMessage;
 import com.lbs.re.ui.components.grid.GridColumns;
 import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.components.grid.REGridConfig;
@@ -20,20 +20,21 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Grid.SelectionMode;
 
 @SpringView
-public class ResourceGridView extends AbstractGridView<ReResource, ResourceService, ResourceGridPresenter, ResourceGridView> {
+public class MessageGridView
+		extends AbstractGridView<ReMessage, MessageService, MessageGridPresenter, MessageGridView> {
 
 	private static final long serialVersionUID = 1L;
 
-	private REGridConfig<ReResource> config = new REGridConfig<ReResource>() {
+	private REGridConfig<ReMessage> config = new REGridConfig<ReMessage>() {
 
 		@Override
 		public List<GridColumn> getColumnList() {
-			return GridColumns.GridColumn.RESOURCE_COLUMNS;
+			return GridColumns.GridColumn.MESSAGE_COLUMNS;
 		}
 
 		@Override
-		public Class<ReResource> getBeanType() {
-			return ReResource.class;
+		public Class<ReMessage> getBeanType() {
+			return ReMessage.class;
 		}
 
 		@Override
@@ -47,18 +48,18 @@ public class ResourceGridView extends AbstractGridView<ReResource, ResourceServi
 	};
 
 	@Autowired
-	public ResourceGridView(ResourceGridPresenter presenter) {
+	public MessageGridView(MessageGridPresenter presenter) {
 		super(presenter, SelectionMode.MULTI);
 	}
 
 	@PostConstruct
 	private void init() {
 		getPresenter().setView(this);
-		setHeader(getLocaleValue("view.resourcegrid.header"));
+		setHeader(getLocaleValue("view.messagegrid.header"));
 	}
 
 	@Override
-	protected REGridConfig<ReResource> getTedamGridConfig() {
+	protected REGridConfig<ReMessage> getTedamGridConfig() {
 		return config;
 	}
 
@@ -69,8 +70,6 @@ public class ResourceGridView extends AbstractGridView<ReResource, ResourceServi
 
 	@Override
 	public void buildGridColumnDescription() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

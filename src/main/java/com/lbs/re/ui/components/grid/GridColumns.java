@@ -21,6 +21,7 @@ public class GridColumns {
 
 		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(ID, USER_NAME, EMAIL);
 		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(ID, RESOURCE_NUMBER, RESOURCE_DESCRIPTION);
+		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(ID);
 
 		private final String columnName;
 		private final String resourceName;
