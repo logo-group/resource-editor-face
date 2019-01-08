@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
-import com.lbs.re.data.service.ProjectService;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReUser;
@@ -52,7 +51,7 @@ public class UserEditPresenter extends AbstractEditPresenter<ReUser, REUserServi
 
 	@Autowired
 	public UserEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, REUserService userService, BeanFactory beanFactory,
-			BCryptPasswordEncoder passwordEncoder, ProjectService projectService) {
+			BCryptPasswordEncoder passwordEncoder) {
 		super(viewEventBus, navigationManager, userService, ReUser.class, beanFactory, userService);
 		this.passwordEncoder = passwordEncoder;
 	}

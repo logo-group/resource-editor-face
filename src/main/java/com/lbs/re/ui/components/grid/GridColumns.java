@@ -12,10 +12,15 @@ public class GridColumns {
 	public static enum GridColumn {
 
 		ID("id", "column.id", DataType.INTEGER, null, false, false, true),
+
 		USER_NAME("username", "column.user.name", DataType.TEXT, null, true, false, true),
-		EMAIL("email", "column.user.email", DataType.TEXT, null, true, false, true); //
+		EMAIL("email", "column.user.email", DataType.TEXT, null, true, false, true), //
+
+		RESOURCE_DESCRIPTION("description", "column.resource.description", DataType.TEXT, null, true, false, true),
+		RESOURCE_NUMBER("resourcenr", "column.resource.number", DataType.INTEGER, null, true, false, true);
 
 		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(ID, USER_NAME, EMAIL);
+		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(ID, RESOURCE_NUMBER, RESOURCE_DESCRIPTION);
 
 		private final String columnName;
 		private final String resourceName;

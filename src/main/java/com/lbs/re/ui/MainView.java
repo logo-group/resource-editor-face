@@ -34,6 +34,7 @@ import com.lbs.re.ui.components.basic.RELabel;
 import com.lbs.re.ui.components.layout.RECssLayout;
 import com.lbs.re.ui.components.layout.REVerticalLayout;
 import com.lbs.re.ui.navigation.NavigationManager;
+import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.lbs.re.ui.view.user.UserGridView;
 import com.lbs.re.ui.view.usersettings.UserSettingsView;
 import com.vaadin.icons.VaadinIcons;
@@ -73,6 +74,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 	private RECssLayout menu;
 
 	private REButton users;
+	private REButton resources;
 	private REButton userSettings;
 	private REButton logout;
 
@@ -89,6 +91,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		initComponents();
 		attachNavigation(userSettings, UserSettingsView.class, SecurityUtils.getCurrentUser(userService).getReUser().getId());
 		attachNavigation(users, UserGridView.class, "");
+		attachNavigation(resources, ResourceGridView.class, "");
 	}
 
 	private void initComponents() throws LocalizedException {
@@ -148,6 +151,9 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		userLabel.setStyleName("menuLabel");
 		userLabel.setWidth("100%");
 
+		resources = new REButton("view.mainview.resources", VaadinIcons.FOLDER);
+		resources.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+
 		users = new REButton("view.mainview.usersview", VaadinIcons.USERS);
 		users.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 
@@ -158,7 +164,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		logout.addClickListener(e -> logout());
 
-		menu.addComponents(userLabel, userSettings, users, logout);
+		menu.addComponents(resources, userLabel, userSettings, users, logout);
 		return menu;
 	}
 
