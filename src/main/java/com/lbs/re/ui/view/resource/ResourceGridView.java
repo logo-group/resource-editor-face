@@ -14,6 +14,7 @@ import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.grid.RUDOperations;
 import com.lbs.re.ui.view.AbstractGridView;
+import com.lbs.re.ui.view.resource.edit.ResourceEditView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Grid.SelectionMode;
@@ -63,8 +64,7 @@ public class ResourceGridView extends AbstractGridView<ReResource, ResourceServi
 
 	@Override
 	protected Class<? extends View> getEditView() {
-		// refactor
-		return ResourceGridView.class;
+		return ResourceEditView.class;
 	}
 
 	@Override
