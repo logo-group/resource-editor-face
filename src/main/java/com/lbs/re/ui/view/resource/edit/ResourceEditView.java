@@ -52,6 +52,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResource::getResourcenr,
 				ReResource::setResourcenr);
 		super.bindFormFields(binder);
+		binder.forField(resourcegroup).bind("resourcegroup");
 	}
 
 	@Override
@@ -66,10 +67,6 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	public ResourceGroupComboBox getResourcegroup() {
 		return resourcegroup;
-	}
-
-	public void setResourcegroup(ResourceGroupComboBox resourcegroup) {
-		this.resourcegroup = resourcegroup;
 	}
 
 }
