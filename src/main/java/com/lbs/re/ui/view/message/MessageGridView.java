@@ -14,7 +14,7 @@ import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.grid.RUDOperations;
 import com.lbs.re.ui.view.AbstractGridView;
-import com.lbs.re.ui.view.resource.edit.ResourceEditView;
+import com.lbs.re.ui.view.message.edit.MessageEditView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Grid.SelectionMode;
@@ -65,7 +65,7 @@ public class MessageGridView
 
 	@Override
 	protected Class<? extends View> getEditView() {
-		return ResourceEditView.class;
+		return MessageEditView.class;
 	}
 
 	@Override
