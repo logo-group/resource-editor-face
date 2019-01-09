@@ -70,80 +70,55 @@ public class MessageEditPresenter
 		case 2:
 			standartButtons.select(MessageButton.CANCEL);
 			break;
-		case 4:
-			standartButtons.select(MessageButton.YES);
-			break;
-		case 8:
-			standartButtons.select(MessageButton.NO);
-			break;
-		case 16:
-			standartButtons.select(MessageButton.SAVE);
-			break;
 		case 3:
 			standartButtons.select(MessageButton.OK);
 			standartButtons.select(MessageButton.CANCEL);
+			break;
+		case 4:
+			standartButtons.select(MessageButton.YES);
 			break;
 		case 5:
 			standartButtons.select(MessageButton.OK);
 			standartButtons.select(MessageButton.YES);
 			break;
-		case 9:
-			standartButtons.select(MessageButton.OK);
-			standartButtons.select(MessageButton.NO);
-			break;
-		case 17:
-			standartButtons.select(MessageButton.OK);
-			standartButtons.select(MessageButton.SAVE);
-			break;
 		case 6:
 			standartButtons.select(MessageButton.CANCEL);
 			standartButtons.select(MessageButton.YES);
-			break;
-		case 10:
-			standartButtons.select(MessageButton.CANCEL);
-			standartButtons.select(MessageButton.NO);
-			break;
-		case 18:
-			standartButtons.select(MessageButton.CANCEL);
-			standartButtons.select(MessageButton.SAVE);
-			break;
-		case 12:
-			standartButtons.select(MessageButton.YES);
-			standartButtons.select(MessageButton.NO);
-			break;
-		case 20:
-			standartButtons.select(MessageButton.YES);
-			standartButtons.select(MessageButton.SAVE);
 			break;
 		case 7:
 			standartButtons.select(MessageButton.OK);
 			standartButtons.select(MessageButton.CANCEL);
 			standartButtons.select(MessageButton.YES);
 			break;
+		case 8:
+			standartButtons.select(MessageButton.NO);
+			break;
+		case 9:
+			standartButtons.select(MessageButton.OK);
+			standartButtons.select(MessageButton.NO);
+			break;
+		case 10:
+			standartButtons.select(MessageButton.CANCEL);
+			standartButtons.select(MessageButton.NO);
+			break;
 		case 11:
 			standartButtons.select(MessageButton.OK);
 			standartButtons.select(MessageButton.CANCEL);
 			standartButtons.select(MessageButton.NO);
 			break;
-		case 19:
+		case 12:
+			standartButtons.select(MessageButton.YES);
+			standartButtons.select(MessageButton.NO);
+			break;
+		case 13:
 			standartButtons.select(MessageButton.OK);
-			standartButtons.select(MessageButton.CANCEL);
-			standartButtons.select(MessageButton.SAVE);
+			standartButtons.select(MessageButton.YES);
+			standartButtons.select(MessageButton.NO);
 			break;
 		case 14:
 			standartButtons.select(MessageButton.CANCEL);
 			standartButtons.select(MessageButton.YES);
 			standartButtons.select(MessageButton.NO);
-			break;
-		case 22:
-			standartButtons.select(MessageButton.CANCEL);
-			standartButtons.select(MessageButton.YES);
-			standartButtons.select(MessageButton.SAVE);
-			break;
-		case 28:
-			standartButtons.select(MessageButton.YES);
-			standartButtons.select(MessageButton.NO);
-			standartButtons.select(MessageButton.CANCEL);
 			break;
 		case 15:
 			standartButtons.select(MessageButton.OK);
@@ -151,10 +126,71 @@ public class MessageEditPresenter
 			standartButtons.select(MessageButton.YES);
 			standartButtons.select(MessageButton.NO);
 			break;
+		case 16:
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 17:
+			standartButtons.select(MessageButton.OK);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 18:
+			standartButtons.select(MessageButton.CANCEL);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 19:
+			standartButtons.select(MessageButton.OK);
+			standartButtons.select(MessageButton.CANCEL);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 20:
+			standartButtons.select(MessageButton.YES);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 21:
+			standartButtons.select(MessageButton.OK);
+			standartButtons.select(MessageButton.YES);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 22:
+			standartButtons.select(MessageButton.CANCEL);
+			standartButtons.select(MessageButton.YES);
+			standartButtons.select(MessageButton.SAVE);
+			break;
 		case 23:
 			standartButtons.select(MessageButton.OK);
 			standartButtons.select(MessageButton.CANCEL);
 			standartButtons.select(MessageButton.YES);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 24:
+			standartButtons.select(MessageButton.NO);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 25:
+			standartButtons.select(MessageButton.OK);
+			standartButtons.select(MessageButton.NO);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 26:
+			standartButtons.select(MessageButton.CANCEL);
+			standartButtons.select(MessageButton.NO);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 27:
+			standartButtons.select(MessageButton.OK);
+			standartButtons.select(MessageButton.CANCEL);
+			standartButtons.select(MessageButton.NO);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 28:
+			standartButtons.select(MessageButton.YES);
+			standartButtons.select(MessageButton.NO);
+			standartButtons.select(MessageButton.SAVE);
+			break;
+		case 29:
+			standartButtons.select(MessageButton.OK);
+			standartButtons.select(MessageButton.YES);
+			standartButtons.select(MessageButton.NO);
 			standartButtons.select(MessageButton.SAVE);
 			break;
 		case 30:
@@ -196,7 +232,7 @@ public class MessageEditPresenter
 		MessageButtonsComboBox defaultButton = getView().getDefaultButton();
 		Optional<MessageButton> selectedItem = defaultButton.getSelectedItem();
 		int defaultButtonIntValue = 0;
-		if (selectedItem != null && selectedItem.get() != null) {
+		if (selectedItem != null && selectedItem.isPresent() && selectedItem.get() != null) {
 			defaultButtonIntValue = selectedItem.get().getButtonIntValue();
 		}
 		item.setDefButton(defaultButtonIntValue);
