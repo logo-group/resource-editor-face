@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.lbs.re.data.service.MessageService;
 import com.lbs.re.model.ReMessage;
 import com.lbs.re.ui.components.basic.RETextField;
+import com.lbs.re.ui.components.checkbox.MessageButtonsCheckboxGroup;
+import com.lbs.re.ui.components.combobox.MessageButtonsComboBox;
 import com.lbs.re.ui.components.combobox.MessageTypeComboBox;
 import com.lbs.re.ui.components.combobox.ResourceGroupComboBox;
 import com.lbs.re.ui.view.AbstractEditView;
@@ -26,12 +28,17 @@ public class MessageEditView
 	private RETextField strtag;
 	private MessageTypeComboBox mtype;
 	private ResourceGroupComboBox resgroup;
+	private MessageButtonsComboBox defaultButton;
+	private MessageButtonsCheckboxGroup standartButtons;
 
 	@Autowired
-	public MessageEditView(MessageEditPresenter presenter, MessageTypeComboBox mtype, ResourceGroupComboBox resgroup) {
+	public MessageEditView(MessageEditPresenter presenter, MessageTypeComboBox mtype, ResourceGroupComboBox resgroup,
+			MessageButtonsCheckboxGroup buttons, MessageButtonsComboBox defaultButton) {
 		super(presenter);
 		this.mtype = mtype;
 		this.resgroup = resgroup;
+		this.standartButtons = buttons;
+		this.defaultButton = defaultButton;
 	}
 
 	@PostConstruct
@@ -41,7 +48,7 @@ public class MessageEditView
 		listid = new RETextField("view.resourceedit.textfield.number", "half", true, true);
 		strtag = new RETextField("view.messageedit.textfield.tag", "half", true, true);
 		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, mtype, consId, module, resgroup, listid,
-				strtag);
+				strtag, standartButtons, defaultButton);
 		getPresenter().setView(this);
 	}
 
@@ -68,6 +75,14 @@ public class MessageEditView
 	@Override
 	public String getHeader() {
 		return getLocaleValue("view.messagedit.header");
+	}
+
+	public MessageButtonsCheckboxGroup getStandartButtons() {
+		return standartButtons;
+	}
+
+	public MessageButtonsComboBox getDefaultButton() {
+		return defaultButton;
 	}
 
 }
