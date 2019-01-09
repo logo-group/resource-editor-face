@@ -3,6 +3,8 @@ package com.lbs.re.ui.components.grid;
 import java.util.Arrays;
 import java.util.List;
 
+import com.lbs.re.util.EnumsV2;
+
 public class GridColumns {
 
 	private GridColumns() {
@@ -17,11 +19,18 @@ public class GridColumns {
 		EMAIL("email", "column.user.email", DataType.TEXT, null, true, false, true), //
 
 		RESOURCE_DESCRIPTION("description", "column.resource.description", DataType.TEXT, null, true, false, true),
-		RESOURCE_NUMBER("resourcenr", "column.resource.number", DataType.INTEGER, null, true, false, true);
+		RESOURCE_NUMBER("resourcenr", "column.resource.number", DataType.INTEGER, null, true, false, true),
+
+		MESSAGE_TYPE("mtype", "column.message.type", DataType.SELECT_ENUM, EnumsV2.MessageType.class, true, false,
+				true),
+		MESSAGE_CONSTANT("consId", "column.message.constant", DataType.TEXT, null, true, false, true),
+		MESSAGE_MODULE("module", "column.message.module", DataType.TEXT, null, true, false, true);
 
 		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(ID, USER_NAME, EMAIL);
-		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(ID, RESOURCE_NUMBER, RESOURCE_DESCRIPTION);
-		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(ID);
+		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(ID, RESOURCE_NUMBER,
+				RESOURCE_DESCRIPTION);
+		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(ID, MESSAGE_TYPE, MESSAGE_CONSTANT,
+				MESSAGE_MODULE);
 
 		private final String columnName;
 		private final String resourceName;
@@ -31,7 +40,8 @@ public class GridColumns {
 		private final boolean hidden;
 		private final boolean sortable;
 
-		private GridColumn(String columnName, String resourceName, DataType filterType, Class<?> filterBeanType, boolean editable, boolean hidden, boolean sortable) {
+		private GridColumn(String columnName, String resourceName, DataType filterType, Class<?> filterBeanType,
+				boolean editable, boolean hidden, boolean sortable) {
 			this.columnName = columnName;
 			this.resourceName = resourceName;
 			this.dataType = filterType;
