@@ -113,7 +113,6 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 			public List<RUDOperations> getRUDOperations() {
 				List<RUDOperations> operations = new ArrayList<RUDOperations>();
 				operations.add(RUDOperations.VIEW);
-				operations.add(RUDOperations.EDIT);
 				return operations;
 			}
 
@@ -128,18 +127,14 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
+
 				/*
-				 * try { // getPresenter().prepareTestStepTypeWindow(resourceItem, ViewMode.EDIT); } catch (LocalizedException e) { logError(e); }
+				 * try { getPresenter().prepareTestStepTypeWindow(resourceItem, ViewMode.EDIT); } catch (LocalizedException e) { logError(e); }
 				 */
+
 			}
 
-			@Override
-			public void onEditSelected(ReResourceitem resourceItem) {
-				getEditor().editRow(getRowIndex(resourceItem));
-			}
 		};
-
-		// gridResourceItems.getColumn(GridColumn.RESOURCE_ITEMS_COLUMNS.getColumnName()).setDescriptionGenerator(ReResourceitem::getReTurkishtr);
 		gridResourceItems.setId("ResourceItemGrid");
 	}
 
