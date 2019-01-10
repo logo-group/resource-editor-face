@@ -12,9 +12,6 @@ public class GridColumns {
 	}
 
 	public static enum GridColumn {
-
-		ID("id", "column.id", DataType.INTEGER, null, false, false, true),
-
 		USER_NAME("username", "column.user.name", DataType.TEXT, null, true, false, true),
 		EMAIL("email", "column.user.email", DataType.TEXT, null, true, false, true), //
 
@@ -47,12 +44,12 @@ public class GridColumns {
 		ITEM_RUSSIANRU("russianRu", "column.resource.item.russianru", DataType.TEXT, null, false, true, true),
 		ITEM_TURKMENTM("turkmenTm", "column.resource.item.turkmentm", DataType.TEXT, null, false, true, true);
 
-		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(ID, USER_NAME, EMAIL);
-		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(ID, RESOURCE_NUMBER, RESOURCE_DESCRIPTION);
-		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ID, ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_TURKISH,
+		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(USER_NAME, EMAIL);
+		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(RESOURCE_NUMBER, RESOURCE_DESCRIPTION);
+		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_TURKISH,
 				ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA, ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE, ITEM_GERMANDE,
 				ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
-		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(ID, MESSAGE_TYPE, MESSAGE_CONSTANT, MESSAGE_MODULE);
+		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(MESSAGE_TYPE, MESSAGE_CONSTANT, MESSAGE_MODULE);
 
 		private final String columnName;
 		private final String resourceName;

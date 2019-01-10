@@ -378,7 +378,7 @@ public class REGrid<T> extends Grid<T> implements ResourceEditorLocalizerWrapper
 			}
 
 			if (view) {
-				REButton viewButton = new REButton("general.button.view", VaadinIcons.EDIT);
+				REButton viewButton = new REButton("general.button.view", VaadinIcons.SEARCH);
 				viewButton.setId(viewButton.getId() + "." + idValue);
 				viewButton.setSizeUndefined();
 				viewButton.setCaption("");
