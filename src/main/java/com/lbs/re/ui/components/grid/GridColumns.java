@@ -21,16 +21,38 @@ public class GridColumns {
 		RESOURCE_DESCRIPTION("description", "column.resource.description", DataType.TEXT, null, true, false, true),
 		RESOURCE_NUMBER("resourcenr", "column.resource.number", DataType.INTEGER, null, true, false, true),
 
-		MESSAGE_TYPE("mtype", "column.message.type", DataType.SELECT_ENUM, EnumsV2.MessageType.class, true, false,
-				true),
+		MESSAGE_TYPE("mtype", "column.message.type", DataType.SELECT_ENUM, EnumsV2.MessageType.class, true, false, true),
 		MESSAGE_CONSTANT("consId", "column.message.constant", DataType.TEXT, null, true, false, true),
-		MESSAGE_MODULE("module", "column.message.module", DataType.TEXT, null, true, false, true);
+		MESSAGE_MODULE("module", "column.message.module", DataType.TEXT, null, true, false, true),
+
+		// RESOURCE ITEM GRID
+		ITEM_ORDER_NUMBER("ordernr", "column.resource.item.order.number", DataType.INTEGER, null, true, false, true),
+		ITEM_TAG_NUMBER("tagnr", "column.resource.item.tag.number", DataType.INTEGER, null, true, false, true),
+		ITEM_LEVEL_NUMBER("levelnr", "column.resource.item.level.number", DataType.INTEGER, null, true, false, true),
+		ITEM_PREFIX("prefixstr", "column.resource.item.prefix", DataType.TEXT, null, true, false, true),
+		ITEM_INFO("info", "column.resource.item.info", DataType.TEXT, null, true, false, true),
+		ITEM_TURKISH("turkishTr", "column.resource.item.turkish", DataType.TEXT, null, true, false, true),
+		ITEM_ENGLISH("englishUs", "column.resource.item.english", DataType.TEXT, null, true, false, true),
+		ITEM_ALBANIANKV("albanianKv", "column.resource.item.albanian", DataType.TEXT, null, true, true, true),
+		ITEM_ARABICEG("arabicEg", "column.resource.item.arabiceg", DataType.TEXT, null, true, true, true),
+		ITEM_ARABICJO("arabicJo", "column.resource.item.arabicjo", DataType.TEXT, null, true, true, true),
+		ITEM_ARABICSA("arabicSa", "column.resource.item.arabicsa", DataType.TEXT, null, true, true, true),
+		ITEM_AZERBAIJANIAZ("azerbaijaniAz", "column.resource.item.azerbaijaniaz", DataType.TEXT, null, true, true, true),
+		ITEM_BULGARIANBG("bulguarianBg", "column.resource.item.bulguarianBg", DataType.TEXT, null, true, true, true),
+		ITEM_FRENCHFR("frenchFr", "column.resource.item.frenchfr", DataType.TEXT, null, true, true, true),
+		ITEM_GEORGIANGE("georgianGe", "column.resource.item.georgiande", DataType.TEXT, null, true, true, true),
+		ITEM_GERMANDE("germanDe", "column.resource.item.germande", DataType.TEXT, null, true, true, true),
+		ITEM_PERSIANIR("persianIr", "column.resource.item.persianir", DataType.TEXT, null, true, true, true),
+		ITEM_ROMANIANRO("romanianRo", "column.resource.item.romanianro", DataType.TEXT, null, true, true, true),
+		ITEM_RUSSIANRU("russianRu", "column.resource.item.russianru", DataType.TEXT, null, true, true, true),
+		ITEM_TURKMENTM("turkmenTm", "column.resource.item.turkmentm", DataType.TEXT, null, true, true, true);
 
 		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(ID, USER_NAME, EMAIL);
-		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(ID, RESOURCE_NUMBER,
-				RESOURCE_DESCRIPTION);
-		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(ID, MESSAGE_TYPE, MESSAGE_CONSTANT,
-				MESSAGE_MODULE);
+		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(ID, RESOURCE_NUMBER, RESOURCE_DESCRIPTION);
+		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ID, ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_TURKISH,
+				ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA, ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE, ITEM_GERMANDE,
+				ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
+		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(ID, MESSAGE_TYPE, MESSAGE_CONSTANT, MESSAGE_MODULE);
 
 		private final String columnName;
 		private final String resourceName;
@@ -40,8 +62,7 @@ public class GridColumns {
 		private final boolean hidden;
 		private final boolean sortable;
 
-		private GridColumn(String columnName, String resourceName, DataType filterType, Class<?> filterBeanType,
-				boolean editable, boolean hidden, boolean sortable) {
+		private GridColumn(String columnName, String resourceName, DataType filterType, Class<?> filterBeanType, boolean editable, boolean hidden, boolean sortable) {
 			this.columnName = columnName;
 			this.resourceName = resourceName;
 			this.dataType = filterType;
