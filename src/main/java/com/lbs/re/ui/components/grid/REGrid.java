@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
-import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
 import com.lbs.re.ui.view.AbstractDataProvider;
 import com.vaadin.data.HasValue.ValueChangeEvent;
@@ -34,14 +33,6 @@ public class REGrid<T> extends Grid<T> implements ResourceEditorLocalizerWrapper
 	public void init() {
 		setBeanType(getConfig().getBeanType());
 		wrapper.init();
-	}
-
-	public void onMoveDown() {
-		wrapper.onMoveDown();
-	}
-
-	public void onMoveUp() {
-		wrapper.onMoveUp();
 	}
 
 	public void onCopyRow() {
@@ -107,17 +98,5 @@ public class REGrid<T> extends Grid<T> implements ResourceEditorLocalizerWrapper
 
 	public void refreshAll() {
 		wrapper.refreshAll();
-	}
-
-	public REButton getButtonDown() {
-		return wrapper.getButtonDown();
-	}
-
-	public REButton getButtonUp() {
-		return wrapper.getButtonUp();
-	}
-
-	public REButton getButtonCopyRows() {
-		return wrapper.getButtonCopyRows();
 	}
 }

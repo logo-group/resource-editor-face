@@ -39,41 +39,18 @@ import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalizerWrapper, DataProviderListener<T> {
 
 	private static final long serialVersionUID = 1L;
-	private static final int RECORD_COUNT_LABEL_INDEX = 3;
+	private static final int RECORD_COUNT_LABEL_INDEX = 0;
 
-	/**
-	 * Grid config instance to build grid.
-	 */
 	private REGridConfig<T> config;
-
 	private T clickedItem;
-
-	/**
-	 * Menu bar column for read and delete operations.
-	 */
 	private Column<T, REHorizontalLayout> RUDMenuColumn;
-
 	private SelectionMode selectionMode;
-
 	private AbstractTreeDataProvider<T> abstractTreeDataProvider;
-
 	private HeaderCell recordCountCell;
-
 	private String recordCountLocaleValue = getLocaleValue("general.grid.recordCount");
 
-	private REButton buttonDown = new REButton("general.grid.moveDown");
-	private REButton buttonUp = new REButton("general.grid.moveUp");
-	private REButton buttonCopyRows = new REButton("general.grid.copyRows");
-
-	/**
-	 * One parameter constructor.
-	 *
-	 * @param config
-	 *            Grid config instance to build grid.
-	 * @param dataProvider
-	 *            Data provider.
-	 */
-	public RETreeGrid(REGridConfig<T> config, AbstractTreeDataProvider<T> abstractTreeDataProvider, SelectionMode selectionMode) {
+	public RETreeGrid(REGridConfig<T> config, AbstractTreeDataProvider<T> abstractTreeDataProvider,
+			SelectionMode selectionMode) {
 		this.config = config;
 		this.selectionMode = selectionMode;
 		this.abstractTreeDataProvider = abstractTreeDataProvider;
@@ -124,95 +101,13 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		RELabel label = new RELabel();
 		label.setWidthUndefined();
 
-		buttonDown.setIcon(VaadinIcons.ARROW_DOWN);
-		buttonDown.setWidthUndefined();
-		buttonDown.setCaption("");
-		buttonDown.setEnabled(false);
-		buttonDown.addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				onMoveDown();
-			}
-		});
-
-		buttonUp.setIcon(VaadinIcons.ARROW_UP);
-		buttonUp.setWidthUndefined();
-		buttonUp.setCaption("");
-		buttonUp.setEnabled(false);
-		buttonUp.addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				onMoveUp();
-			}
-		});
-
-		buttonCopyRows.setIcon(VaadinIcons.COPY);
-		buttonCopyRows.setWidthUndefined();
-		buttonCopyRows.setCaption("");
-		buttonCopyRows.setEnabled(false);
-		buttonCopyRows.addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				onCopyRow();
-			}
-		});
-
-		layout.addComponents(buttonDown, buttonUp, buttonCopyRows, label);
+		layout.addComponents(label);
 		layout.setExpandRatio(label, 1);
 		recordCountCell.setComponent(layout);
 	}
 
-	private void onMoveDown() {
-		// if (canMove()) {
-		// T selectedItem = getSelectedItems().iterator().next();
-		// List<T> items = (List<T>) getGridDataProvider().getTreeDataProvider().getItems();
-		// int selectedIndex = items.indexOf(selectedItem);
-		// if (selectedIndex < items.size() - 1) {
-		// T movableItem = items.get(selectedIndex + 1);
-		// items.set(selectedIndex + 1, selectedItem);
-		// items.set(selectedIndex, movableItem);
-		// refreshAll();
-		// }
-		// }
-	}
-
-	private void onMoveUp() {
-		// if (canMove()) {
-		// T selectedItem = getSelectedItems().iterator().next();
-		// List<T> items = (List<T>) getGridDataProvider().getListDataProvider().getItems();
-		// int selectedIndex = items.indexOf(selectedItem);
-		// if (selectedIndex > 0) {
-		// T movableItem = items.get(selectedIndex - 1);
-		// items.set(selectedIndex - 1, selectedItem);
-		// items.set(selectedIndex, movableItem);
-		// refreshAll();
-		// }
-		// }
-	}
-
-	protected void onCopyRow() {
-
-	}
-
 	protected boolean canCopy() {
 		if (getSelectionMode() != SelectionMode.NONE && getSelectedItems().size() >= 1 && getEditor().isEnabled()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private boolean canMove() {
-		if (getSelectionMode() == SelectionMode.MULTI && getSelectedItems().size() == 1 && getEditor().isEnabled()) {
 			return true;
 		} else {
 			return false;
@@ -233,40 +128,24 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		refreshRecordCountText(size);
 	}
 
-	/**
-	 * @return the clickedItem
-	 */
 	public T getClickedItem() {
 		return clickedItem;
 	}
 
-	/**
-	 * Sets extra options for grid.
-	 */
 	private void setExtraOptions() {
 		getColumns().stream().forEach(column -> column.setHidable(true));
 		getEditor().setCancelCaption(getLocaleValue("general.button.cancel"));
 		getEditor().setSaveCaption(getLocaleValue("general.button.save"));
 	}
 
-	/**
-	 * @return the config
-	 */
 	public REGridConfig<T> getConfig() {
 		return config;
 	}
 
-	/**
-	 * @param config
-	 *            the config to set
-	 */
 	public void setConfig(REGridConfig<T> config) {
 		this.config = config;
 	}
 
-	/**
-	 * Sets column attributes.
-	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void setColumnAttributes() {
 		List<Column<T, ?>> columns = getColumns();
@@ -328,9 +207,6 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * Sets column titles.
-	 */
 	private void setColumnTitles() {
 		List<Column<T, ?>> columns = getColumns();
 		Map<String, String> columnTitles = getConfig().getColumnTitles();
@@ -341,9 +217,6 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		}
 	}
 
-	/**
-	 * Inits grid view, update, delete buttons.
-	 */
 	private void initRUDMenuColumn() {
 		List<RUDOperations> rudOperations = getConfig().getRUDOperations();
 		if (rudOperations.contains(RUDOperations.NONE)) {
@@ -420,61 +293,29 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 	}
 
 	public int getRowIndex(T item) {
-		// int index = 0;
-		// for (T currentItem : getGridDataProvider().getListDataProvider().getItems()) {
-		// if (item == currentItem) {
-		// return index;
-		// }
-		// index++;
-		// }
 		return -1;
 	}
 
-	/**
-	 * To be called when view selected.
-	 *
-	 * @param t
-	 *            Item
-	 */
 	public void onViewSelected(T item) {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * @param item
-	 * @param i
-	 */
 	public void onEditSelected(T item) {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * To be called when delete selected.
-	 *
-	 * @param t
-	 *            Item
-	 */
 	public void onDeleteSelected(T item) {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * @return Read, delete included menu column.
-	 */
 	public Column<T, REHorizontalLayout> getRUDMenuColumn() {
 		return RUDMenuColumn;
 	}
 
-	/**
-	 * @return custom button list.
-	 */
 	public List<Component> buildCustomComponentForItem(T item) {
 		return new ArrayList<>();
 	}
 
-	/**
-	 * @return the selectionMode
-	 */
 	public SelectionMode getSelectionMode() {
 		return selectionMode;
 	}
@@ -487,26 +328,14 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		this.abstractTreeDataProvider = abstractTreeDataProvider;
 		abstractTreeDataProvider.addDataProviderListener(this);
 		setDataProvider(abstractTreeDataProvider.getTreeDataProvider());
-		// refreshRecordCountText(abstractTreeDataProvider.getTreeDataProvider().getTreeData().getgetItems().size());
 		if (getRUDMenuColumn() != null) {
 			getRUDMenuColumn().setSortable(false);
 		}
-		getConfig().getColumnList().stream().forEach(gridColumn -> getColumn(gridColumn.getColumnName()).setSortable(gridColumn.isSortable()));
+		getConfig().getColumnList().stream()
+				.forEach(gridColumn -> getColumn(gridColumn.getColumnName()).setSortable(gridColumn.isSortable()));
 	}
 
 	public void refreshAll() {
 		getDataProvider().refreshAll();
-	}
-
-	public REButton getButtonDown() {
-		return buttonDown;
-	}
-
-	public REButton getButtonUp() {
-		return buttonUp;
-	}
-
-	public REButton getButtonCopyRows() {
-		return buttonCopyRows;
 	}
 }

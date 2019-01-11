@@ -328,9 +328,6 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 		if (REGrid.getEditor().isOpen()) {
 			REGrid.getEditor().cancel();
 		}
-		REGrid.getButtonDown().setEnabled(isEnabled);
-		REGrid.getButtonUp().setEnabled(isEnabled);
-		REGrid.getButtonCopyRows().setEnabled(isEnabled);
 		REGrid.getEditor().setEnabled(isEnabled);
 	}
 

@@ -34,7 +34,7 @@ import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 
 public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 
-	private static final int RECORD_COUNT_LABEL_INDEX = 3;
+	private static final int RECORD_COUNT_LABEL_INDEX = 0;
 
 	private REGrid<T> grid;
 	private REGridConfig<T> config;
@@ -42,9 +42,6 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 	private AbstractDataProvider<T> gridDataProvider;
 	private Column<T, REHorizontalLayout> RUDMenuColumn;
 	private HeaderCell recordCountCell;
-	private REButton buttonDown = new REButton("general.grid.moveDown");
-	private REButton buttonUp = new REButton("general.grid.moveUp");
-	private REButton buttonCopyRows = new REButton("general.grid.copyRows");
 	private String recordCountLocaleValue = getLocaleValue("general.grid.recordCount");
 	private T clickedItem;
 
@@ -97,18 +94,6 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 
 	public HeaderCell getRecordCountCell() {
 		return recordCountCell;
-	}
-
-	public REButton getButtonDown() {
-		return buttonDown;
-	}
-
-	public REButton getButtonUp() {
-		return buttonUp;
-	}
-
-	public REButton getButtonCopyRows() {
-		return buttonCopyRows;
 	}
 
 	public String getRecordCountLocaleValue() {
@@ -290,88 +275,9 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 		RELabel label = new RELabel();
 		label.setWidthUndefined();
 
-		getButtonDown().setIcon(VaadinIcons.ARROW_DOWN);
-		getButtonDown().setWidthUndefined();
-		getButtonDown().setCaption("");
-		getButtonDown().setEnabled(false);
-		getButtonDown().addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				getGrid().onMoveDown();
-			}
-		});
-
-		getButtonUp().setIcon(VaadinIcons.ARROW_UP);
-		getButtonUp().setWidthUndefined();
-		getButtonUp().setCaption("");
-		getButtonUp().setEnabled(false);
-		getButtonUp().addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				getGrid().onMoveUp();
-			}
-		});
-
-		getButtonCopyRows().setIcon(VaadinIcons.COPY);
-		getButtonCopyRows().setWidthUndefined();
-		getButtonCopyRows().setCaption("");
-		getButtonCopyRows().setEnabled(false);
-		getButtonCopyRows().addClickListener(new ClickListener() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				getGrid().onCopyRow();
-			}
-		});
-
-		layout.addComponents(getButtonDown(), getButtonUp(), getButtonCopyRows(), label);
+		layout.addComponents(label);
 		layout.setExpandRatio(label, 1);
 		getRecordCountCell().setComponent(layout);
-	}
-
-	public void onMoveDown() {
-		if (canMove()) {
-			T selectedItem = getGrid().getSelectedItems().iterator().next();
-			List<T> items = (List<T>) getGridDataProvider().getListDataProvider().getItems();
-			int selectedIndex = items.indexOf(selectedItem);
-			if (selectedIndex < items.size() - 1) {
-				T movableItem = items.get(selectedIndex + 1);
-				items.set(selectedIndex + 1, selectedItem);
-				items.set(selectedIndex, movableItem);
-				refreshAll();
-			}
-		}
-	}
-
-	public void onMoveUp() {
-		if (canMove()) {
-			T selectedItem = getGrid().getSelectedItems().iterator().next();
-			List<T> items = (List<T>) getGridDataProvider().getListDataProvider().getItems();
-			int selectedIndex = items.indexOf(selectedItem);
-			if (selectedIndex > 0) {
-				T movableItem = items.get(selectedIndex - 1);
-				items.set(selectedIndex - 1, selectedItem);
-				items.set(selectedIndex, movableItem);
-				refreshAll();
-			}
-		}
-	}
-
-	private boolean canMove() {
-		if (getSelectionMode() == SelectionMode.MULTI && getGrid().getSelectedItems().size() == 1
-				&& getGrid().getEditor().isEnabled()) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	public boolean canCopy() {
