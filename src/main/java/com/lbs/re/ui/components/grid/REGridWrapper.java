@@ -24,9 +24,11 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.components.grid.HeaderCell;
 import com.vaadin.ui.components.grid.HeaderRow;
+import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.renderers.LocalDateRenderer;
 import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 
@@ -414,6 +416,27 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 			index++;
 		}
 		return -1;
+	}
+
+	public void init() {
+		getGrid().setStyleName("small");
+		getGrid().setSizeFull();
+		getConfig().getColumnList().stream().forEach(gridColumn -> getGrid().addColumn(gridColumn.getColumnName()));
+		setColumnTitles();
+		setColumnAttributes();
+		setExtraOptions();
+		initRUDMenuColumn();
+		getGrid().setSelectionMode(getSelectionMode());
+		initHeaderCell();
+		getGrid().addItemClickListener(new ItemClickListener<T>() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void itemClick(ItemClick<T> event) {
+				setClickedItem(event.getItem());
+			}
+		});
 	}
 
 }
