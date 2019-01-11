@@ -22,11 +22,13 @@ import com.lbs.re.ui.components.grid.GridColumns;
 import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.components.grid.REGridConfig;
+import com.lbs.re.ui.components.grid.RETreeGrid;
 import com.lbs.re.ui.components.grid.RUDOperations;
 import com.lbs.re.ui.util.RENotification;
 import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.AbstractDataProvider;
 import com.lbs.re.ui.view.AbstractEditView;
+import com.lbs.re.ui.view.AbstractTreeDataProvider;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
@@ -34,6 +36,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TreeGrid;
 
 @SpringView
 public class ResourceEditView extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
@@ -50,6 +53,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	private REButton btnRemoveRow;
 
 	private REFilterGrid<ReResourceitem> gridResourceItems;
+	private RETreeGrid<ReResourceitem> treeGridResourceItems;
 
 	@Autowired
 	public ResourceEditView(ResourceEditPresenter presenter, ResourceGroupComboBox resourcegroup, ResourceCaseComboBox resourcecase, ResourceTypeComboBox resourcetype,
@@ -66,8 +70,9 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		resourceNr = new RETextField("view.resourceedit.textfield.number", "full", true, true);
 		description = new RETextArea("view.resourceedit.textfield.description", "full", true, true);
 		buildResourceItemsGrid();
+		buildResourceItemsTreeGrid();
 		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, description, resourcegroup, resourcecase, resourcetype, ownerproduct);
-		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(), gridResourceItems);
+		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(), gridResourceItems, treeGridResourceItems);
 		getPresenter().setView(this);
 	}
 
@@ -96,6 +101,10 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		gridResourceItems.initFilters();
 	}
 
+	protected void organizeResourceItemsTreeGrid(AbstractTreeDataProvider<ReResourceitem> dataProvider) {
+		treeGridResourceItems.setTreeGridDataProvider(dataProvider);
+	}
+
 	private REGridConfig<ReResourceitem> buildResourceItemsGridConfig() {
 		REGridConfig<ReResourceitem> resourceItemsGridConfig = new REGridConfig<ReResourceitem>() {
 
@@ -118,6 +127,35 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 		};
 		return resourceItemsGridConfig;
+	}
+
+	private REGridConfig<ReResourceitem> buildResourceItemsTreeGridConfig() {
+		REGridConfig<ReResourceitem> resourceItemsGridConfig = new REGridConfig<ReResourceitem>() {
+
+			@Override
+			public List<GridColumn> getColumnList() {
+				return GridColumns.GridColumn.RESOURCE_ITEMS_COLUMNS;
+			}
+
+			@Override
+			public Class<ReResourceitem> getBeanType() {
+				return ReResourceitem.class;
+			}
+
+			@Override
+			public List<RUDOperations> getRUDOperations() {
+				List<RUDOperations> operations = new ArrayList<RUDOperations>();
+				operations.add(RUDOperations.VIEW);
+				return operations;
+			}
+
+		};
+		return resourceItemsGridConfig;
+	}
+
+	protected void buildResourceItemsTreeGrid() {
+		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(), SelectionMode.SINGLE);
+		treeGridResourceItems.setId("ResourceItemTreeGrid");
 	}
 
 	protected void buildResourceItemsGrid() {
@@ -166,6 +204,10 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	public REFilterGrid<ReResourceitem> getGridResourceItems() {
 		return gridResourceItems;
+	}
+
+	public TreeGrid<ReResourceitem> getTreeGridResourceItems() {
+		return treeGridResourceItems;
 	}
 
 }

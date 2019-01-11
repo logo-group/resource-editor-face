@@ -23,6 +23,8 @@ import com.lbs.re.ui.util.Enums.ViewMode;
 import com.lbs.re.ui.view.AbstractEditPresenter;
 import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemDataProvider;
+import com.lbs.re.ui.view.resourceitem.edit.ResourceItemTreeDataProvider;
+import com.vaadin.data.provider.TreeDataProvider;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
@@ -37,12 +39,14 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	private static final long serialVersionUID = 1L;
 
 	private ResourceItemDataProvider resourceItemDataProvider;
+	private ResourceItemTreeDataProvider resourceItemTreeDataProvider;
 
 	@Autowired
 	public ResourceEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceService resourceService, REUserService userService,
-			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider) {
+			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider, ResourceItemTreeDataProvider resourceItemTreeDataProvider) {
 		super(viewEventBus, navigationManager, resourceService, ReResource.class, beanFactory, userService);
 		this.resourceItemDataProvider = resourceItemDataProvider;
+		this.resourceItemTreeDataProvider = resourceItemTreeDataProvider;
 	}
 
 	@Override
@@ -59,7 +63,9 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		}
 		refreshView(resource, (ViewMode) parameters.get(UIParameter.MODE));
 		resourceItemDataProvider.provideResourceItems(resource);
+		resourceItemTreeDataProvider.provideResourceItems(resource);
 		getView().organizeResourceItemsGrid(resourceItemDataProvider);
+		getView().organizeResourceItemsTreeGrid(resourceItemTreeDataProvider);
 		getTitleForHeader();
 		organizeComponents(getView().getAccordion(), (ViewMode) parameters.get(UIParameter.MODE) == ViewMode.VIEW);
 	}
