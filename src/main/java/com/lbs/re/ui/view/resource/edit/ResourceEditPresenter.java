@@ -99,6 +99,10 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		setHasChanges(true);
 	}
 
+	public void prepareResourceItemWindow(ReResourceitem item, ViewMode mode) throws LocalizedException {
+
+	}
+
 	@Override
 	protected Class<? extends View> getGridView() {
 		return ResourceGridView.class;

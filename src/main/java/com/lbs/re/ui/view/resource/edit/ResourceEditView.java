@@ -24,6 +24,7 @@ import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.grid.RETreeGrid;
 import com.lbs.re.ui.components.grid.RUDOperations;
+import com.lbs.re.ui.util.Enums.ViewMode;
 import com.lbs.re.ui.util.RENotification;
 import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.AbstractDataProvider;
@@ -165,11 +166,11 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
-
-				/*
-				 * try { getPresenter().prepareTestStepTypeWindow(resourceItem, ViewMode.EDIT); } catch (LocalizedException e) { logError(e); }
-				 */
-
+				try {
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT);
+				} catch (LocalizedException e) {
+					logError(e);
+				}
 			}
 
 		};
