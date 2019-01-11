@@ -24,6 +24,7 @@ import com.lbs.re.ui.view.AbstractEditPresenter;
 import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemDataProvider;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemTreeDataProvider;
+import com.lbs.re.util.EnumsV2.ResourceGroupType;
 import com.vaadin.data.provider.TreeDataProvider;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -43,7 +44,8 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 
 	@Autowired
 	public ResourceEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceService resourceService, REUserService userService,
-			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider, ResourceItemTreeDataProvider resourceItemTreeDataProvider) {
+			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider,
+			ResourceItemTreeDataProvider resourceItemTreeDataProvider) {
 		super(viewEventBus, navigationManager, resourceService, ReResource.class, beanFactory, userService);
 		this.resourceItemDataProvider = resourceItemDataProvider;
 		this.resourceItemTreeDataProvider = resourceItemTreeDataProvider;
@@ -64,6 +66,13 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		refreshView(resource, (ViewMode) parameters.get(UIParameter.MODE));
 		resourceItemDataProvider.provideResourceItems(resource);
 		resourceItemTreeDataProvider.provideResourceItems(resource);
+		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+			getView().getGridResourceItems().setVisible(true);
+			getView().getTreeGridResourceItems().setVisible(false);
+		} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+			getView().getGridResourceItems().setVisible(false);
+			getView().getTreeGridResourceItems().setVisible(true);
+		}
 		getView().organizeResourceItemsGrid(resourceItemDataProvider);
 		getView().organizeResourceItemsTreeGrid(resourceItemTreeDataProvider);
 		getTitleForHeader();

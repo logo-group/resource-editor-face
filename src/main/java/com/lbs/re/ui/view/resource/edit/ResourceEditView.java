@@ -30,6 +30,7 @@ import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.AbstractDataProvider;
 import com.lbs.re.ui.view.AbstractEditView;
 import com.lbs.re.ui.view.AbstractTreeDataProvider;
+import com.lbs.re.util.EnumsV2.ResourceGroupType;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
@@ -71,7 +72,6 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		resourceNr = new RETextField("view.resourceedit.textfield.number", "full", true, true);
 		description = new RETextArea("view.resourceedit.textfield.description", "full", true, true);
 		buildResourceItemsGrid();
-		buildResourceItemsTreeGrid();
 		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, description, resourcegroup, resourcecase, resourcetype, ownerproduct);
 		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(), gridResourceItems, treeGridResourceItems);
 		getPresenter().setView(this);
@@ -154,11 +154,6 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		return resourceItemsGridConfig;
 	}
 
-	protected void buildResourceItemsTreeGrid() {
-		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(), SelectionMode.SINGLE);
-		treeGridResourceItems.setId("ResourceItemTreeGrid");
-	}
-
 	protected void buildResourceItemsGrid() {
 		gridResourceItems = new REFilterGrid<ReResourceitem>(buildResourceItemsGridConfig(), SelectionMode.MULTI) {
 
@@ -175,6 +170,9 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 		};
 		gridResourceItems.setId("ResourceItemGrid");
+
+		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(), SelectionMode.SINGLE);
+		treeGridResourceItems.setId("ResourceItemTreeGrid");
 	}
 
 	@Override
