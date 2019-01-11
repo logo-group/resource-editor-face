@@ -13,7 +13,6 @@ import com.vaadin.data.provider.DataProviderListener;
 import com.vaadin.data.provider.Query;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.components.grid.ItemClickListener;
 
 public class REGrid<T> extends Grid<T> implements ResourceEditorLocalizerWrapper, DataProviderListener<T> {
 
@@ -33,25 +32,8 @@ public class REGrid<T> extends Grid<T> implements ResourceEditorLocalizerWrapper
 	}
 
 	public void init() {
-		setStyleName("small");
-		setSizeFull();
 		setBeanType(getConfig().getBeanType());
-		getConfig().getColumnList().stream().forEach(gridColumn -> addColumn(gridColumn.getColumnName()));
-		wrapper.setColumnTitles();
-		wrapper.setColumnAttributes();
-		wrapper.setExtraOptions();
-		wrapper.initRUDMenuColumn();
-		setSelectionMode(wrapper.getSelectionMode());
-		wrapper.initHeaderCell();
-		addItemClickListener(new ItemClickListener<T>() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void itemClick(ItemClick<T> event) {
-				wrapper.setClickedItem(event.getItem());
-			}
-		});
+		wrapper.init();
 	}
 
 	public void onMoveDown() {
