@@ -25,7 +25,6 @@ import com.lbs.re.data.service.language.RussianruService;
 import com.lbs.re.data.service.language.TurkishtrService;
 import com.lbs.re.data.service.language.TurkmentmService;
 import com.lbs.re.exception.localized.LocalizedException;
-import com.lbs.re.model.ReLanguageTable;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.model.languages.ReAlbaniankv;
@@ -43,13 +42,14 @@ import com.lbs.re.model.languages.ReRomanianro;
 import com.lbs.re.model.languages.ReRussianru;
 import com.lbs.re.model.languages.ReTurkishtr;
 import com.lbs.re.model.languages.ReTurkmentm;
-import com.lbs.re.ui.view.AbstractTreeDataProvider;
 import com.vaadin.data.TreeData;
+import com.vaadin.data.provider.DataProviderListener;
+import com.vaadin.data.provider.TreeDataProvider;
 import com.vaadin.spring.annotation.SpringComponent;
 
 @SpringComponent
 @PrototypeScope
-public class ResourceItemTreeDataProvider<T extends ReLanguageTable> extends AbstractTreeDataProvider<ReResourceitem> {
+public class ResourceItemTreeDataProvider {
 
 	private static final long serialVersionUID = 1L;
 	private BeanFactory beanFactory;
@@ -94,6 +94,32 @@ public class ResourceItemTreeDataProvider<T extends ReLanguageTable> extends Abs
 		this.turkmenService = turkmenService;
 	}
 
+	/**
+	 * Data provider.
+	 */
+	private TreeDataProvider<ReResourceitem> dataProvider;
+
+	/**
+	 * Gets data provider.
+	 *
+	 * @return Data provider.
+	 */
+	public TreeDataProvider<ReResourceitem> getTreeDataProvider() {
+		return dataProvider;
+	}
+
+	public void buildTreeDataProvider(TreeData<ReResourceitem> items) {
+		dataProvider = new TreeDataProvider<ReResourceitem>(items);
+	}
+
+	public void removeItem(ReResourceitem item) {
+		dataProvider.getTreeData().removeItem(item);
+	}
+
+	public void addDataProviderListener(DataProviderListener listener) {
+		dataProvider.addDataProviderListener(listener);
+	}
+
 	public void provideResourceItems(ReResource resource) throws LocalizedException {
 		List<ReResourceitem> resourceItemList = resource.getReResourceitem();
 		List<ReResourceitem> preparedData = loadTransientData(resourceItemList, resource.getId());
@@ -102,7 +128,30 @@ public class ResourceItemTreeDataProvider<T extends ReLanguageTable> extends Abs
 		buildTreeDataProvider(buildTreeData(preparedData));
 	}
 
-	private void orderList(List<ReResourceitem> preparedData) {
+	public void refreshDataProviderByItems(List<ReResourceitem> resourceItemList) {
+		getTreeDataProvider().getTreeData().clear();
+
+		orderList(resourceItemList);
+
+		Stack<ReResourceitem> stack = new Stack<>();
+		for (int i = 0; i < resourceItemList.size(); i++) {
+			ReResourceitem reResourceitem = resourceItemList.get(i);
+			if (reResourceitem.getLevelnr() == 0) {
+				getTreeDataProvider().getTreeData().addItem(null, reResourceitem);
+				stack.clear();
+				stack.push(reResourceitem);
+				continue;
+			}
+			while (reResourceitem.getLevelnr() <= stack.peek().getLevelnr()) {
+				stack.pop();
+			}
+			getTreeDataProvider().getTreeData().addItem(stack.peek(), reResourceitem);
+			stack.push(reResourceitem);
+		}
+		getTreeDataProvider().refreshAll();
+	}
+
+	public void orderList(List<ReResourceitem> preparedData) {
 		Collections.sort(preparedData, new Comparator<ReResourceitem>() {
 
 			@Override
@@ -118,10 +167,9 @@ public class ResourceItemTreeDataProvider<T extends ReLanguageTable> extends Abs
 				return c;
 			}
 		});
-
 	}
 
-	private TreeData<ReResourceitem> buildTreeData(List<ReResourceitem> orderedList) {
+	public TreeData<ReResourceitem> buildTreeData(List<ReResourceitem> orderedList) {
 		Stack<ReResourceitem> stack = new Stack<>();
 		TreeData<ReResourceitem> treeData = new TreeData<ReResourceitem>();
 		for (int i = 0; i < orderedList.size(); i++) {
@@ -241,7 +289,7 @@ public class ResourceItemTreeDataProvider<T extends ReLanguageTable> extends Abs
 			for (ReResourceitem item : resourceItemList) {
 				for (ReBulgarianbg bulgarian : bulgarianBgList) {
 					if (bulgarian.getResourceitemref().equals(item.getId())) {
-						item.setBulguarianBg(bulgarian.getResourcestr());
+						item.setBulgarianBg(bulgarian.getResourcestr());
 						break;
 					}
 				}

@@ -18,11 +18,9 @@
 package com.lbs.re.ui.view;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import com.vaadin.data.TreeData;
 import com.vaadin.data.provider.DataProviderListener;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.data.provider.TreeDataProvider;
 
 /**
@@ -51,8 +49,13 @@ public class AbstractTreeDataProvider<T> implements Serializable {
 	}
 
 	public void refreshDataProviderByItems(TreeData<T> items) {
-		dataProvider.getTreeData().clear();
-		dataProvider = new TreeDataProvider<>(items);
+
+		// dataProvider.getTreeData().
+		//
+		// dataProvider.getTreeData().clear();
+		// dataProvider.getTreeData().addItems(null, items));
+		// dataProvider.getTreeData().add
+		// dataProvider.refreshAll();
 	}
 
 	public void removeItem(T item) {

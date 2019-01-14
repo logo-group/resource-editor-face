@@ -20,32 +20,32 @@ package com.lbs.re.ui.view;
 import java.io.Serializable;
 
 import com.lbs.re.exception.localized.LocalizedException;
-import com.lbs.re.ui.components.CustomExceptions.TedamWindowNotAbleToOpenException;
+import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
 import com.lbs.re.ui.components.basic.REWindow;
 
 public abstract class AbstractWindowPresenter<W extends REWindow> implements Serializable {
 
-    /**
-     * long serialVersionUID
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * long serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private transient W window;
+	private transient W window;
 
 	public AbstractWindowPresenter() {
-    }
+	}
 
-    public void init(W window) {
-        this.window = window;
-    }
+	public void init(W window) {
+		this.window = window;
+	}
 
-    /**
-     * @return the window
-     */
-    public W getWindow() {
-        return window;
-    }
+	/**
+	 * @return the window
+	 */
+	public W getWindow() {
+		return window;
+	}
 
-    public abstract void fillComponentsWithValues() throws TedamWindowNotAbleToOpenException, LocalizedException;
+	public abstract void fillComponentsWithValues() throws REWindowNotAbleToOpenException, LocalizedException;
 
 }

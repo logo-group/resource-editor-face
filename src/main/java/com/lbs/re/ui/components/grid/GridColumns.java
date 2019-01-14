@@ -39,7 +39,7 @@ public class GridColumns {
 		ITEM_ARABICSA("arabicSa", "column.resource.item.arabicsa", DataType.TEXT, null, false, true, true),
 		ITEM_AZERBAIJANIAZ("azerbaijaniAz", "column.resource.item.azerbaijaniaz", DataType.TEXT, null, false, true,
 				true),
-		ITEM_BULGARIANBG("bulguarianBg", "column.resource.item.bulguarianbg", DataType.TEXT, null, false, true, true),
+		ITEM_BULGARIANBG("bulgarianBg", "column.resource.item.bulgarianbg", DataType.TEXT, null, false, true, true),
 		ITEM_FRENCHFR("frenchFr", "column.resource.item.frenchfr", DataType.TEXT, null, false, true, true),
 		ITEM_GEORGIANGE("georgianGe", "column.resource.item.georgiande", DataType.TEXT, null, false, true, true),
 		ITEM_GERMANDE("germanDe", "column.resource.item.germande", DataType.TEXT, null, false, true, true),

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.vaadin.gridutil.renderer.BooleanRenderer;
 
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
@@ -20,11 +21,10 @@ import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.components.combobox.REComboBox;
 import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
-import com.lbs.re.ui.view.AbstractTreeDataProvider;
+import com.lbs.re.ui.view.resourceitem.edit.ResourceItemTreeDataProvider;
 import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.data.provider.DataChangeEvent;
 import com.vaadin.data.provider.DataProviderListener;
-import com.vaadin.data.provider.Query;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -36,21 +36,20 @@ import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.renderers.LocalDateRenderer;
 import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 
-public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalizerWrapper, DataProviderListener<T> {
+public class RETreeGrid<ReResourceitem> extends TreeGrid implements ResourceEditorLocalizerWrapper, DataProviderListener<T> {
 
 	private static final long serialVersionUID = 1L;
 	private static final int RECORD_COUNT_LABEL_INDEX = 0;
 
-	private REGridConfig<T> config;
-	private T clickedItem;
+	private REGridConfig<ReResourceitem> config;
+	private ReResourceitem clickedItem;
 	private Column<T, REHorizontalLayout> RUDMenuColumn;
 	private SelectionMode selectionMode;
-	private AbstractTreeDataProvider<T> abstractTreeDataProvider;
+	private ResourceItemTreeDataProvider abstractTreeDataProvider;
 	private HeaderCell recordCountCell;
 	private String recordCountLocaleValue = getLocaleValue("general.grid.recordCount");
 
-	public RETreeGrid(REGridConfig<T> config, AbstractTreeDataProvider<T> abstractTreeDataProvider,
-			SelectionMode selectionMode) {
+	public RETreeGrid(REGridConfig<ReResourceitem> config, ResourceItemTreeDataProvider abstractTreeDataProvider, SelectionMode selectionMode) {
 		this.config = config;
 		this.selectionMode = selectionMode;
 		this.abstractTreeDataProvider = abstractTreeDataProvider;
@@ -58,7 +57,7 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		setTreeGridDataProvider(abstractTreeDataProvider);
 	}
 
-	public RETreeGrid(REGridConfig<T> config, SelectionMode selectionMode) {
+	public RETreeGrid(REGridConfig<ReResourceitem> config, SelectionMode selectionMode) {
 		this.config = config;
 		this.selectionMode = selectionMode;
 		this.abstractTreeDataProvider = null;
@@ -77,12 +76,12 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		initRUDMenuColumn();
 		setSelectionMode(selectionMode);
 		initHeaderCell();
-		addItemClickListener(new ItemClickListener<T>() {
+		addItemClickListener(new ItemClickListener<ReResourceitem>() {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void itemClick(ItemClick<T> event) {
+			public void itemClick(ItemClick<ReResourceitem> event) {
 				clickedItem = event.getItem();
 			}
 		});
@@ -91,7 +90,7 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 	@SuppressWarnings("unchecked")
 	private void initHeaderCell() {
 		HeaderRow headerRow = prependHeaderRow();
-		Column<T, ?>[] columnArray = getColumns().toArray(new Column[getColumns().size()]);
+		Column<T, ?>[] columnArray = (Column<T, ?>[]) getColumns().toArray(new Column[getColumns().size()]);
 		if (columnArray.length > 1) {
 			recordCountCell = headerRow.join(columnArray);
 		} else {
@@ -124,25 +123,25 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 
 	@Override
 	public void onDataChange(DataChangeEvent<T> event) {
-		int size = getDataProvider().size(new Query<>());
-		refreshRecordCountText(size);
+		// int size = getDataProvider().size(new Query<>());
+		// refreshRecordCountText(size);
 	}
 
-	public T getClickedItem() {
+	public ReResourceitem getClickedItem() {
 		return clickedItem;
 	}
 
 	private void setExtraOptions() {
-		getColumns().stream().forEach(column -> column.setHidable(true));
+		getColumns().stream().forEach(column -> ((Column<T, REHorizontalLayout>) column).setHidable(true));
 		getEditor().setCancelCaption(getLocaleValue("general.button.cancel"));
 		getEditor().setSaveCaption(getLocaleValue("general.button.save"));
 	}
 
-	public REGridConfig<T> getConfig() {
+	public REGridConfig<ReResourceitem> getConfig() {
 		return config;
 	}
 
-	public void setConfig(REGridConfig<T> config) {
+	public void setConfig(REGridConfig<ReResourceitem> config) {
 		this.config = config;
 	}
 
@@ -262,7 +261,7 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						onViewSelected(param);
+						onViewSelected((ReResourceitem) param);
 					}
 				});
 				layout.addComponent(viewButton);
@@ -292,19 +291,19 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		getRUDMenuColumn().setCaption(getLocaleValue("general.grid.operations"));
 	}
 
-	public int getRowIndex(T item) {
+	public int getRowIndex(Object item) {
 		return -1;
 	}
 
-	public void onViewSelected(T item) {
+	public void onViewSelected(ReResourceitem item) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void onEditSelected(T item) {
+	public void onEditSelected(Object item) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void onDeleteSelected(T item) {
+	public void onDeleteSelected(Object item) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -312,7 +311,7 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		return RUDMenuColumn;
 	}
 
-	public List<Component> buildCustomComponentForItem(T item) {
+	public List<Component> buildCustomComponentForItem(Object param) {
 		return new ArrayList<>();
 	}
 
@@ -320,19 +319,18 @@ public class RETreeGrid<T> extends TreeGrid<T> implements ResourceEditorLocalize
 		return selectionMode;
 	}
 
-	public AbstractTreeDataProvider<T> getGridDataProvider() {
+	public ResourceItemTreeDataProvider getGridDataProvider() {
 		return abstractTreeDataProvider;
 	}
 
-	public void setTreeGridDataProvider(AbstractTreeDataProvider<T> abstractTreeDataProvider) {
+	public void setTreeGridDataProvider(ResourceItemTreeDataProvider abstractTreeDataProvider) {
 		this.abstractTreeDataProvider = abstractTreeDataProvider;
 		abstractTreeDataProvider.addDataProviderListener(this);
 		setDataProvider(abstractTreeDataProvider.getTreeDataProvider());
 		if (getRUDMenuColumn() != null) {
 			getRUDMenuColumn().setSortable(false);
 		}
-		getConfig().getColumnList().stream()
-				.forEach(gridColumn -> getColumn(gridColumn.getColumnName()).setSortable(gridColumn.isSortable()));
+		getConfig().getColumnList().stream().forEach(gridColumn -> getColumn(gridColumn.getColumnName()).setSortable(gridColumn.isSortable()));
 	}
 
 	public void refreshAll() {

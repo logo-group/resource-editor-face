@@ -22,15 +22,15 @@ package com.lbs.re.ui.components;
  */
 public abstract class CustomExceptions {
 
-    private CustomExceptions() {
-    }
+	private CustomExceptions() {
+	}
 
-    public static final class TedamWindowNotAbleToOpenException extends Exception {
+	public static final class REWindowNotAbleToOpenException extends Exception {
 
-        private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1L;
 
-        public TedamWindowNotAbleToOpenException(String message) {
-            super(message);
-        }
-    }
+		public REWindowNotAbleToOpenException(String message) {
+			super(message);
+		}
+	}
 }

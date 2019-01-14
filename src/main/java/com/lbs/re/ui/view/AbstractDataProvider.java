@@ -50,8 +50,8 @@ public class AbstractDataProvider<T> implements Serializable {
 
     public void refreshDataProviderByItems(Collection<T> items) {
         dataProvider.getItems().clear();
-        dataProvider.getItems().addAll(items);
-        dataProvider.refreshAll();
+		dataProvider.getItems().addAll(items);
+		dataProvider.refreshAll();
     }
 
     public void removeItem(T item) {

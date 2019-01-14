@@ -1,6 +1,6 @@
 package com.lbs.re.ui.view.resource.edit;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
-import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
+import com.lbs.re.data.service.ResourceitemService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
@@ -20,12 +20,12 @@ import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
+import com.lbs.re.ui.util.REStatic;
 import com.lbs.re.ui.view.AbstractEditPresenter;
 import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemDataProvider;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemTreeDataProvider;
 import com.lbs.re.util.EnumsV2.ResourceGroupType;
-import com.vaadin.data.provider.TreeDataProvider;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
@@ -41,18 +41,21 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 
 	private ResourceItemDataProvider resourceItemDataProvider;
 	private ResourceItemTreeDataProvider resourceItemTreeDataProvider;
+	private ResourceitemService resourceitemService;
 
 	@Autowired
 	public ResourceEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceService resourceService, REUserService userService,
 			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider,
-			ResourceItemTreeDataProvider resourceItemTreeDataProvider) {
+			ResourceItemTreeDataProvider resourceItemTreeDataProvider, ResourceitemService resourceitemService) {
 		super(viewEventBus, navigationManager, resourceService, ReResource.class, beanFactory, userService);
 		this.resourceItemDataProvider = resourceItemDataProvider;
 		this.resourceItemTreeDataProvider = resourceItemTreeDataProvider;
+		this.resourceitemService = resourceitemService;
 	}
 
 	@Override
 	protected void enterView(Map<UIParameter, Object> parameters) throws LocalizedException {
+		parameters.replace(UIParameter.MODE, ViewMode.EDIT);
 		ReResource resource;
 		if ((Integer) parameters.get(UIParameter.ID) == 0) {
 			resource = new ReResource();
@@ -76,7 +79,9 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		getView().organizeResourceItemsGrid(resourceItemDataProvider);
 		getView().organizeResourceItemsTreeGrid(resourceItemTreeDataProvider);
 		getTitleForHeader();
-		organizeComponents(getView().getAccordion(), (ViewMode) parameters.get(UIParameter.MODE) == ViewMode.VIEW);
+		// getView().getBtnAddRow().setEnabled(true);
+		// getView().getBtnRemoveRow().setEnabled(true);
+		// getView().getGridResourceItems().setSelectionMode(SelectionMode.MULTI);
 	}
 
 	@PostConstruct
@@ -84,20 +89,17 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		subscribeToEventBus();
 	}
 
-	public void addResourceItemRow() throws LocalizedException {
-		ReResourceitem resourceItem = new ReResourceitem();
+	public void removeResourceItemRow() throws LocalizedException {
 		REFilterGrid<ReResourceitem> activeTab = getView().getGridResourceItems();
-		resourceItem.setCreatedon(LocalDateTime.now());
-		resourceItem.setCreatedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
-		activeTab.getGridDataProvider().getListDataProvider().getItems().add(resourceItem);
-		activeTab.refreshAll();
-		activeTab.deselectAll();
-		activeTab.scrollToEnd();
-		setHasChanges(true);
-	}
-
-	public void removeResourceItemRow() {
-		REFilterGrid<ReResourceitem> activeTab = getView().getGridResourceItems();
+		// todo tedam grid
+		activeTab.getSelectedItems().forEach(resourceItem -> {
+			try {
+				resourceItemDataProvider.deleteLanguagesByItem(resourceItem);
+				resourceitemService.delete(resourceItem);
+			} catch (LocalizedException e) {
+				e.printStackTrace();
+			}
+		});
 		if (activeTab.getSelectedItems().isEmpty()) {
 			getView().showGridRowNotSelected();
 			return;
@@ -105,11 +107,22 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		activeTab.getSelectedItems().forEach(resourceItem -> activeTab.getGridDataProvider().removeItem(resourceItem));
 		activeTab.deselectAll();
 		activeTab.refreshAll();
-		setHasChanges(true);
 	}
 
 	public void prepareResourceItemWindow(ReResourceitem item, ViewMode mode) throws LocalizedException {
+		Map<UIParameter, Object> windowParameters = REStatic.getUIParameterMap(item.getId(), ViewMode.VIEW);
+		windowParameters.put(UIParameter.RESOURCE_ID, getItem().getId());
+		getView().openResourceItemWindow(windowParameters);
+	}
 
+	public void refreshGrid() {
+		List<ReResourceitem> itemList = resourceitemService.getItemListByResource(getItem().getId());
+		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+			getView().getTreeGridResourceItems().getGridDataProvider().refreshDataProviderByItems(itemList);
+		} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+			getView().getGridResourceItems().getGridDataProvider().refreshDataProviderByItems(itemList);
+		}
+		resourceItemDataProvider.loadTransientData(itemList, getItem().getId());
 	}
 
 	@Override

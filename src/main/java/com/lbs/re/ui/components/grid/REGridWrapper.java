@@ -45,8 +45,7 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 	private String recordCountLocaleValue = getLocaleValue("general.grid.recordCount");
 	private T clickedItem;
 
-	public REGridWrapper(REGridConfig<T> config, AbstractDataProvider<T> gridDataProvider, SelectionMode selectionMode,
-			REGrid<T> grid) {
+	public REGridWrapper(REGridConfig<T> config, AbstractDataProvider<T> gridDataProvider, SelectionMode selectionMode, REGrid<T> grid) {
 		this.config = config;
 		this.selectionMode = selectionMode;
 		this.gridDataProvider = gridDataProvider;
@@ -253,8 +252,7 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 
 				layout.addComponent(deleteButton);
 			}
-			getGrid().buildCustomComponentForItem(param)
-					.forEach(customComponent -> layout.addComponent(customComponent));
+			getGrid().buildCustomComponentForItem(param).forEach(customComponent -> layout.addComponent(customComponent));
 			return layout;
 		});
 		setRUDMenuColumn(column);
@@ -281,8 +279,7 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 	}
 
 	public boolean canCopy() {
-		if (getSelectionMode() != SelectionMode.NONE && getGrid().getSelectedItems().size() >= 1
-				&& getGrid().getEditor().isEnabled()) {
+		if (getSelectionMode() != SelectionMode.NONE && getGrid().getSelectedItems().size() >= 1 && getGrid().getEditor().isEnabled()) {
 			return true;
 		} else {
 			return false;
@@ -309,8 +306,7 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 		if (getRUDMenuColumn() != null) {
 			getRUDMenuColumn().setSortable(false);
 		}
-		getConfig().getColumnList().stream().forEach(
-				gridColumn -> getGrid().getColumn(gridColumn.getColumnName()).setSortable(gridColumn.isSortable()));
+		getConfig().getColumnList().stream().forEach(gridColumn -> getGrid().getColumn(gridColumn.getColumnName()).setSortable(gridColumn.isSortable()));
 	}
 
 	private int getRowIndex(T item) {

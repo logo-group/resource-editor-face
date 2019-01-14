@@ -27,7 +27,7 @@ import org.vaadin.spring.events.EventBus;
 
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
-import com.lbs.re.ui.components.CustomExceptions.TedamWindowNotAbleToOpenException;
+import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
 import com.lbs.re.ui.components.grid.REGrid;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.WindowSize;
@@ -66,7 +66,7 @@ public abstract class REWindow extends Window implements ResourceEditorLocalizer
         removeAllCloseShortcuts();
     }
 
-    protected void initWindow() throws TedamWindowNotAbleToOpenException, LocalizedException {
+	protected void initWindow() throws REWindowNotAbleToOpenException, LocalizedException {
         cssFormLayout = new VerticalLayout();
         cssFormLayout.setResponsive(true);
         cssFormLayout.setWidth(100f, Unit.PERCENTAGE);
@@ -98,9 +98,10 @@ public abstract class REWindow extends Window implements ResourceEditorLocalizer
         RELabel footerText = new RELabel();
         footerText.setSizeUndefined();
 
-        btnOk = new REButton("general.button.ok", VaadinIcons.CHECK);
+		btnOk = new REButton("general.button.save", VaadinIcons.CHECK);
         btnOk.addStyleName("primary");
         btnOk.setWidthUndefined();
+		btnOk.setDisableOnClick(true);
 
         btnCancel = new REButton("general.button.cancel", VaadinIcons.CROSS_CUTLERY);
         btnCancel.setWidthUndefined();
@@ -139,9 +140,9 @@ public abstract class REWindow extends Window implements ResourceEditorLocalizer
     }
 
 	public abstract void open(Map<UIParameter, Object> parameters)
-			throws TedamWindowNotAbleToOpenException, LocalizedException;
+			throws REWindowNotAbleToOpenException, LocalizedException;
 
-    protected abstract Component buildContent() throws TedamWindowNotAbleToOpenException, LocalizedException;
+	protected abstract Component buildContent() throws REWindowNotAbleToOpenException, LocalizedException;
 
     protected abstract String getHeader();
 
@@ -197,4 +198,9 @@ public abstract class REWindow extends Window implements ResourceEditorLocalizer
 	public REGrid<?> getWindowGrid() {
 		return null;
 	}
+
+	public REButton getBtnOk() {
+		return btnOk;
+	}
+
 }

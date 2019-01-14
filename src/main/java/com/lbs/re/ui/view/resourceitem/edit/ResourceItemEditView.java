@@ -16,10 +16,15 @@ import com.vaadin.spring.annotation.SpringView;
 @SpringView
 public class ResourceItemEditView extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private RETextField ordernr;
 	private RETextField tagnr;
 	private RETextField levelnr;
-	private RETextField prefix;
+	private RETextField prefixstr;
 	private RETextArea info;
 	private RETextArea albanianKv;
 	private RETextArea arabicEg;
@@ -29,7 +34,7 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 	private RETextArea bulgarianBg;
 	private RETextArea englishUs;
 	private RETextArea frenchFr;
-	private RETextArea geoargianGe;
+	private RETextArea georgianGe;
 	private RETextArea germanDe;
 	private RETextArea persianIr;
 	private RETextArea romanianRo;
@@ -47,17 +52,17 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 		ordernr = new RETextField("column.resource.item.order.number", "full", true, true);
 		tagnr = new RETextField("column.resource.item.tag.number", "full", true, true);
 		levelnr = new RETextField("column.resource.item.level.number", "full", true, true);
-		prefix = new RETextField("column.resource.item.prefix", "full", true, true);
+		prefixstr = new RETextField("column.resource.item.prefix", "full", true, true);
 		info = new RETextArea("column.resource.item.info", "full", true, true);
 		albanianKv = new RETextArea("column.resource.item.albanian", "full", true, true);
 		arabicEg = new RETextArea("column.resource.item.arabiceg", "full", true, true);
 		arabicJo = new RETextArea("column.resource.item.arabicjo", "full", true, true);
 		arabicSa = new RETextArea("column.resource.item.arabicsa", "full", true, true);
 		azerbaijaniAz = new RETextArea("column.resource.item.azerbaijaniaz", "full", true, true);
-		bulgarianBg = new RETextArea("column.resource.item.bulguarianbg", "full", true, true);
+		bulgarianBg = new RETextArea("column.resource.item.bulgarianbg", "full", true, true);
 		englishUs = new RETextArea("column.resource.item.english", "full", true, true);
 		frenchFr = new RETextArea("column.resource.item.frenchfr", "full", true, true);
-		geoargianGe = new RETextArea("column.resource.item.georgiande", "full", true, true);
+		georgianGe = new RETextArea("column.resource.item.georgianGe", "full", true, true);
 		germanDe = new RETextArea("column.resource.item.germande", "full", true, true);
 		persianIr = new RETextArea("column.resource.item.persianir", "full", true, true);
 		romanianRo = new RETextArea("column.resource.item.romanianro", "full", true, true);
@@ -65,9 +70,9 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 		turkishTr = new RETextArea("column.resource.item.turkish", "full", true, true);
 		turkmenTm = new RETextArea("column.resource.item.turkmentm", "full", true, true);
 
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefix, info);
-		addSection(getLocaleValue("view.viewedit.section.general"), 1, null, turkishTr, englishUs, albanianKv, arabicEg, arabicJo, arabicSa, azerbaijaniAz, bulgarianBg, frenchFr,
-				geoargianGe, germanDe, persianIr, romanianRo, russianRu, turkmenTm);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info);
+		addSection(getLocaleValue("view.viewedit.section.languages"), 1, null, turkishTr, englishUs, albanianKv, arabicEg, arabicJo, arabicSa, azerbaijaniAz, bulgarianBg, frenchFr,
+				georgianGe, germanDe, persianIr, romanianRo, russianRu, turkmenTm);
 
 		getCancel().setVisible(false);
 		getSave().setVisible(false);
@@ -94,160 +99,80 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 		return ordernr;
 	}
 
-	public void setOrdernr(RETextField ordernr) {
-		this.ordernr = ordernr;
-	}
-
 	public RETextField getTagnr() {
 		return tagnr;
-	}
-
-	public void setTagnr(RETextField tagnr) {
-		this.tagnr = tagnr;
 	}
 
 	public RETextField getLevelnr() {
 		return levelnr;
 	}
 
-	public void setLevelnr(RETextField levelnr) {
-		this.levelnr = levelnr;
-	}
-
-	public RETextField getPrefix() {
-		return prefix;
-	}
-
-	public void setPrefix(RETextField prefix) {
-		this.prefix = prefix;
+	public RETextField getPrefixstr() {
+		return prefixstr;
 	}
 
 	public RETextArea getInfo() {
 		return info;
 	}
 
-	public void setInfo(RETextArea info) {
-		this.info = info;
-	}
-
 	public RETextArea getAlbanianKv() {
 		return albanianKv;
-	}
-
-	public void setAlbanianKv(RETextArea albanianKv) {
-		this.albanianKv = albanianKv;
 	}
 
 	public RETextArea getArabicEg() {
 		return arabicEg;
 	}
 
-	public void setArabicEg(RETextArea arabicEg) {
-		this.arabicEg = arabicEg;
-	}
-
 	public RETextArea getArabicJo() {
 		return arabicJo;
-	}
-
-	public void setArabicJo(RETextArea arabicJo) {
-		this.arabicJo = arabicJo;
 	}
 
 	public RETextArea getArabicSa() {
 		return arabicSa;
 	}
 
-	public void setArabicSa(RETextArea arabicSa) {
-		this.arabicSa = arabicSa;
-	}
-
 	public RETextArea getAzerbaijaniAz() {
 		return azerbaijaniAz;
-	}
-
-	public void setAzerbaijaniAz(RETextArea azerbaijaniAz) {
-		this.azerbaijaniAz = azerbaijaniAz;
 	}
 
 	public RETextArea getBulgarianBg() {
 		return bulgarianBg;
 	}
 
-	public void setBulgarianBg(RETextArea bulgarianBg) {
-		this.bulgarianBg = bulgarianBg;
-	}
-
 	public RETextArea getEnglishUs() {
 		return englishUs;
-	}
-
-	public void setEnglishUs(RETextArea englishUs) {
-		this.englishUs = englishUs;
 	}
 
 	public RETextArea getFrenchFr() {
 		return frenchFr;
 	}
 
-	public void setFrenchFr(RETextArea frenchFr) {
-		this.frenchFr = frenchFr;
-	}
-
-	public RETextArea getGeoargianGe() {
-		return geoargianGe;
-	}
-
-	public void setGeoargianGe(RETextArea geoargianGe) {
-		this.geoargianGe = geoargianGe;
+	public RETextArea getGeorgianGe() {
+		return georgianGe;
 	}
 
 	public RETextArea getGermanDe() {
 		return germanDe;
 	}
 
-	public void setGermanDe(RETextArea germanDe) {
-		this.germanDe = germanDe;
-	}
-
 	public RETextArea getPersianIr() {
 		return persianIr;
-	}
-
-	public void setPersianIr(RETextArea persianIr) {
-		this.persianIr = persianIr;
 	}
 
 	public RETextArea getRomanianRo() {
 		return romanianRo;
 	}
 
-	public void setRomanianRo(RETextArea romanianRo) {
-		this.romanianRo = romanianRo;
-	}
-
 	public RETextArea getRussianRu() {
 		return russianRu;
-	}
-
-	public void setRussianRu(RETextArea russianRu) {
-		this.russianRu = russianRu;
 	}
 
 	public RETextArea getTurkishTr() {
 		return turkishTr;
 	}
 
-	public void setTurkishTr(RETextArea turkishTr) {
-		this.turkishTr = turkishTr;
-	}
-
 	public RETextArea getTurkmenTm() {
 		return turkmenTm;
-	}
-
-	public void setTurkmenTm(RETextArea turkmenTm) {
-		this.turkmenTm = turkmenTm;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.lbs.re.ui.view.resource.edit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -11,6 +12,7 @@ import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
+import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RETextArea;
 import com.lbs.re.ui.components.basic.RETextField;
@@ -24,13 +26,14 @@ import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.grid.RETreeGrid;
 import com.lbs.re.ui.components.grid.RUDOperations;
+import com.lbs.re.ui.components.window.WindowResourceItem;
+import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
 import com.lbs.re.ui.util.RENotification;
 import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.AbstractDataProvider;
 import com.lbs.re.ui.view.AbstractEditView;
-import com.lbs.re.ui.view.AbstractTreeDataProvider;
-import com.lbs.re.util.EnumsV2.ResourceGroupType;
+import com.lbs.re.ui.view.resourceitem.edit.ResourceItemTreeDataProvider;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
@@ -38,7 +41,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TreeGrid;
 
 @SpringView
 public class ResourceEditView extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
@@ -57,18 +59,21 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	private REFilterGrid<ReResourceitem> gridResourceItems;
 	private RETreeGrid<ReResourceitem> treeGridResourceItems;
 
+	private WindowResourceItem windowResourceItem;
+
 	@Autowired
 	public ResourceEditView(ResourceEditPresenter presenter, ResourceGroupComboBox resourcegroup, ResourceCaseComboBox resourcecase, ResourceTypeComboBox resourcetype,
-			OwnerProductComboBox ownerproduct) {
+			OwnerProductComboBox ownerproduct, WindowResourceItem windowResourceItem) {
 		super(presenter);
 		this.resourcegroup = resourcegroup;
 		this.resourcecase = resourcecase;
 		this.resourcetype = resourcetype;
 		this.ownerproduct = ownerproduct;
+		this.windowResourceItem = windowResourceItem;
 	}
 
 	@PostConstruct
-	private void initView() {
+	protected void initView() {
 		resourceNr = new RETextField("view.resourceedit.textfield.number", "full", true, true);
 		description = new RETextArea("view.resourceedit.textfield.description", "full", true, true);
 		buildResourceItemsGrid();
@@ -82,18 +87,23 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 		btnAddRow = new REButton("view.testcaseedit.button.addrow", VaadinIcons.PLUS_CIRCLE);
 		btnRemoveRow = new REButton("view.testcaseedit.button.removerow", VaadinIcons.MINUS_CIRCLE);
-
 		hLayButtons.addComponents(btnAddRow, btnRemoveRow);
 
 		btnAddRow.addClickListener(e -> {
 			try {
-				getPresenter().addResourceItemRow();
+				getPresenter().prepareResourceItemWindow(new ReResourceitem(), ViewMode.EDIT);
 			} catch (LocalizedException e1) {
 				logError(e1);
 			}
 		});
-		btnRemoveRow.addClickListener(e -> getPresenter().removeResourceItemRow());
-
+		btnRemoveRow.addClickListener(e -> {
+			try {
+				getPresenter().removeResourceItemRow();
+			} catch (LocalizedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 		return hLayButtons;
 	}
 
@@ -102,7 +112,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		gridResourceItems.initFilters();
 	}
 
-	protected void organizeResourceItemsTreeGrid(AbstractTreeDataProvider<ReResourceitem> dataProvider) {
+	protected void organizeResourceItemsTreeGrid(ResourceItemTreeDataProvider dataProvider) {
 		treeGridResourceItems.setTreeGridDataProvider(dataProvider);
 	}
 
@@ -171,7 +181,18 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		};
 		gridResourceItems.setId("ResourceItemGrid");
 
-		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(), SelectionMode.SINGLE);
+		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(), SelectionMode.MULTI) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onViewSelected(ReResourceitem resourceItem) {
+				try {
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT);
+				} catch (LocalizedException e) {
+					logError(e);
+				}
+			}
+		};
 		treeGridResourceItems.setId("ResourceItemTreeGrid");
 	}
 
@@ -193,6 +214,19 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		return getLocaleValue("view.resourceedit.header");
 	}
 
+	public void openResourceItemWindow(Map<UIParameter, Object> windowParameters) throws LocalizedException {
+		try {
+			windowResourceItem.open(windowParameters);
+		} catch (REWindowNotAbleToOpenException e) {
+			windowResourceItem.close();
+			RENotification.showNotification(e.getMessage(), NotifyType.ERROR);
+		}
+	}
+
+	protected void refreshPage() {
+		initView();
+	}
+
 	public void showGridRowNotSelected() {
 		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"), NotifyType.ERROR);
 	}
@@ -205,8 +239,16 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		return gridResourceItems;
 	}
 
-	public TreeGrid<ReResourceitem> getTreeGridResourceItems() {
+	public RETreeGrid<ReResourceitem> getTreeGridResourceItems() {
 		return treeGridResourceItems;
+	}
+
+	public REButton getBtnAddRow() {
+		return btnAddRow;
+	}
+
+	public REButton getBtnRemoveRow() {
+		return btnRemoveRow;
 	}
 
 }
