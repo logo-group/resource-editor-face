@@ -28,6 +28,7 @@ import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.exception.localized.OperationNotAuthedException;
 import com.lbs.re.model.ReUser;
+import com.lbs.re.ui.view.Operation;
 
 /**
  * SecurityUtils takes care of all such static operations that have to do with
@@ -65,6 +66,9 @@ public class SecurityUtils {
 	}
 
 	public static void checkForOperation(REUserService userService, String operationName) throws LocalizedException {
+		if (operationName.equals(Operation.NO_CHECK)) {
+			return;
+		}
 		Integer userId = SecurityUtils.getCurrentUser(userService).getReUser().getId();
 		boolean userAuth = userService.isUserAuth(userId, operationName);
 		if (!userAuth) {
