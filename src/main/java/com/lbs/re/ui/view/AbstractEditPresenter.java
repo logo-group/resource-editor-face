@@ -337,4 +337,12 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 	protected void getTitleForHeader() {
 	}
 
+	private void checkForEditOperation() throws LocalizedException {
+		SecurityUtils.checkForOperation(userService, getView().getEditOperationName());
+	}
+
+	private void checkForViewOperation() throws LocalizedException {
+		SecurityUtils.checkForOperation(userService, getView().getViewOperationName());
+	}
+
 }

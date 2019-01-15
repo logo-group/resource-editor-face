@@ -26,39 +26,50 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
+import com.lbs.re.exception.localized.OperationNotAuthedException;
 import com.lbs.re.model.ReUser;
 
 /**
- * SecurityUtils takes care of all such static operations that have to do with security and querying rights from different beans of the UI.
+ * SecurityUtils takes care of all such static operations that have to do with
+ * security and querying rights from different beans of the UI.
  */
 public class SecurityUtils {
 
-    private SecurityUtils() {
-        // Util methods only
-    }
+	private SecurityUtils() {
+		// Util methods only
+	}
 
-    private static UserSessionAttr getUserSessionAttr() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        UserSessionAttr userSessionAttr = (UserSessionAttr) context.getAuthentication().getPrincipal();
-        return userSessionAttr;
-    }
+	private static UserSessionAttr getUserSessionAttr() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		UserSessionAttr userSessionAttr = (UserSessionAttr) context.getAuthentication().getPrincipal();
+		return userSessionAttr;
+	}
 
-    /**
-     * Gets the roles the currently signed-in user belongs to.
-     *
-     * @return a set of all roles the currently signed-in user belongs to.
-     */
-    public static Set<String> getUserRoles() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        return context.getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-    }
+	/**
+	 * Gets the roles the currently signed-in user belongs to.
+	 *
+	 * @return a set of all roles the currently signed-in user belongs to.
+	 */
+	public static Set<String> getUserRoles() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		return context.getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority)
+				.collect(Collectors.toSet());
+	}
 
 	public static UserSessionAttr getCurrentUser(REUserService userService) throws LocalizedException {
-        UserSessionAttr userSessionAttr = getUserSessionAttr();
+		UserSessionAttr userSessionAttr = getUserSessionAttr();
 		ReUser reUser = userService.getUserListByUsername((userSessionAttr.getUsername()));
 		userSessionAttr.setReUser(reUser);
-        return userSessionAttr;
+		return userSessionAttr;
 
-    }
+	}
+
+	public static void checkForOperation(REUserService userService, String operationName) throws LocalizedException {
+		Integer userId = SecurityUtils.getCurrentUser(userService).getReUser().getId();
+		boolean userAuth = userService.isUserAuth(userId, operationName);
+		if (!userAuth) {
+			throw new OperationNotAuthedException();
+		}
+	}
 
 }

@@ -23,6 +23,7 @@ import java.util.Map;
 import org.springframework.beans.factory.BeanFactory;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
+import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.BaseService;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
@@ -33,97 +34,110 @@ import com.lbs.re.util.HasLogger;
 import com.vaadin.navigator.ViewBeforeLeaveEvent;
 
 public abstract class AbstractGridPresenter<T extends AbstractBaseEntity, S extends BaseService<T, Integer>, P extends AbstractGridPresenter<T, S, P, V>, V extends AbstractGridView<T, S, P, V>>
-        implements Serializable, HasLogger {
+		implements Serializable, HasLogger {
 
-    /**
-     * long serialVersionUID
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * long serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private final transient S service;
+	private final transient S service;
 
 	private final REUserService userService;
-    private final NavigationManager navigationManager;
-    private final BeanFactory beanFactory;
-    private transient V view;
-    private ViewEventBus viewEventBus;
-    private AbstractDataProvider<T> dataProvider;
+	private final NavigationManager navigationManager;
+	private final BeanFactory beanFactory;
+	private transient V view;
+	private ViewEventBus viewEventBus;
+	private AbstractDataProvider<T> dataProvider;
 
-    protected AbstractGridPresenter(NavigationManager navigationManager, S service, AbstractDataProvider<T> dataProvider, BeanFactory beanFactory, ViewEventBus viewEventBus,
+	protected AbstractGridPresenter(NavigationManager navigationManager, S service,
+			AbstractDataProvider<T> dataProvider, BeanFactory beanFactory, ViewEventBus viewEventBus,
 			REUserService userService) {
-        this.beanFactory = beanFactory;
-        this.service = service;
-        this.dataProvider = dataProvider;
-        this.navigationManager = navigationManager;
-        this.viewEventBus = viewEventBus;
-        this.userService = userService;
-    }
+		this.beanFactory = beanFactory;
+		this.service = service;
+		this.dataProvider = dataProvider;
+		this.navigationManager = navigationManager;
+		this.viewEventBus = viewEventBus;
+		this.userService = userService;
+	}
 
-    protected abstract void enterView(Map<UIParameter, Object> parameters);
+	protected abstract void enterView(Map<UIParameter, Object> parameters);
 
-    public void subscribeToEventBus() {
-        viewEventBus.subscribe(this);
-    }
+	public void subscribeToEventBus() {
+		viewEventBus.subscribe(this);
+	}
 
-    public void destroy() {
-        viewEventBus.unsubscribe(this);
-    }
+	public void destroy() {
+		viewEventBus.unsubscribe(this);
+	}
 
-    public void init(V view) {
-        this.view = view;
-    }
+	public void init(V view) {
+		this.view = view;
+	}
 
-    public void beforeLeavingView(ViewBeforeLeaveEvent event) {
-        destroy();
-        runWithConfirmation(event::navigate, () -> {
-        });
-    }
+	public void beforeLeavingView(ViewBeforeLeaveEvent event) {
+		destroy();
+		runWithConfirmation(event::navigate, () -> {
+		});
+	}
 
-    private void runWithConfirmation(Runnable onConfirmation, Runnable onCancel) {
-        onConfirmation.run();
-    }
+	private void runWithConfirmation(Runnable onConfirmation, Runnable onCancel) {
+		onConfirmation.run();
+	}
 
-    protected S getService() {
-        return service;
-    }
+	protected S getService() {
+		return service;
+	}
 
-    public ViewEventBus getViewEventBus() {
-        return viewEventBus;
-    }
+	public ViewEventBus getViewEventBus() {
+		return viewEventBus;
+	}
 
-    public AbstractDataProvider<T> getDataPovider() {
-        return dataProvider;
-    }
+	public AbstractDataProvider<T> getDataPovider() {
+		return dataProvider;
+	}
 
-    public BeanFactory getBeanFactory() {
-        return beanFactory;
-    }
+	public BeanFactory getBeanFactory() {
+		return beanFactory;
+	}
 
-    protected void delete(T item) throws LocalizedException {
+	protected void delete(T item) throws LocalizedException {
 		getService().deleteById(item.getId());
-        dataProvider.removeItem(item);
-    }
+		dataProvider.removeItem(item);
+	}
 
-    public NavigationManager getNavigationManager() {
-        return navigationManager;
-    }
+	public NavigationManager getNavigationManager() {
+		return navigationManager;
+	}
 
-    protected void deleteSelectedLines(Iterable<T> entities) throws LocalizedException {
-        for (T entity : entities) {
-            delete(entity);
-        }
-    }
+	protected void deleteSelectedLines(Iterable<T> entities) throws LocalizedException {
+		for (T entity : entities) {
+			delete(entity);
+		}
+	}
 
-    public V getView() {
-        return view;
-    }
+	public V getView() {
+		return view;
+	}
 
-    public void setView(V view) {
-        this.view = view;
-    }
+	public void setView(V view) {
+		this.view = view;
+	}
 
 	public REUserService getUserService() {
-        return userService;
-    }
+		return userService;
+	}
+
+	private void checkForListOperation() throws LocalizedException {
+		SecurityUtils.checkForOperation(userService, getView().getListOperationName());
+	}
+
+	private void checkForAddOperation() throws LocalizedException {
+		SecurityUtils.checkForOperation(userService, getView().getAddOperationName());
+	}
+
+	private void checkForDeleteOperation() throws LocalizedException {
+		SecurityUtils.checkForOperation(userService, getView().getDeleteOperationName());
+	}
 
 }
