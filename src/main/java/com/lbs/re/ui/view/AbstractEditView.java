@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import com.lbs.re.data.service.BaseService;
 import com.lbs.re.exception.localized.LocalizedException;
+import com.lbs.re.exception.localized.OperationNotAuthedException;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
 import com.lbs.re.model.AbstractBaseEntity;
 import com.lbs.re.ui.components.basic.REButton;
@@ -81,8 +82,12 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 				Map<UIParameter, Object> uiParameterMap = buildUIParameterMap(parameter);
 				getPresenter().enterView(uiParameterMap);
 			} else {
+				getPresenter().checkForViewOperation();
 				getPresenter().enterView(REStatic.getUIParameterMap(Integer.valueOf(parameter), ViewMode.VIEW));
 			}
+		} catch (OperationNotAuthedException e) {
+			removeAllComponents();
+			logError(e);
 		} catch (LocalizedException e) {
 			logError(e);
 		}
@@ -128,6 +133,9 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 		getCancel().addClickListener(e -> getPresenter().backPressed());
 		getSave().addClickListener(e -> {
 			try {
+				if (viewMode == ViewMode.VIEW) {
+					getPresenter().checkForEditOperation();
+				}
 				getPresenter().okPressed();
 			} catch (LocalizedException e1) {
 				logError(e1);

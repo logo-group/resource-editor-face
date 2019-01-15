@@ -128,15 +128,15 @@ public abstract class AbstractGridPresenter<T extends AbstractBaseEntity, S exte
 		return userService;
 	}
 
-	private void checkForListOperation() throws LocalizedException {
+	public void checkForListOperation() throws LocalizedException {
 		SecurityUtils.checkForOperation(userService, getView().getListOperationName());
 	}
 
-	private void checkForAddOperation() throws LocalizedException {
+	public void checkForAddOperation() throws LocalizedException {
 		SecurityUtils.checkForOperation(userService, getView().getAddOperationName());
 	}
 
-	private void checkForDeleteOperation() throws LocalizedException {
+	public void checkForDeleteOperation() throws LocalizedException {
 		SecurityUtils.checkForOperation(userService, getView().getDeleteOperationName());
 	}
 
