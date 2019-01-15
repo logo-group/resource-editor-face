@@ -76,17 +76,17 @@ public class UserGridView extends AbstractGridView<ReUser, REUserService, UserGr
 
 	@Override
 	public String getListOperationName() {
-		return Operation.NO_CHECK;
+		return Operation.LIST_USER;
 	}
 
 	@Override
 	public String getAddOperationName() {
-		return Operation.NO_CHECK;
+		return Operation.ADD_USER;
 	}
 
 	@Override
 	public String getDeleteOperationName() {
-		return Operation.NO_CHECK;
+		return Operation.DELETE_USER;
 	}
 
 }

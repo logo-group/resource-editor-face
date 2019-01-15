@@ -156,12 +156,12 @@ public class UserEditView extends AbstractEditView<ReUser, REUserService, UserEd
 
 	@Override
 	public String getViewOperationName() {
-		return Operation.NO_CHECK;
+		return Operation.VIEW_USER;
 	}
 
 	@Override
 	public String getEditOperationName() {
-		return Operation.NO_CHECK;
+		return Operation.EDIT_USER;
 	}
 
 }

@@ -183,12 +183,12 @@ public class ResourceItemEditView
 
 	@Override
 	public String getViewOperationName() {
-		return Operation.NO_CHECK;
+		return Operation.VIEW_RESOURCE_ITEM;
 	}
 
 	@Override
 	public String getEditOperationName() {
-		return Operation.NO_CHECK;
+		return Operation.EDIT_RESOURCE_ITEM;
 	}
 
 }
