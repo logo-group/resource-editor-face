@@ -17,6 +17,7 @@ import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.ui.components.grid.REFilterGrid;
+import com.lbs.re.ui.components.grid.RETreeGrid;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
@@ -90,23 +91,43 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	}
 
 	public void removeResourceItemRow() throws LocalizedException {
-		REFilterGrid<ReResourceitem> activeTab = getView().getGridResourceItems();
-		// todo tedam grid
-		activeTab.getSelectedItems().forEach(resourceItem -> {
-			try {
-				resourceItemDataProvider.deleteLanguagesByItem(resourceItem);
-				resourceitemService.delete(resourceItem);
-			} catch (LocalizedException e) {
-				e.printStackTrace();
+		REFilterGrid<ReResourceitem> listGrid = getView().getGridResourceItems();
+		RETreeGrid<ReResourceitem> treeGrid = getView().getTreeGridResourceItems();
+
+		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+			if (treeGrid.getSelectedItems().isEmpty()) {
+				getView().showGridRowNotSelected();
+				return;
 			}
-		});
-		if (activeTab.getSelectedItems().isEmpty()) {
-			getView().showGridRowNotSelected();
-			return;
+			treeGrid.getSelectedItems().forEach(resourceItem -> {
+				try {
+					resourceItemDataProvider.deleteLanguagesByItem((ReResourceitem) resourceItem);
+					resourceitemService.delete((ReResourceitem) resourceItem);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			});
+			treeGrid.getSelectedItems().forEach(resourceItem -> treeGrid.getGridDataProvider().removeItem((ReResourceitem) resourceItem));
+			treeGrid.deselectAll();
+			treeGrid.refreshAll();
+		} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+			if (listGrid.getSelectedItems().isEmpty()) {
+				getView().showGridRowNotSelected();
+				return;
+			}
+			listGrid.getSelectedItems().forEach(resourceItem -> {
+				try {
+					resourceItemDataProvider.deleteLanguagesByItem(resourceItem);
+					resourceitemService.delete(resourceItem);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			});
+
+			listGrid.getSelectedItems().forEach(resourceItem -> listGrid.getGridDataProvider().removeItem(resourceItem));
+			listGrid.deselectAll();
+			listGrid.refreshAll();
 		}
-		activeTab.getSelectedItems().forEach(resourceItem -> activeTab.getGridDataProvider().removeItem(resourceItem));
-		activeTab.deselectAll();
-		activeTab.refreshAll();
 	}
 
 	public void prepareResourceItemWindow(ReResourceitem item, ViewMode mode) throws LocalizedException {
