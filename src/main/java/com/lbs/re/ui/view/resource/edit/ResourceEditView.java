@@ -261,4 +261,12 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		return btnRemoveRow;
 	}
 
+	public REButton getBtnActive() {
+		return btnActive;
+	}
+
+	public REButton getBtnDeActive() {
+		return btnDeActive;
+	}
+
 }

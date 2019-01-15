@@ -70,17 +70,24 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			}
 		}
 		refreshView(resource, (ViewMode) parameters.get(UIParameter.MODE));
-		resourceItemDataProvider.provideResourceItems(resource);
-		resourceItemTreeDataProvider.provideResourceItems(resource);
-		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
-			getView().getGridResourceItems().setVisible(true);
-			getView().getTreeGridResourceItems().setVisible(false);
-		} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+		if (getItem().getId() != 0) {
+			if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+				resourceItemDataProvider.provideResourceItems(resource);
+				getView().getGridResourceItems().setVisible(true);
+				getView().getTreeGridResourceItems().setVisible(false);
+				getView().organizeResourceItemsGrid(resourceItemDataProvider);
+			} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+				resourceItemTreeDataProvider.provideResourceItems(resource);
+				getView().getGridResourceItems().setVisible(false);
+				getView().getTreeGridResourceItems().setVisible(true);
+				getView().organizeResourceItemsTreeGrid(resourceItemTreeDataProvider);
+			}
+			setVisibleButtons(true);
+		} else {
+			setVisibleButtons(false);
 			getView().getGridResourceItems().setVisible(false);
-			getView().getTreeGridResourceItems().setVisible(true);
+			getView().getTreeGridResourceItems().setVisible(false);
 		}
-		getView().organizeResourceItemsGrid(resourceItemDataProvider);
-		getView().organizeResourceItemsTreeGrid(resourceItemTreeDataProvider);
 		getTitleForHeader();
 	}
 
@@ -225,4 +232,10 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		getView().setTitle(title);
 	}
 
+	private void setVisibleButtons(boolean isVisible) {
+		getView().getBtnAddRow().setVisible(isVisible);
+		getView().getBtnRemoveRow().setVisible(isVisible);
+		getView().getBtnActive().setVisible(isVisible);
+		getView().getBtnDeActive().setVisible(isVisible);
+	}
 }
