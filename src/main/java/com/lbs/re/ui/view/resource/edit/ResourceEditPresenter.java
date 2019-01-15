@@ -44,6 +44,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	private ResourceItemTreeDataProvider resourceItemTreeDataProvider;
 	private ResourceitemService resourceitemService;
 
+	@SuppressWarnings("rawtypes")
 	@Autowired
 	public ResourceEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceService resourceService, REUserService userService,
 			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider,
@@ -54,9 +55,9 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		this.resourceitemService = resourceitemService;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void enterView(Map<UIParameter, Object> parameters) throws LocalizedException {
-		parameters.replace(UIParameter.MODE, ViewMode.EDIT);
 		ReResource resource;
 		if ((Integer) parameters.get(UIParameter.ID) == 0) {
 			resource = new ReResource();
@@ -80,9 +81,6 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		getView().organizeResourceItemsGrid(resourceItemDataProvider);
 		getView().organizeResourceItemsTreeGrid(resourceItemTreeDataProvider);
 		getTitleForHeader();
-		// getView().getBtnAddRow().setEnabled(true);
-		// getView().getBtnRemoveRow().setEnabled(true);
-		// getView().getGridResourceItems().setSelectionMode(SelectionMode.MULTI);
 	}
 
 	@PostConstruct
@@ -90,6 +88,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		subscribeToEventBus();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void removeResourceItemRow() throws LocalizedException {
 		REFilterGrid<ReResourceitem> listGrid = getView().getGridResourceItems();
 		RETreeGrid<ReResourceitem> treeGrid = getView().getTreeGridResourceItems();
@@ -136,6 +135,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		getView().openResourceItemWindow(windowParameters);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void refreshGrid() {
 		List<ReResourceitem> itemList = resourceitemService.getItemListByResource(getItem().getId());
 		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {

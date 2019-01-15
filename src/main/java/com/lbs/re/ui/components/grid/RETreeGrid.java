@@ -64,6 +64,7 @@ public class RETreeGrid<ReResourceitem> extends TreeGrid implements ResourceEdit
 		init();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void init() {
 		setStyleName("small");
 		setConfig(config);
@@ -206,6 +207,7 @@ public class RETreeGrid<ReResourceitem> extends TreeGrid implements ResourceEdit
 		throw new UnsupportedOperationException();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setColumnTitles() {
 		List<Column<T, ?>> columns = getColumns();
 		Map<String, String> columnTitles = getConfig().getColumnTitles();
@@ -216,6 +218,7 @@ public class RETreeGrid<ReResourceitem> extends TreeGrid implements ResourceEdit
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initRUDMenuColumn() {
 		List<RUDOperations> rudOperations = getConfig().getRUDOperations();
 		if (rudOperations.contains(RUDOperations.NONE)) {

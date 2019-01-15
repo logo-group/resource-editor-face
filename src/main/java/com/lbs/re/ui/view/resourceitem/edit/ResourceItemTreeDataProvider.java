@@ -9,21 +9,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.PrototypeScope;
 
-import com.lbs.re.data.service.language.AlbaniankvService;
-import com.lbs.re.data.service.language.ArabicegService;
-import com.lbs.re.data.service.language.ArabicjoService;
-import com.lbs.re.data.service.language.ArabicsaService;
-import com.lbs.re.data.service.language.AzerbaijaniazService;
-import com.lbs.re.data.service.language.BulgarianbgService;
-import com.lbs.re.data.service.language.EnglishusService;
-import com.lbs.re.data.service.language.FrenchfrService;
-import com.lbs.re.data.service.language.GeorgiangeService;
-import com.lbs.re.data.service.language.GermandeService;
-import com.lbs.re.data.service.language.PersianirService;
-import com.lbs.re.data.service.language.RomanianroService;
-import com.lbs.re.data.service.language.RussianruService;
-import com.lbs.re.data.service.language.TurkishtrService;
-import com.lbs.re.data.service.language.TurkmentmService;
+import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
@@ -54,44 +40,12 @@ public class ResourceItemTreeDataProvider {
 	private static final long serialVersionUID = 1L;
 	private BeanFactory beanFactory;
 
-	private TurkishtrService turkishService;
-	private AlbaniankvService albanianService;
-	private ArabicegService arabicEgService;
-	private ArabicjoService arabicJoService;
-	private ArabicsaService arabicSaService;
-	private AzerbaijaniazService azerbaijaniazService;
-	private BulgarianbgService bulgarianService;
-	private EnglishusService englishService;
-	private FrenchfrService frenchService;
-	private GeorgiangeService georgianService;
-	private GermandeService germanService;
-	private PersianirService persianService;
-	private RomanianroService romanianService;
-	private RussianruService russianruService;
-	private TurkmentmService turkmenService;
+	private LanguageServices languageServices;
 
 	@Autowired
-	public ResourceItemTreeDataProvider(BeanFactory beanFactory, TurkishtrService turkishService, AlbaniankvService albanianService, ArabicegService arabicEgService,
-			ArabicjoService arabicJoService, ArabicsaService arabicSaService, AzerbaijaniazService azerbaijaniazService, BulgarianbgService bulgarianService,
-			EnglishusService englishService, FrenchfrService frenchService, GeorgiangeService georgianService, GermandeService germanService, PersianirService persianService,
-			RomanianroService romanianService, RussianruService russianruService, TurkmentmService turkmenService) {
+	public ResourceItemTreeDataProvider(BeanFactory beanFactory, LanguageServices languageServices) {
 		this.beanFactory = beanFactory;
-		this.turkishService = turkishService;
-		this.albanianService = albanianService;
-		this.arabicEgService = arabicEgService;
-		this.arabicJoService = arabicJoService;
-		this.arabicSaService = arabicSaService;
-		this.azerbaijaniazService = azerbaijaniazService;
-		this.bulgarianService = bulgarianService;
-		this.englishService = englishService;
-		this.frenchService = frenchService;
-		this.georgianService = georgianService;
-		this.germanService = germanService;
-		this.persianService = persianService;
-		this.romanianService = romanianService;
-		this.russianruService = russianruService;
-		this.turkishService = turkishService;
-		this.turkmenService = turkmenService;
+		this.languageServices = languageServices;
 	}
 
 	/**
@@ -209,7 +163,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadTurkishData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReTurkishtr> trList = turkishService.getLanguageListByresourceref(resourceId);
+		List<ReTurkishtr> trList = languageServices.getTurkishService().getLanguageListByresourceref(resourceId);
 		if (trList != null && !trList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReTurkishtr turkish : trList) {
@@ -224,7 +178,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadAlbanianData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReAlbaniankv> albenianList = albanianService.getLanguageListByresourceref(resourceId);
+		List<ReAlbaniankv> albenianList = languageServices.getAlbanianService().getLanguageListByresourceref(resourceId);
 		if (albenianList != null && !albenianList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReAlbaniankv albanian : albenianList) {
@@ -239,7 +193,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadArabicEgData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReArabiceg> arabicEgList = arabicEgService.getLanguageListByresourceref(resourceId);
+		List<ReArabiceg> arabicEgList = languageServices.getArabicEgService().getLanguageListByresourceref(resourceId);
 		if (arabicEgList != null && !arabicEgList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReArabiceg arabicEg : arabicEgList) {
@@ -254,7 +208,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadArabicJoData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReArabicjo> arabicJoList = arabicJoService.getLanguageListByresourceref(resourceId);
+		List<ReArabicjo> arabicJoList = languageServices.getArabicJoService().getLanguageListByresourceref(resourceId);
 		if (arabicJoList != null && !arabicJoList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReArabicjo arabicJo : arabicJoList) {
@@ -269,7 +223,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadArabicSaData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReArabicsa> arabicSaList = arabicSaService.getLanguageListByresourceref(resourceId);
+		List<ReArabicsa> arabicSaList = languageServices.getArabicSaService().getLanguageListByresourceref(resourceId);
 		if (arabicSaList != null && !arabicSaList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReArabicsa arabicSa : arabicSaList) {
@@ -284,7 +238,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadBulgarianData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReBulgarianbg> bulgarianBgList = bulgarianService.getLanguageListByresourceref(resourceId);
+		List<ReBulgarianbg> bulgarianBgList = languageServices.getBulgarianService().getLanguageListByresourceref(resourceId);
 		if (bulgarianBgList != null && !bulgarianBgList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReBulgarianbg bulgarian : bulgarianBgList) {
@@ -299,7 +253,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadAzerbaijaniAzData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReAzerbaijaniaz> azerbaijaniAzList = azerbaijaniazService.getLanguageListByresourceref(resourceId);
+		List<ReAzerbaijaniaz> azerbaijaniAzList = languageServices.getAzerbaijaniazService().getLanguageListByresourceref(resourceId);
 		if (azerbaijaniAzList != null && !azerbaijaniAzList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReAzerbaijaniaz azerbaijaniAz : azerbaijaniAzList) {
@@ -314,7 +268,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadEnglishUsData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReEnglishus> englishUsList = englishService.getLanguageListByresourceref(resourceId);
+		List<ReEnglishus> englishUsList = languageServices.getEnglishService().getLanguageListByresourceref(resourceId);
 		if (englishUsList != null && !englishUsList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReEnglishus englishUs : englishUsList) {
@@ -329,7 +283,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadFrenchFrData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReFrenchfr> frenchFrList = frenchService.getLanguageListByresourceref(resourceId);
+		List<ReFrenchfr> frenchFrList = languageServices.getFrenchService().getLanguageListByresourceref(resourceId);
 		if (frenchFrList != null && !frenchFrList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReFrenchfr frenchFr : frenchFrList) {
@@ -344,7 +298,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadGeorgianData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReGeorgiange> georgianList = georgianService.getLanguageListByresourceref(resourceId);
+		List<ReGeorgiange> georgianList = languageServices.getGeorgianService().getLanguageListByresourceref(resourceId);
 		if (georgianList != null && !georgianList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReGeorgiange georgian : georgianList) {
@@ -359,7 +313,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadGermanData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReGermande> germanList = germanService.getLanguageListByresourceref(resourceId);
+		List<ReGermande> germanList = languageServices.getGermanService().getLanguageListByresourceref(resourceId);
 		if (germanList != null && !germanList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReGermande german : germanList) {
@@ -374,7 +328,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadPersianData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<RePersianir> persianList = persianService.getLanguageListByresourceref(resourceId);
+		List<RePersianir> persianList = languageServices.getPersianService().getLanguageListByresourceref(resourceId);
 		if (persianList != null && !persianList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (RePersianir persian : persianList) {
@@ -389,7 +343,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadRomanianData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReRomanianro> romanianList = romanianService.getLanguageListByresourceref(resourceId);
+		List<ReRomanianro> romanianList = languageServices.getRomanianService().getLanguageListByresourceref(resourceId);
 		if (romanianList != null && !romanianList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReRomanianro romanian : romanianList) {
@@ -404,7 +358,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadRussianData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReRussianru> russianList = russianruService.getLanguageListByresourceref(resourceId);
+		List<ReRussianru> russianList = languageServices.getRussianruService().getLanguageListByresourceref(resourceId);
 		if (russianList != null && !russianList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReRussianru russian : russianList) {
@@ -419,7 +373,7 @@ public class ResourceItemTreeDataProvider {
 	}
 
 	private void loadTurkmenData(List<ReResourceitem> resourceItemList, Integer resourceId) {
-		List<ReTurkmentm> turkmenList = turkmenService.getLanguageListByresourceref(resourceId);
+		List<ReTurkmentm> turkmenList = languageServices.getTurkmenService().getLanguageListByresourceref(resourceId);
 		if (turkmenList != null && !turkmenList.isEmpty()) {
 			for (ReResourceitem item : resourceItemList) {
 				for (ReTurkmentm turkmen : turkmenList) {
