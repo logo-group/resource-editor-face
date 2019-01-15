@@ -33,6 +33,7 @@ import com.lbs.re.ui.util.RENotification;
 import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.AbstractDataProvider;
 import com.lbs.re.ui.view.AbstractEditView;
+import com.lbs.re.ui.view.Operation;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemTreeDataProvider;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.converter.StringToIntegerConverter;
@@ -43,7 +44,8 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 
 @SpringView
-public class ResourceEditView extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
+public class ResourceEditView
+		extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,8 +66,9 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	private WindowResourceItem windowResourceItem;
 
 	@Autowired
-	public ResourceEditView(ResourceEditPresenter presenter, ResourceGroupComboBox resourcegroup, ResourceCaseComboBox resourcecase, ResourceTypeComboBox resourcetype,
-			OwnerProductComboBox ownerproduct, WindowResourceItem windowResourceItem) {
+	public ResourceEditView(ResourceEditPresenter presenter, ResourceGroupComboBox resourcegroup,
+			ResourceCaseComboBox resourcecase, ResourceTypeComboBox resourcetype, OwnerProductComboBox ownerproduct,
+			WindowResourceItem windowResourceItem) {
 		super(presenter);
 		this.resourcegroup = resourcegroup;
 		this.resourcecase = resourcecase;
@@ -79,8 +82,10 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		resourceNr = new RETextField("view.resourceedit.textfield.number", "full", true, true);
 		description = new RETextArea("view.resourceedit.textfield.description", "full", true, true);
 		buildResourceItemsGrid();
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, description, resourcegroup, resourcecase, resourcetype, ownerproduct);
-		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(), gridResourceItems, treeGridResourceItems);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, description, resourcegroup,
+				resourcecase, resourcetype, ownerproduct);
+		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(),
+				gridResourceItems, treeGridResourceItems);
 		getPresenter().setView(this);
 	}
 
@@ -191,7 +196,8 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		};
 		gridResourceItems.setId("ResourceItemGrid");
 
-		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(), SelectionMode.MULTI) {
+		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(),
+				SelectionMode.MULTI) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -208,8 +214,9 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResource> binder) {
-		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResource::getResourcenr,
-				ReResource::setResourcenr);
+		binder.forField(resourceNr).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter("must be integer"))
+				.bind(ReResource::getResourcenr, ReResource::setResourcenr);
 		super.bindFormFields(binder);
 		binder.forField(resourcegroup).bind("resourcegroup");
 	}
@@ -234,11 +241,13 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	}
 
 	public void showGridRowNotSelected() {
-		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"), NotifyType.ERROR);
+		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"),
+				NotifyType.ERROR);
 	}
 
 	public void showActiveRowSelected() {
-		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showActiveRowSelected"), NotifyType.ERROR);
+		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showActiveRowSelected"),
+				NotifyType.ERROR);
 	}
 
 	public ResourceGroupComboBox getResourcegroup() {
@@ -267,6 +276,16 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	public REButton getBtnDeActive() {
 		return btnDeActive;
+	}
+
+	@Override
+	public String getViewOperationName() {
+		return Operation.VIEW_RESOURCE;
+	}
+
+	@Override
+	public String getEditOperationName() {
+		return Operation.EDIT_RESOURCE;
 	}
 
 }

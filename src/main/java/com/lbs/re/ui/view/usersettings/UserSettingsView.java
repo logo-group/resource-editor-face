@@ -27,6 +27,7 @@ import com.lbs.re.ui.components.basic.REPasswordField;
 import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.components.combobox.ResourceGroupComboBox;
 import com.lbs.re.ui.view.AbstractEditView;
+import com.lbs.re.ui.view.Operation;
 import com.vaadin.spring.annotation.SpringView;
 
 @SpringView
@@ -57,7 +58,8 @@ public class UserSettingsView extends AbstractEditView<ReUser, REUserService, Us
 		newPass = new REPasswordField("view.useredit.passwordfield.password", "half", true, true);
 		newPass.addValueChangeListener(e -> getPresenter().setNewPassword(newPass.getValue()));
 
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, userName, newPass, name, surname, email, altemail, department);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, userName, newPass, name, surname, email,
+				altemail, department);
 
 		getPresenter().setView(this);
 	}
@@ -65,6 +67,16 @@ public class UserSettingsView extends AbstractEditView<ReUser, REUserService, Us
 	@Override
 	public String getHeader() {
 		return getLocaleValue("view.useredit.header");
+	}
+
+	@Override
+	public String getViewOperationName() {
+		return Operation.NO_CHECK;
+	}
+
+	@Override
+	public String getEditOperationName() {
+		return Operation.NO_CHECK;
 	}
 
 }

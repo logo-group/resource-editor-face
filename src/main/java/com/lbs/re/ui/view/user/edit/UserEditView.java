@@ -32,6 +32,7 @@ import com.lbs.re.ui.components.combobox.UserRoleComboBox;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
 import com.lbs.re.ui.components.layout.REVerticalLayout;
 import com.lbs.re.ui.view.AbstractEditView;
+import com.lbs.re.ui.view.Operation;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
@@ -59,7 +60,8 @@ public class UserEditView extends AbstractEditView<ReUser, REUserService, UserEd
 	private RECheckBox englishDelete;
 
 	@Autowired
-	public UserEditView(UserEditPresenter presenter, ResourceGroupComboBox defaultresourcegroup, UserRoleComboBox generalaccessrights) {
+	public UserEditView(UserEditPresenter presenter, ResourceGroupComboBox defaultresourcegroup,
+			UserRoleComboBox generalaccessrights) {
 		super(presenter);
 		this.defaultresourcegroup = defaultresourcegroup;
 		this.generalaccessrights = generalaccessrights;
@@ -82,8 +84,8 @@ public class UserEditView extends AbstractEditView<ReUser, REUserService, UserEd
 		newPass.addValueChangeListener(e -> getPresenter().setNewPassword(newPass.getValue()));
 		newPass.addValueChangeListener(e -> getPresenter().setNewPassword(newPass.getValue()));
 
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, userName, newPass, name, surname, email, altemail, department, defaultresourcegroup,
-				generalaccessrights);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, userName, newPass, name, surname, email,
+				altemail, department, defaultresourcegroup, generalaccessrights);
 		addSection(getLocaleValue("view.viewedit.section.languageauthorities"), 1, null, listLanguageAuthorities());
 		getPresenter().setView(this);
 	}
@@ -150,6 +152,16 @@ public class UserEditView extends AbstractEditView<ReUser, REUserService, UserEd
 
 	public void setDefaultresourcegroup(ResourceGroupComboBox defaultresourcegroup) {
 		this.defaultresourcegroup = defaultresourcegroup;
+	}
+
+	@Override
+	public String getViewOperationName() {
+		return Operation.NO_CHECK;
+	}
+
+	@Override
+	public String getEditOperationName() {
+		return Operation.NO_CHECK;
 	}
 
 }

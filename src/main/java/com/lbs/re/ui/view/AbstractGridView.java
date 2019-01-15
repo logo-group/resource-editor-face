@@ -250,7 +250,8 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 						@Override
 						public void onCancel() {
 						}
-					}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"), getLocaleValue("general.button.cancel"));
+					}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
+							getLocaleValue("general.button.cancel"));
 				}
 
 			}
@@ -362,8 +363,7 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	/**
 	 * To be called when view selected.
 	 *
-	 * @param item
-	 *            Item
+	 * @param item Item
 	 */
 	public void onGridViewSelected(T item) {
 		if (getEditView() != null) {
@@ -374,8 +374,7 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	/**
 	 * To be called when delete selected.
 	 *
-	 * @param item
-	 *            Item
+	 * @param item Item
 	 * @throws LocalizedException
 	 */
 	public void onGridDeleteSelected(T item) throws LocalizedException {
@@ -386,8 +385,7 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	/**
 	 * Executes confirmation for delete operations.
 	 *
-	 * @param item
-	 *            Item
+	 * @param item Item
 	 */
 	private void confirmDelete(T item) {
 		REDialog.confirm(AppUI.getCurrent(), new ConfirmationListener() {
@@ -404,7 +402,8 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 			@Override
 			public void onCancel() {
 			}
-		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"), getLocaleValue("general.button.cancel"));
+		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
+				getLocaleValue("general.button.cancel"));
 	}
 
 	/**
@@ -453,4 +452,10 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 		getLogger().error(e.getLocalizedMessage(), e);
 		RENotification.showNotification(e.getLocalizedMessage(), NotifyType.ERROR);
 	}
+
+	public abstract String getListOperationName();
+
+	public abstract String getAddOperationName();
+
+	public abstract String getDeleteOperationName();
 }

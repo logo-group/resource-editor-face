@@ -181,7 +181,8 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 		dateCreated = new REDateTimeField("textfield.createddate", "half", true, false);
 		updatedUser = new RETextField("textfield.updateduser", "half", true, false);
 		dateUpdated = new REDateTimeField("textfield.updateddate", "half", true, false);
-		addSection(getLocaleValue("section.userproperties"), 0, null, id, createdUser, dateCreated, updatedUser, dateUpdated);
+		addSection(getLocaleValue("section.userproperties"), 0, null, id, createdUser, dateCreated, updatedUser,
+				dateUpdated);
 	}
 
 	protected void addSection(String title, int position, Resource icon, Component... c) {
@@ -200,7 +201,8 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 		vlayTemp.setMargin(true);
 		vlayTemp.setSpacing(true);
 		vlayTemp.addComponent(cssLayout);
-		accordion.addTab(vlayTemp, title, icon, position).setStyleName(com.lbs.re.ui.util.Constants.TEDAM_ACCORDION_TAB_CSS);
+		accordion.addTab(vlayTemp, title, icon, position)
+				.setStyleName(com.lbs.re.ui.util.Constants.TEDAM_ACCORDION_TAB_CSS);
 	}
 
 	private Component wrapWithHorizontalLayout(Component c) {
@@ -269,12 +271,14 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 	}
 
 	public Stream<Object> validate() {
-		Stream<Object> errorFields = getBinder().validate().getFieldValidationErrors().stream().map(BindingValidationStatus::getField);
+		Stream<Object> errorFields = getBinder().validate().getFieldValidationErrors().stream()
+				.map(BindingValidationStatus::getField);
 		return errorFields;
 	}
 
 	public void bindFormFields(BeanValidationBinder<T> binder) {
-		binder.forField(id).withNullRepresentation("").withConverter(new StringToIntegerConverter(Integer.valueOf(0), "")).bind(T::getId, T::setId);
+		binder.forField(id).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter(Integer.valueOf(0), "")).bind(T::getId, T::setId);
 		getBinder().bindInstanceFields(this);
 	}
 
@@ -289,7 +293,8 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 	}
 
 	public void showDataIntegrityException() {
-		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.DataIntegrityViolationException"), NotifyType.ERROR);
+		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.DataIntegrityViolationException"),
+				NotifyType.ERROR);
 	}
 
 	protected void logError(LocalizedException e) {
@@ -310,11 +315,13 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 	}
 
 	public void showSuccessfulSave() {
-		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
+		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"),
+				NotifyType.SUCCESS);
 	}
 
 	public void showSuccessfulUpdate() {
-		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulUpdate"), NotifyType.SUCCESS);
+		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulUpdate"),
+				NotifyType.SUCCESS);
 	}
 
 	public List<REGrid<?>> getGridList() {
@@ -336,4 +343,8 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 	public void setLblFolder(RELabel lblFolder) {
 		this.lblFolder = lblFolder;
 	}
+
+	public abstract String getViewOperationName();
+
+	public abstract String getEditOperationName();
 }

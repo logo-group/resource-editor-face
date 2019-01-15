@@ -14,6 +14,7 @@ import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.grid.RUDOperations;
 import com.lbs.re.ui.view.AbstractGridView;
+import com.lbs.re.ui.view.Operation;
 import com.lbs.re.ui.view.user.edit.UserEditView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
@@ -71,6 +72,21 @@ public class UserGridView extends AbstractGridView<ReUser, REUserService, UserGr
 	public void buildGridColumnDescription() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public String getListOperationName() {
+		return Operation.NO_CHECK;
+	}
+
+	@Override
+	public String getAddOperationName() {
+		return Operation.NO_CHECK;
+	}
+
+	@Override
+	public String getDeleteOperationName() {
+		return Operation.NO_CHECK;
 	}
 
 }

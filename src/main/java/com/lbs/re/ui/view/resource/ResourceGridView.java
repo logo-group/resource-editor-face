@@ -14,13 +14,15 @@ import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.grid.RUDOperations;
 import com.lbs.re.ui.view.AbstractGridView;
+import com.lbs.re.ui.view.Operation;
 import com.lbs.re.ui.view.resource.edit.ResourceEditView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Grid.SelectionMode;
 
 @SpringView
-public class ResourceGridView extends AbstractGridView<ReResource, ResourceService, ResourceGridPresenter, ResourceGridView> {
+public class ResourceGridView
+		extends AbstractGridView<ReResource, ResourceService, ResourceGridPresenter, ResourceGridView> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -71,6 +73,21 @@ public class ResourceGridView extends AbstractGridView<ReResource, ResourceServi
 	public void buildGridColumnDescription() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public String getListOperationName() {
+		return Operation.LIST_RESOURCE;
+	}
+
+	@Override
+	public String getAddOperationName() {
+		return Operation.ADD_RESOURCE;
+	}
+
+	@Override
+	public String getDeleteOperationName() {
+		return Operation.DELETE_RESOURCE;
 	}
 
 }

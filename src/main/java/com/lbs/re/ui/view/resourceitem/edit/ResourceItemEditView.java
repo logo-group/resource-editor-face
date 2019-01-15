@@ -9,12 +9,14 @@ import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.ui.components.basic.RETextArea;
 import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.view.AbstractEditView;
+import com.lbs.re.ui.view.Operation;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.spring.annotation.SpringView;
 
 @SpringView
-public class ResourceItemEditView extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
+public class ResourceItemEditView
+		extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
 
 	/**
 	 * 
@@ -71,8 +73,9 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 		turkmenTm = new RETextArea("column.resource.item.turkmentm", "full", true, true);
 
 		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info);
-		addSection(getLocaleValue("view.viewedit.section.languages"), 1, null, turkishTr, englishUs, albanianKv, arabicEg, arabicJo, arabicSa, azerbaijaniAz, bulgarianBg, frenchFr,
-				georgianGe, germanDe, persianIr, romanianRo, russianRu, turkmenTm);
+		addSection(getLocaleValue("view.viewedit.section.languages"), 1, null, turkishTr, englishUs, albanianKv,
+				arabicEg, arabicJo, arabicSa, azerbaijaniAz, bulgarianBg, frenchFr, georgianGe, germanDe, persianIr,
+				romanianRo, russianRu, turkmenTm);
 
 		getCancel().setVisible(false);
 		getSave().setVisible(false);
@@ -82,11 +85,14 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResourceitem> binder) {
-		binder.forField(ordernr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getOrdernr,
-				ReResourceitem::setOrdernr);
-		binder.forField(tagnr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getTagnr, ReResourceitem::setTagnr);
-		binder.forField(levelnr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getLevelnr,
-				ReResourceitem::setLevelnr);
+		binder.forField(ordernr).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter("must be integer"))
+				.bind(ReResourceitem::getOrdernr, ReResourceitem::setOrdernr);
+		binder.forField(tagnr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer"))
+				.bind(ReResourceitem::getTagnr, ReResourceitem::setTagnr);
+		binder.forField(levelnr).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter("must be integer"))
+				.bind(ReResourceitem::getLevelnr, ReResourceitem::setLevelnr);
 		super.bindFormFields(binder);
 	}
 
@@ -173,6 +179,16 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 
 	public RETextArea getTurkmenTm() {
 		return turkmenTm;
+	}
+
+	@Override
+	public String getViewOperationName() {
+		return Operation.NO_CHECK;
+	}
+
+	@Override
+	public String getEditOperationName() {
+		return Operation.NO_CHECK;
 	}
 
 }
