@@ -2,6 +2,7 @@ package com.lbs.re.ui.view.resource.edit;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -97,6 +98,9 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			if (treeGrid.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
+			} else if (isActiveItemExists(treeGrid.getSelectedItems())) {
+				getView().showActiveRowSelected();
+				return;
 			}
 			treeGrid.getSelectedItems().forEach(resourceItem -> {
 				try {
@@ -113,6 +117,9 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			if (listGrid.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
+			} else if (isActiveItemExists(treeGrid.getSelectedItems())) {
+				getView().showActiveRowSelected();
+				return;
 			}
 			listGrid.getSelectedItems().forEach(resourceItem -> {
 				try {
@@ -123,6 +130,64 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 				}
 			});
 
+			listGrid.getSelectedItems().forEach(resourceItem -> listGrid.getGridDataProvider().removeItem(resourceItem));
+			listGrid.deselectAll();
+			listGrid.refreshAll();
+		}
+	}
+
+	private boolean isActiveItemExists(Set<ReResourceitem> itemSet) {
+		for (ReResourceitem item : itemSet) {
+			if (item.getActive() == 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void setActiveItems(boolean isActive) {
+		REFilterGrid<ReResourceitem> listGrid = getView().getGridResourceItems();
+		RETreeGrid<ReResourceitem> treeGrid = getView().getTreeGridResourceItems();
+
+		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+			if (treeGrid.getSelectedItems().isEmpty()) {
+				getView().showGridRowNotSelected();
+				return;
+			}
+			treeGrid.getSelectedItems().forEach(resourceItem -> {
+				try {
+					ReResourceitem item = (ReResourceitem) resourceItem;
+					if (isActive) {
+						item.setActive(1);
+					} else {
+						item.setActive(0);
+					}
+					resourceitemService.save(item);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			});
+			treeGrid.deselectAll();
+			treeGrid.refreshAll();
+		} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+			if (listGrid.getSelectedItems().isEmpty()) {
+				getView().showGridRowNotSelected();
+				return;
+			}
+			listGrid.getSelectedItems().forEach(resourceItem -> {
+				try {
+					ReResourceitem item = resourceItem;
+					if (isActive) {
+						item.setActive(1);
+					} else {
+						item.setActive(0);
+					}
+					resourceitemService.save(item);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			});
 			listGrid.getSelectedItems().forEach(resourceItem -> listGrid.getGridDataProvider().removeItem(resourceItem));
 			listGrid.deselectAll();
 			listGrid.refreshAll();

@@ -55,6 +55,8 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	private OwnerProductComboBox ownerproduct;
 	private REButton btnAddRow;
 	private REButton btnRemoveRow;
+	private REButton btnActive;
+	private REButton btnDeActive;
 
 	private REFilterGrid<ReResourceitem> gridResourceItems;
 	private RETreeGrid<ReResourceitem> treeGridResourceItems;
@@ -87,7 +89,9 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 		btnAddRow = new REButton("view.testcaseedit.button.addrow", VaadinIcons.PLUS_CIRCLE);
 		btnRemoveRow = new REButton("view.testcaseedit.button.removerow", VaadinIcons.MINUS_CIRCLE);
-		hLayButtons.addComponents(btnAddRow, btnRemoveRow);
+		btnActive = new REButton("view.testcaseedit.button.activerow", VaadinIcons.CHECK_SQUARE_O);
+		btnDeActive = new REButton("view.testcaseedit.button.deactiverow", VaadinIcons.CLOSE_CIRCLE_O);
+		hLayButtons.addComponents(btnAddRow, btnRemoveRow, btnActive, btnDeActive);
 
 		btnAddRow.addClickListener(e -> {
 			try {
@@ -103,6 +107,12 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		});
+		btnActive.addClickListener(e -> {
+			getPresenter().setActiveItems(true);
+		});
+		btnDeActive.addClickListener(e -> {
+			getPresenter().setActiveItems(false);
 		});
 		return hLayButtons;
 	}
@@ -223,12 +233,12 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		}
 	}
 
-	protected void refreshPage() {
-		initView();
-	}
-
 	public void showGridRowNotSelected() {
 		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"), NotifyType.ERROR);
+	}
+
+	public void showActiveRowSelected() {
+		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showActiveRowSelected"), NotifyType.ERROR);
 	}
 
 	public ResourceGroupComboBox getResourcegroup() {
