@@ -129,116 +129,26 @@ public class ResourceItemEditPresenter extends
 	}
 
 	public void checkLanguageFields(ReResourceitem item) throws LocalizedException {
-		if (!getView().getTurkishTr().getValue().isEmpty()) {
-			turkishTr = languageServices.getTurkishService().getLanguageByresourceitemref(item.getId());
-			if (turkishTr == null) {
-				turkishTr = new ReTurkishtr();
-			}
-			persistLanguage(turkishTr, item);
-		}
-		if (!getView().getEnglishUs().getValue().isEmpty()) {
-			englishUs = languageServices.getEnglishService().getLanguageByresourceitemref(item.getId());
-			if (englishUs == null) {
-				englishUs = new ReEnglishus();
-			}
-			persistLanguage(englishUs, item);
-		}
-		if (!getView().getAlbanianKv().getValue().isEmpty()) {
-			albanianKv = languageServices.getAlbanianService().getLanguageByresourceitemref(item.getId());
-			if (albanianKv == null) {
-				albanianKv = new ReAlbaniankv();
-			}
-			persistLanguage(albanianKv, item);
-		}
-		if (!getView().getArabicEg().getValue().isEmpty()) {
-			arabicEg = languageServices.getArabicEgService().getLanguageByresourceitemref(item.getId());
-			if (arabicEg == null) {
-				arabicEg = new ReArabiceg();
-			}
-			persistLanguage(arabicEg, item);
-		}
-		if (!getView().getArabicJo().getValue().isEmpty()) {
-			arabicJo = languageServices.getArabicJoService().getLanguageByresourceitemref(item.getId());
-			if (arabicJo == null) {
-				arabicJo = new ReArabicjo();
-			}
-			persistLanguage(arabicJo, item);
-		}
-		if (!getView().getArabicSa().getValue().isEmpty()) {
-			arabicSa = languageServices.getArabicSaService().getLanguageByresourceitemref(item.getId());
-			if (arabicSa == null) {
-				arabicSa = new ReArabicsa();
-			}
-			persistLanguage(arabicSa, item);
-		}
-		if (!getView().getAzerbaijaniAz().getValue().isEmpty()) {
-			azerbaijaniAz = languageServices.getAzerbaijaniazService().getLanguageByresourceitemref(item.getId());
-			if (azerbaijaniAz == null) {
-				azerbaijaniAz = new ReAzerbaijaniaz();
-			}
-			persistLanguage(azerbaijaniAz, item);
-		}
-		if (!getView().getBulgarianBg().getValue().isEmpty()) {
-			bulgarianBg = languageServices.getBulgarianService().getLanguageByresourceitemref(item.getId());
-			if (bulgarianBg == null) {
-				bulgarianBg = new ReBulgarianbg();
-			}
-			persistLanguage(bulgarianBg, item);
-		}
-		if (!getView().getFrenchFr().getValue().isEmpty()) {
-			frenchFr = languageServices.getFrenchService().getLanguageByresourceitemref(item.getId());
-			if (frenchFr == null) {
-				frenchFr = new ReFrenchfr();
-			}
-			persistLanguage(frenchFr, item);
-		}
-		if (!getView().getGeorgianGe().getValue().isEmpty()) {
-			georgianGe = languageServices.getGeorgianService().getLanguageByresourceitemref(item.getId());
-			if (georgianGe == null) {
-				georgianGe = new ReGeorgiange();
-			}
-			persistLanguage(georgianGe, item);
-		}
-		if (!getView().getGermanDe().getValue().isEmpty()) {
-			germanDe = languageServices.getGermanService().getLanguageByresourceitemref(item.getId());
-			if (germanDe == null) {
-				germanDe = new ReGermande();
-			}
-			persistLanguage(germanDe, item);
-		}
-		if (!getView().getPersianIr().getValue().isEmpty()) {
-			persianIr = languageServices.getPersianService().getLanguageByresourceitemref(item.getId());
-			if (persianIr == null) {
-				persianIr = new RePersianir();
-			}
-			persistLanguage(persianIr, item);
-		}
-		if (!getView().getRomanianRo().getValue().isEmpty()) {
-			romanianRo = languageServices.getRomanianService().getLanguageByresourceitemref(item.getId());
-			if (romanianRo == null) {
-				romanianRo = new ReRomanianro();
-			}
-			persistLanguage(romanianRo, item);
-		}
-		if (!getView().getRussianRu().getValue().isEmpty()) {
-			russianRu = languageServices.getRussianruService().getLanguageByresourceitemref(item.getId());
-			if (russianRu == null) {
-				russianRu = new ReRussianru();
-			}
-			persistLanguage(russianRu, item);
-		}
-		if (!getView().getTurkmenTm().getValue().isEmpty()) {
-			turkmenTm = languageServices.getTurkmenService().getLanguageByresourceitemref(item.getId());
-			if (turkmenTm == null) {
-				turkmenTm = new ReTurkmentm();
-			}
-			persistLanguage(turkmenTm, item);
-		}
+		persistLanguage(turkishTr, item);
+		persistLanguage(englishUs, item);
+		persistLanguage(albanianKv, item);
+		persistLanguage(arabicEg, item);
+		persistLanguage(arabicJo, item);
+		persistLanguage(arabicSa, item);
+		persistLanguage(azerbaijaniAz, item);
+		persistLanguage(bulgarianBg, item);
+		persistLanguage(frenchFr, item);
+		persistLanguage(georgianGe, item);
+		persistLanguage(germanDe, item);
+		persistLanguage(persianIr, item);
+		persistLanguage(romanianRo, item);
+		persistLanguage(russianRu, item);
+		persistLanguage(turkmenTm, item);
 	}
 
 	private <T extends ReLanguageTable> void persistLanguage(T language, ReResourceitem item)
 			throws LocalizedException {
-		if (item.getResourceref() != null) {
+		if (item.getResourceref() != null && language != null) {
 			language.setResourceref(item.getResourceref());
 			language.setReResourceitem(item);
 			language.setResourceitemref(item.getId());
