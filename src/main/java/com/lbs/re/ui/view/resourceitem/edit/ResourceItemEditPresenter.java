@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
+import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.data.service.ResourceitemService;
@@ -230,9 +231,12 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 			language.setResourceitemref(item.getId());
 			if (language.getId() == 0) {
 				language.setCreatedon(LocalDateTime.now());
+				language.setCreatedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
 			} else {
 				language.setModifiedon(LocalDateTime.now());
+				language.setModifiedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
 			}
+
 			if (language instanceof ReTurkishtr) {
 				String trValue = getView().getTurkishTr().getValue();
 				if (language.getResourcestr() != null) {
@@ -247,7 +251,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 
 			}
 
-			if (language instanceof ReEnglishus) {
+			else if (language instanceof ReEnglishus) {
 				String enValue = getView().getEnglishUs().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(enValue)) {
@@ -260,7 +264,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReAlbaniankv) {
+			else if (language instanceof ReAlbaniankv) {
 				String kvValue = getView().getAlbanianKv().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(kvValue)) {
@@ -273,7 +277,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReArabiceg) {
+			else if (language instanceof ReArabiceg) {
 				String egValue = getView().getArabicEg().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(egValue)) {
@@ -286,7 +290,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReArabicjo) {
+			else if (language instanceof ReArabicjo) {
 				String joValue = getView().getArabicJo().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(joValue)) {
@@ -299,7 +303,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReArabicsa) {
+			else if (language instanceof ReArabicsa) {
 				String saValue = getView().getArabicSa().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(saValue)) {
@@ -312,7 +316,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReAzerbaijaniaz) {
+			else if (language instanceof ReAzerbaijaniaz) {
 				String azValue = getView().getAzerbaijaniAz().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(azValue)) {
@@ -325,7 +329,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReBulgarianbg) {
+			else if (language instanceof ReBulgarianbg) {
 				String bgValue = getView().getBulgarianBg().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(bgValue)) {
@@ -338,7 +342,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReFrenchfr) {
+			else if (language instanceof ReFrenchfr) {
 				String frValue = getView().getFrenchFr().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(frValue)) {
@@ -352,7 +356,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 
 			}
 
-			if (language instanceof ReGeorgiange) {
+			else if (language instanceof ReGeorgiange) {
 				String geValue = getView().getGeorgianGe().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(geValue)) {
@@ -365,7 +369,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReGermande) {
+			else if (language instanceof ReGermande) {
 				String deValue = getView().getGermanDe().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(deValue)) {
@@ -378,7 +382,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof RePersianir) {
+			else if (language instanceof RePersianir) {
 				String irValue = getView().getPersianIr().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(irValue)) {
@@ -391,7 +395,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReRomanianro) {
+			else if (language instanceof ReRomanianro) {
 				String roValue = getView().getRomanianRo().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(roValue)) {
@@ -404,7 +408,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReRussianru) {
+			else if (language instanceof ReRussianru) {
 				String ruValue = getView().getRussianRu().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(ruValue)) {
@@ -417,7 +421,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				}
 			}
 
-			if (language instanceof ReTurkmentm) {
+			else if (language instanceof ReTurkmentm) {
 				String tmValue = getView().getTurkmenTm().getValue();
 				if (language.getResourcestr() != null) {
 					if (!language.getResourcestr().equals(tmValue)) {
