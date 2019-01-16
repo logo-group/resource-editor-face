@@ -35,6 +35,9 @@ import com.lbs.re.model.languages.ReRomanianro;
 import com.lbs.re.model.languages.ReRussianru;
 import com.lbs.re.model.languages.ReTurkishtr;
 import com.lbs.re.model.languages.ReTurkmentm;
+import com.lbs.re.ui.AppUI;
+import com.lbs.re.ui.dialog.ConfirmationListener;
+import com.lbs.re.ui.dialog.REDialog;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
@@ -470,6 +473,25 @@ public class ResourceItemEditPresenter extends
 
 	public ReUser getUser() {
 		return user;
+	}
+
+	public LanguageServices getLanguageServices() {
+		return languageServices;
+	}
+
+	public void confirmDelete() {
+		REDialog.confirm(AppUI.getCurrent(), new ConfirmationListener() {
+
+			@Override
+			public void onConfirm() {
+				System.out.println("confirmed!!!");
+			}
+
+			@Override
+			public void onCancel() {
+			}
+		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
+				getLocaleValue("general.button.cancel"));
 	}
 
 }

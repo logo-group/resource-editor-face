@@ -12,15 +12,12 @@ import com.lbs.re.data.service.ResourceitemService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.model.ReUser;
-import com.lbs.re.ui.AppUI;
 import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RETextArea;
 import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
 import com.lbs.re.ui.components.window.WindowDictionary;
-import com.lbs.re.ui.dialog.ConfirmationListener;
-import com.lbs.re.ui.dialog.REDialog;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
 import com.lbs.re.ui.util.RENotification;
@@ -313,95 +310,80 @@ public class ResourceItemEditView
 		turkmenTm = new RETextArea("column.resource.item.turkmentm", "full", true, true);
 	}
 
-	private void confirmDelete(RETextArea textarea) {
-		REDialog.confirm(AppUI.getCurrent(), new ConfirmationListener() {
-
-			@Override
-			public void onConfirm() {
-				textarea.clear();
-			}
-
-			@Override
-			public void onCancel() {
-			}
-		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
-				getLocaleValue("general.button.cancel"));
-	}
-
 	private void initDeleteButtons() {
 		albanianKvDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
 		albanianKvDelete.addClickListener(e -> {
-			confirmDelete(albanianKv);
+			getPresenter().confirmDelete();
 		});
 
 		arabicEgDelete = new REButton("arabicEgDelete", VaadinIcons.TRASH);
 		arabicEgDelete.addClickListener(e -> {
-			confirmDelete(arabicEg);
+			getPresenter().confirmDelete();
 		});
 
 		arabicJoDelete = new REButton("arabicJoDelete", VaadinIcons.TRASH);
 		arabicJoDelete.addClickListener(e -> {
-			confirmDelete(arabicJo);
+			getPresenter().confirmDelete();
 		});
 
 		arabicSaDelete = new REButton("arabicSaDelete", VaadinIcons.TRASH);
 		arabicSaDelete.addClickListener(e -> {
-			confirmDelete(arabicSa);
+			getPresenter().confirmDelete();
 		});
 
 		azerbaijaniAzDelete = new REButton("azerbaijaniAzDelete", VaadinIcons.TRASH);
 		azerbaijaniAzDelete.addClickListener(e -> {
-			confirmDelete(azerbaijaniAz);
+			getPresenter().confirmDelete();
 		});
 
 		bulgarianBgDelete = new REButton("bulgarianBgDelete", VaadinIcons.TRASH);
 		bulgarianBgDelete.addClickListener(e -> {
-			confirmDelete(bulgarianBg);
+			getPresenter().confirmDelete();
 		});
 
 		englishUsDelete = new REButton("englishUsDelete", VaadinIcons.TRASH);
 		englishUsDelete.addClickListener(e -> {
-			confirmDelete(englishUs);
+			getPresenter().confirmDelete();
 		});
 
 		frenchFrDelete = new REButton("frenchFrDelete", VaadinIcons.TRASH);
 		frenchFrDelete.addClickListener(e -> {
-			confirmDelete(frenchFr);
+			getPresenter().confirmDelete();
 		});
 
 		georgianGeDelete = new REButton("georgianGeDelete", VaadinIcons.TRASH);
 		georgianGeDelete.addClickListener(e -> {
-			confirmDelete(georgianGe);
+			getPresenter().confirmDelete();
 		});
 
 		germanDeDelete = new REButton("germanDeDelete", VaadinIcons.TRASH);
 		germanDeDelete.addClickListener(e -> {
-			confirmDelete(germanDe);
+			getPresenter().confirmDelete();
 		});
 
 		persianIrDelete = new REButton("persianIrDelete", VaadinIcons.TRASH);
 		persianIrDelete.addClickListener(e -> {
-			confirmDelete(persianIr);
+			getPresenter().confirmDelete();
 		});
 
 		romanianRoDelete = new REButton("romanianRoDelete", VaadinIcons.TRASH);
 		romanianRoDelete.addClickListener(e -> {
-			confirmDelete(romanianRo);
+			getPresenter().confirmDelete();
 		});
 
 		russianRuDelete = new REButton("russianRuDelete", VaadinIcons.TRASH);
 		russianRuDelete.addClickListener(e -> {
-			confirmDelete(russianRu);
+			getPresenter().confirmDelete();
 		});
 
 		turkishTrDelete = new REButton("turkishTrDelete", VaadinIcons.TRASH);
 		turkishTrDelete.addClickListener(e -> {
-			confirmDelete(turkishTr);
+			getPresenter().confirmDelete();
 		});
 
 		turkmenTmDelete = new REButton("turkmenTmDelete", VaadinIcons.TRASH);
 		turkmenTmDelete.addClickListener(e -> {
-			confirmDelete(turkmenTm);
+			getPresenter().confirmDelete();
 		});
 
 	}
