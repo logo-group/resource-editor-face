@@ -58,6 +58,22 @@ public class ResourceItemEditView
 	private REHorizontalLayout turkishTrLayout;
 	private REHorizontalLayout turkmenTmLayout;
 
+	private REHorizontalLayout albanianKvButtonLayout;
+	private REHorizontalLayout arabicEgButtonLayout;
+	private REHorizontalLayout arabicJoButtonLayout;
+	private REHorizontalLayout arabicSaButtonLayout;
+	private REHorizontalLayout azerbaijaniAzButtonLayout;
+	private REHorizontalLayout bulgarianBgButtonLayout;
+	private REHorizontalLayout englishUsButtonLayout;
+	private REHorizontalLayout frenchFrButtonLayout;
+	private REHorizontalLayout georgianGeButtonLayout;
+	private REHorizontalLayout germanDeButtonLayout;
+	private REHorizontalLayout persianIrButtonLayout;
+	private REHorizontalLayout romanianRoButtonLayout;
+	private REHorizontalLayout russianRuButtonLayout;
+	private REHorizontalLayout turkishTrButtonLayout;
+	private REHorizontalLayout turkmenTmButtonLayout;
+
 	private REButton albanianKvDelete;
 	private REButton arabicEgDelete;
 	private REButton arabicJoDelete;
@@ -114,6 +130,7 @@ public class ResourceItemEditView
 		initTextFields();
 		initLangTextAreas();
 		initDeleteButtons();
+		initButtonHorizontalLayouts();
 		initHorizontalLayouts();
 		initSections();
 
@@ -130,30 +147,6 @@ public class ResourceItemEditView
 				albanianKvLayout, arabicEgLayout, arabicJoLayout, arabicSaLayout, azerbaijaniAzLayout,
 				bulgarianBgLayout, frenchFrLayout, georgianGeLayout, germanDeLayout, persianIrLayout, romanianRoLayout,
 				russianRuLayout, turkmenTmLayout);
-	}
-
-	private void checkForUserRight(int userValue, REHorizontalLayout layout) {
-		if ((userValue == 0) || (userValue % 2 != READ)) { // no read right
-			layout.removeAllComponents();
-		} else {
-			switch (userValue) {
-			case READ:
-				layout.setEnabled(false);
-				break;
-			case READ + WRITE:
-				layout.getComponent(0).setEnabled(false); // delete button
-				break;
-			case READ + DELETE:
-				layout.getComponent(1).setEnabled(false); // textarea
-				break;
-			case READ + WRITE + DELETE:
-				// user has all rights. Enable all.
-				break;
-			default:
-				// for sonar and other tools.
-				break;
-			}
-		}
 	}
 
 	private void initButtons() {
@@ -176,22 +169,40 @@ public class ResourceItemEditView
 		dictionaryId = new RETextField("column.resource.item.dictionary", "full", true, false);
 	}
 
+	private void initButtonHorizontalLayouts() {
+		albanianKvButtonLayout = initREHorizontalLayout("albanianKvButtonLayout", albanianKvDelete);
+		arabicEgButtonLayout = initREHorizontalLayout("arabicEgButtonLayout", arabicEgDelete);
+		arabicJoButtonLayout = initREHorizontalLayout("arabicJoButtonLayout", arabicJoDelete);
+		arabicSaButtonLayout = initREHorizontalLayout("arabicSaButtonLayout", arabicSaDelete);
+		azerbaijaniAzButtonLayout = initREHorizontalLayout("azerbaijaniAzButtonLayout", azerbaijaniAzDelete);
+		bulgarianBgButtonLayout = initREHorizontalLayout("bulgarianBgButtonLayout", bulgarianBgDelete);
+		englishUsButtonLayout = initREHorizontalLayout("englishUsButtonLayout", englishUsDelete);
+		frenchFrButtonLayout = initREHorizontalLayout("frenchFrButtonLayout", frenchFrDelete);
+		georgianGeButtonLayout = initREHorizontalLayout("georgianGeButtonLayout", georgianGeDelete);
+		germanDeButtonLayout = initREHorizontalLayout("germanDeButtonLayout", germanDeDelete);
+		persianIrButtonLayout = initREHorizontalLayout("persianIrButtonLayout", persianIrDelete);
+		romanianRoButtonLayout = initREHorizontalLayout("romanianRoButtonLayout", romanianRoDelete);
+		russianRuButtonLayout = initREHorizontalLayout("russianRuButtonLayout", russianRuDelete);
+		turkishTrButtonLayout = initREHorizontalLayout("turkishTrButtonLayout", turkishTrDelete);
+		turkmenTmButtonLayout = initREHorizontalLayout("turkmenTmButtonLayout", turkmenTmDelete);
+	}
+
 	private void initHorizontalLayouts() {
-		albanianKvLayout = initREHorizontalLayout("albanianKvLayout", albanianKvDelete, albanianKv);
-		arabicEgLayout = initREHorizontalLayout("arabicEgLayout", arabicEgDelete, arabicEg);
-		arabicJoLayout = initREHorizontalLayout("arabicJoLayout", arabicJoDelete, arabicJo);
-		arabicSaLayout = initREHorizontalLayout("arabicSaLayout", arabicSaDelete, arabicSa);
-		azerbaijaniAzLayout = initREHorizontalLayout("azerbaijaniAzLayout", azerbaijaniAzDelete, azerbaijaniAz);
-		bulgarianBgLayout = initREHorizontalLayout("bulgarianBgLayout", bulgarianBgDelete, bulgarianBg);
-		englishUsLayout = initREHorizontalLayout("englishUsLayout", englishUsDelete, englishUs);
-		frenchFrLayout = initREHorizontalLayout("frenchFrLayout", frenchFrDelete, frenchFr);
-		georgianGeLayout = initREHorizontalLayout("georgianGeLayout", georgianGeDelete, georgianGe);
-		germanDeLayout = initREHorizontalLayout("germanDeLayout", germanDeDelete, germanDe);
-		persianIrLayout = initREHorizontalLayout("persianIrLayout", persianIrDelete, persianIr);
-		romanianRoLayout = initREHorizontalLayout("romanianRoLayout", romanianRoDelete, romanianRo);
-		russianRuLayout = initREHorizontalLayout("russianRuLayout", russianRuDelete, russianRu);
-		turkishTrLayout = initREHorizontalLayout("turkishTrLayout", turkishTrDelete, turkishTr);
-		turkmenTmLayout = initREHorizontalLayout("turkmenTmLayout", turkmenTmDelete, turkmenTm);
+		albanianKvLayout = initREHorizontalLayout("albanianKvLayout", albanianKvButtonLayout, albanianKv);
+		arabicEgLayout = initREHorizontalLayout("arabicEgLayout", arabicEgButtonLayout, arabicEg);
+		arabicJoLayout = initREHorizontalLayout("arabicJoLayout", arabicJoButtonLayout, arabicJo);
+		arabicSaLayout = initREHorizontalLayout("arabicSaLayout", arabicSaButtonLayout, arabicSa);
+		azerbaijaniAzLayout = initREHorizontalLayout("azerbaijaniAzLayout", azerbaijaniAzButtonLayout, azerbaijaniAz);
+		bulgarianBgLayout = initREHorizontalLayout("bulgarianBgLayout", bulgarianBgButtonLayout, bulgarianBg);
+		englishUsLayout = initREHorizontalLayout("englishUsLayout", englishUsButtonLayout, englishUs);
+		frenchFrLayout = initREHorizontalLayout("frenchFrLayout", frenchFrButtonLayout, frenchFr);
+		georgianGeLayout = initREHorizontalLayout("georgianGeLayout", georgianGeButtonLayout, georgianGe);
+		germanDeLayout = initREHorizontalLayout("germanDeLayout", germanDeButtonLayout, germanDe);
+		persianIrLayout = initREHorizontalLayout("persianIrLayout", persianIrButtonLayout, persianIr);
+		romanianRoLayout = initREHorizontalLayout("romanianRoLayout", romanianRoButtonLayout, romanianRo);
+		russianRuLayout = initREHorizontalLayout("russianRuLayout", russianRuButtonLayout, russianRu);
+		turkishTrLayout = initREHorizontalLayout("turkishTrLayout", turkishTrButtonLayout, turkishTr);
+		turkmenTmLayout = initREHorizontalLayout("turkmenTmLayout", turkmenTmButtonLayout, turkmenTm);
 
 		checkForUserRight(sessionUser.getSqkvaccessrights(), albanianKvLayout);
 		checkForUserRight(sessionUser.getAregaccessrights(), arabicEgLayout);
@@ -208,6 +219,30 @@ public class ResourceItemEditView
 		checkForUserRight(sessionUser.getRuruaccessrights(), russianRuLayout);
 		checkForUserRight(sessionUser.getTrtraccessrights(), turkishTrLayout);
 		checkForUserRight(sessionUser.getTktmaccessrights(), turkmenTmLayout);
+	}
+
+	private void checkForUserRight(int userValue, REHorizontalLayout layout) {
+		if ((userValue == 0) || (userValue % 2 != READ)) { // no read right
+			layout.removeAllComponents();
+		} else {
+			switch (userValue) {
+			case READ:
+				layout.setEnabled(false);
+				break;
+			case READ + WRITE:
+				layout.getComponent(0).setEnabled(false); // button
+				break;
+			case READ + DELETE:
+				layout.getComponent(1).setEnabled(false); // textarea
+				break;
+			case READ + WRITE + DELETE:
+				// user has all rights. Enable all.
+				break;
+			default:
+				// for sonar and other tools.
+				break;
+			}
+		}
 	}
 
 	private void initLangTextAreas() {
@@ -234,72 +269,72 @@ public class ResourceItemEditView
 			albanianKv.clear();
 		});
 
-		arabicEgDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		arabicEgDelete = new REButton("arabicEgDelete", VaadinIcons.TRASH);
 		arabicEgDelete.addClickListener(e -> {
 			arabicEg.clear();
 		});
 
-		arabicJoDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		arabicJoDelete = new REButton("arabicJoDelete", VaadinIcons.TRASH);
 		arabicJoDelete.addClickListener(e -> {
 			arabicJo.clear();
 		});
 
-		arabicSaDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		arabicSaDelete = new REButton("arabicSaDelete", VaadinIcons.TRASH);
 		arabicSaDelete.addClickListener(e -> {
 			arabicSa.clear();
 		});
 
-		azerbaijaniAzDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		azerbaijaniAzDelete = new REButton("azerbaijaniAzDelete", VaadinIcons.TRASH);
 		azerbaijaniAzDelete.addClickListener(e -> {
 			azerbaijaniAz.clear();
 		});
 
-		bulgarianBgDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		bulgarianBgDelete = new REButton("bulgarianBgDelete", VaadinIcons.TRASH);
 		bulgarianBgDelete.addClickListener(e -> {
 			bulgarianBg.clear();
 		});
 
-		englishUsDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		englishUsDelete = new REButton("englishUsDelete", VaadinIcons.TRASH);
 		englishUsDelete.addClickListener(e -> {
 			englishUs.clear();
 		});
 
-		frenchFrDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		frenchFrDelete = new REButton("frenchFrDelete", VaadinIcons.TRASH);
 		frenchFrDelete.addClickListener(e -> {
 			frenchFr.clear();
 		});
 
-		georgianGeDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		georgianGeDelete = new REButton("georgianGeDelete", VaadinIcons.TRASH);
 		georgianGeDelete.addClickListener(e -> {
 			georgianGe.clear();
 		});
 
-		germanDeDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		germanDeDelete = new REButton("germanDeDelete", VaadinIcons.TRASH);
 		germanDeDelete.addClickListener(e -> {
 			germanDe.clear();
 		});
 
-		persianIrDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		persianIrDelete = new REButton("persianIrDelete", VaadinIcons.TRASH);
 		persianIrDelete.addClickListener(e -> {
 			persianIr.clear();
 		});
 
-		romanianRoDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		romanianRoDelete = new REButton("romanianRoDelete", VaadinIcons.TRASH);
 		romanianRoDelete.addClickListener(e -> {
 			romanianRo.clear();
 		});
 
-		russianRuDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		russianRuDelete = new REButton("russianRuDelete", VaadinIcons.TRASH);
 		russianRuDelete.addClickListener(e -> {
 			russianRu.clear();
 		});
 
-		turkishTrDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		turkishTrDelete = new REButton("turkishTrDelete", VaadinIcons.TRASH);
 		turkishTrDelete.addClickListener(e -> {
 			turkishTr.clear();
 		});
 
-		turkmenTmDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
+		turkmenTmDelete = new REButton("turkmenTmDelete", VaadinIcons.TRASH);
 		turkmenTmDelete.addClickListener(e -> {
 			turkmenTm.clear();
 		});
