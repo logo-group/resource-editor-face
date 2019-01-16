@@ -1,5 +1,7 @@
 package com.lbs.re.ui.view.resourceitem.edit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -42,21 +44,21 @@ public class ResourceItemEditView
 	private static final int WRITE = 2;
 	private static final int DELETE = 4;
 
-	private REHorizontalLayout albanianKvLayout;
-	private REHorizontalLayout arabicEgLayout;
-	private REHorizontalLayout arabicJoLayout;
-	private REHorizontalLayout arabicSaLayout;
-	private REHorizontalLayout azerbaijaniAzLayout;
-	private REHorizontalLayout bulgarianBgLayout;
-	private REHorizontalLayout englishUsLayout;
-	private REHorizontalLayout frenchFrLayout;
-	private REHorizontalLayout georgianGeLayout;
-	private REHorizontalLayout germanDeLayout;
-	private REHorizontalLayout persianIrLayout;
-	private REHorizontalLayout romanianRoLayout;
-	private REHorizontalLayout russianRuLayout;
-	private REHorizontalLayout turkishTrLayout;
-	private REHorizontalLayout turkmenTmLayout;
+	private REHorizontalLayoutWithState albanianKvLayout;
+	private REHorizontalLayoutWithState arabicEgLayout;
+	private REHorizontalLayoutWithState arabicJoLayout;
+	private REHorizontalLayoutWithState arabicSaLayout;
+	private REHorizontalLayoutWithState azerbaijaniAzLayout;
+	private REHorizontalLayoutWithState bulgarianBgLayout;
+	private REHorizontalLayoutWithState englishUsLayout;
+	private REHorizontalLayoutWithState frenchFrLayout;
+	private REHorizontalLayoutWithState georgianGeLayout;
+	private REHorizontalLayoutWithState germanDeLayout;
+	private REHorizontalLayoutWithState persianIrLayout;
+	private REHorizontalLayoutWithState romanianRoLayout;
+	private REHorizontalLayoutWithState russianRuLayout;
+	private REHorizontalLayoutWithState turkishTrLayout;
+	private REHorizontalLayoutWithState turkmenTmLayout;
 
 	private REHorizontalLayout albanianKvButtonLayout;
 	private REHorizontalLayout arabicEgButtonLayout;
@@ -141,12 +143,57 @@ public class ResourceItemEditView
 	}
 
 	private void initSections() {
+		List<REHorizontalLayoutWithState> list = new ArrayList<REHorizontalLayoutWithState>();
+		if (turkishTrLayout.isRemove() == false) {
+			list.add(turkishTrLayout);
+		}
+		if (englishUsLayout.isRemove() == false) {
+			list.add(englishUsLayout);
+		}
+		if (albanianKvLayout.isRemove() == false) {
+			list.add(albanianKvLayout);
+		}
+		if (arabicEgLayout.isRemove() == false) {
+			list.add(arabicEgLayout);
+		}
+		if (arabicJoLayout.isRemove() == false) {
+			list.add(arabicJoLayout);
+		}
+		if (arabicSaLayout.isRemove() == false) {
+			list.add(arabicSaLayout);
+		}
+		if (azerbaijaniAzLayout.isRemove() == false) {
+			list.add(azerbaijaniAzLayout);
+		}
+		if (bulgarianBgLayout.isRemove() == false) {
+			list.add(bulgarianBgLayout);
+		}
+		if (frenchFrLayout.isRemove() == false) {
+			list.add(frenchFrLayout);
+		}
+		if (georgianGeLayout.isRemove() == false) {
+			list.add(georgianGeLayout);
+		}
+		if (germanDeLayout.isRemove() == false) {
+			list.add(germanDeLayout);
+		}
+		if (persianIrLayout.isRemove() == false) {
+			list.add(persianIrLayout);
+		}
+		if (romanianRoLayout.isRemove() == false) {
+			list.add(romanianRoLayout);
+		}
+		if (russianRuLayout.isRemove() == false) {
+			list.add(russianRuLayout);
+		}
+		if (turkmenTmLayout.isRemove() == false) {
+			list.add(turkmenTmLayout);
+		}
+		REHorizontalLayoutWithState[] array = new REHorizontalLayoutWithState[list.size()];
+		list.toArray(array);
 		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info,
 				btnDictionary, dictionaryId);
-		addSection(getLocaleValue("view.viewedit.section.languages"), 1, null, turkishTrLayout, englishUsLayout,
-				albanianKvLayout, arabicEgLayout, arabicJoLayout, arabicSaLayout, azerbaijaniAzLayout,
-				bulgarianBgLayout, frenchFrLayout, georgianGeLayout, germanDeLayout, persianIrLayout, romanianRoLayout,
-				russianRuLayout, turkmenTmLayout);
+		addSection(getLocaleValue("view.viewedit.section.languages"), 1, null, array);
 	}
 
 	private void initButtons() {
@@ -221,9 +268,9 @@ public class ResourceItemEditView
 		checkForUserRight(sessionUser.getTktmaccessrights(), turkmenTmLayout);
 	}
 
-	private void checkForUserRight(int userValue, REHorizontalLayout layout) {
+	private void checkForUserRight(int userValue, REHorizontalLayoutWithState layout) {
 		if ((userValue == 0) || (userValue % 2 != READ)) { // no read right
-			layout.removeAllComponents();
+			layout.setRemove(true);
 		} else {
 			switch (userValue) {
 			case READ:
@@ -341,8 +388,8 @@ public class ResourceItemEditView
 
 	}
 
-	private REHorizontalLayout initREHorizontalLayout(String id, Component... components) {
-		REHorizontalLayout layout = new REHorizontalLayout();
+	private REHorizontalLayoutWithState initREHorizontalLayout(String id, Component... components) {
+		REHorizontalLayoutWithState layout = new REHorizontalLayoutWithState();
 		layout.setStyleName("top-bar");
 		layout.setSpacing(false);
 		layout.setWidth("100%");
@@ -477,4 +524,19 @@ public class ResourceItemEditView
 		return Operation.EDIT_RESOURCE_ITEM;
 	}
 
+}
+
+class REHorizontalLayoutWithState extends REHorizontalLayout {
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean remove = false;
+
+	public boolean isRemove() {
+		return remove;
+	}
+
+	public void setRemove(boolean remove) {
+		this.remove = remove;
+	}
 }
