@@ -10,10 +10,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
 import com.lbs.re.data.service.REUserService;
+import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.data.service.ResourceitemService;
 import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReLanguageTable;
+import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.model.languages.ReAlbaniankv;
 import com.lbs.re.model.languages.ReArabiceg;
@@ -68,12 +70,14 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 	private ReTurkmentm turkmenTm;
 
 	ReResourceitem resourceItem;
+	ResourceService resourceService;
 
 	@Autowired
 	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceitemService resourceItemService, REUserService userService,
-			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices) {
+			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices, ResourceService resourceService) {
 		super(viewEventBus, navigationManager, resourceItemService, ReResourceitem.class, beanFactory, userService);
 		this.languageServices = languageServices;
+		this.resourceService = resourceService;
 	}
 
 	@Override
@@ -102,7 +106,11 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 
 	@Override
 	public ReResourceitem save(ReResourceitem item) throws LocalizedException {
-		return super.save(item);
+		super.save(item);
+		ReResource reResource = resourceService.getById(item.getResourceref());
+		reResource.orderResourceItems();
+		resourceService.save(reResource);
+		return item;
 	}
 
 	public void checkLanguageFields(ReResourceitem item) throws LocalizedException {
