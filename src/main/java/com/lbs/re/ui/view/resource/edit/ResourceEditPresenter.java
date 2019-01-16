@@ -142,7 +142,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			if (listGrid.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
-			} else if (isActiveItemExists(treeGrid.getSelectedItems())) {
+			} else if (isActiveItemExists(listGrid.getSelectedItems())) {
 				getView().showActiveRowSelected();
 				return;
 			}
@@ -213,7 +213,6 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 					e.printStackTrace();
 				}
 			});
-			listGrid.getSelectedItems().forEach(resourceItem -> listGrid.getGridDataProvider().removeItem(resourceItem));
 			listGrid.deselectAll();
 			listGrid.refreshAll();
 		}

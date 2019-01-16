@@ -14,6 +14,7 @@ import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.grid.RUDOperations;
 import com.lbs.re.ui.view.AbstractGridView;
+import com.lbs.re.ui.view.Operation;
 import com.lbs.re.ui.view.message.edit.MessageEditView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
@@ -70,6 +71,21 @@ public class MessageGridView
 
 	@Override
 	public void buildGridColumnDescription() {
+	}
+
+	@Override
+	public String getListOperationName() {
+		return Operation.LIST_MESSAGE;
+	}
+
+	@Override
+	public String getAddOperationName() {
+		return Operation.ADD_MESSAGE;
+	}
+
+	@Override
+	public String getDeleteOperationName() {
+		return Operation.DELETE_MESSAGE;
 	}
 
 }

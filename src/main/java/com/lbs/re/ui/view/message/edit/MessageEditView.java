@@ -12,6 +12,7 @@ import com.lbs.re.ui.components.combobox.MessageButtonsComboBox;
 import com.lbs.re.ui.components.combobox.MessageTypeComboBox;
 import com.lbs.re.ui.components.combobox.ResourceGroupComboBox;
 import com.lbs.re.ui.view.AbstractEditView;
+import com.lbs.re.ui.view.Operation;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.spring.annotation.SpringView;
@@ -83,6 +84,16 @@ public class MessageEditView
 
 	public MessageButtonsComboBox getDefaultButton() {
 		return defaultButton;
+	}
+
+	@Override
+	public String getViewOperationName() {
+		return Operation.VIEW_MESSAGE;
+	}
+
+	@Override
+	public String getEditOperationName() {
+		return Operation.EDIT_MESSAGE;
 	}
 
 }

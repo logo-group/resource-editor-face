@@ -1,5 +1,6 @@
 package com.lbs.re.ui.view.resourceitem.edit;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
+import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.data.service.ResourceitemService;
@@ -71,6 +73,8 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 
 	ReResourceitem resourceItem;
 	ResourceService resourceService;
+
+	private REUserService reUserService;
 
 	@Autowired
 	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceitemService resourceItemService, REUserService userService,
@@ -226,7 +230,13 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 			language.setResourceref(item.getResourceref());
 			language.setReResourceitem(item);
 			language.setResourceitemref(item.getId());
-
+			if (language.getId() == 0) {
+				language.setCreatedby(SecurityUtils.getCurrentUser(reUserService).getReUser().getId());
+				language.setCreatedon(LocalDateTime.now());
+			} else {
+				language.setModifiedby(SecurityUtils.getCurrentUser(reUserService).getReUser().getId());
+				language.setModifiedon(LocalDateTime.now());
+			}
 			if (language instanceof ReTurkishtr) {
 				String trValue = getView().getTurkishTr().getValue();
 				if (language.getResourcestr() != null) {
