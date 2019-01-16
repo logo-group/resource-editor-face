@@ -12,7 +12,7 @@ public class DataSourceRouter extends AbstractRoutingDataSource {
 	@Override
 	protected Object determineCurrentLookupKey() {
 		if (RequestContextHolder.getRequestAttributes() == null) {
-			return DatabaseEnvironment.TIGER;
+			return DatabaseEnvironment.DICTIONARY;
 		}
 		return db.getPreferredDb();
 	}

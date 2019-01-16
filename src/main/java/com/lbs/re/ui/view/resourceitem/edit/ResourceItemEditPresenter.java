@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
-import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.data.service.ResourceitemService;
@@ -37,6 +36,7 @@ import com.lbs.re.model.languages.ReTurkmentm;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
+import com.lbs.re.ui.util.REStatic;
 import com.lbs.re.ui.view.AbstractEditPresenter;
 import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.vaadin.navigator.View;
@@ -73,8 +73,6 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 
 	ReResourceitem resourceItem;
 	ResourceService resourceService;
-
-	private REUserService reUserService;
 
 	@Autowired
 	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceitemService resourceItemService, REUserService userService,
@@ -231,10 +229,8 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 			language.setReResourceitem(item);
 			language.setResourceitemref(item.getId());
 			if (language.getId() == 0) {
-				language.setCreatedby(SecurityUtils.getCurrentUser(reUserService).getReUser().getId());
 				language.setCreatedon(LocalDateTime.now());
 			} else {
-				language.setModifiedby(SecurityUtils.getCurrentUser(reUserService).getReUser().getId());
 				language.setModifiedon(LocalDateTime.now());
 			}
 			if (language instanceof ReTurkishtr) {
@@ -514,6 +510,12 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				getView().getTurkmenTm().setValue(turkmenTm.getResourcestr());
 			}
 		}
+	}
+
+	public void prepareDictionaryWindow(ReResourceitem item, ViewMode mode) throws LocalizedException {
+		Map<UIParameter, Object> windowParameters = REStatic.getUIParameterMap(item.getId(), ViewMode.VIEW);
+		windowParameters.put(UIParameter.RESOURCE_ID, getItem().getId());
+		getView().openDictionaryWindow(windowParameters);
 	}
 
 	@Override

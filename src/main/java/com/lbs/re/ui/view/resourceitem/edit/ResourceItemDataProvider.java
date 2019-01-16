@@ -1,14 +1,15 @@
 package com.lbs.re.ui.view.resourceitem.edit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.PrototypeScope;
 
+import com.lbs.re.data.service.ResourceitemService;
 import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
-import com.lbs.re.model.ReLanguageTable;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.model.languages.ReAlbaniankv;
@@ -31,7 +32,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 
 @SpringComponent
 @PrototypeScope
-public class ResourceItemDataProvider<T extends ReLanguageTable> extends AbstractDataProvider<ReResourceitem> {
+public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceitem> {
 
 	private static final long serialVersionUID = 1L;
 	private BeanFactory beanFactory;
@@ -39,9 +40,10 @@ public class ResourceItemDataProvider<T extends ReLanguageTable> extends Abstrac
 	private LanguageServices languageServices;
 
 	@Autowired
-	public ResourceItemDataProvider(BeanFactory beanFactory, LanguageServices languageServices) {
+	public ResourceItemDataProvider(BeanFactory beanFactory, LanguageServices languageServices, ResourceitemService resourceItemService) throws LocalizedException {
 		this.beanFactory = beanFactory;
 		this.languageServices = languageServices;
+		buildListDataProvider(new ArrayList<>());
 	}
 
 	public void provideResourceItems(ReResource resource) throws LocalizedException {
@@ -65,6 +67,19 @@ public class ResourceItemDataProvider<T extends ReLanguageTable> extends Abstrac
 		loadRomanianData(resourceItemList, resourceId);
 		loadRussianData(resourceItemList, resourceId);
 		loadTurkmenData(resourceItemList, resourceId);
+		return resourceItemList;
+	}
+
+	public List<ReResourceitem> loadTurkishDataForDictionary(List<ReResourceitem> resourceItemList) throws LocalizedException {
+		List<ReTurkishtr> turkishList = languageServices.getTurkishService().getAll();
+		for (ReTurkishtr tr : turkishList) {
+			for (ReResourceitem item : resourceItemList) {
+				if (item.getId().equals(tr.getResourceitemref())) {
+					item.setTurkishTr(tr.getResourcestr());
+					break;
+				}
+			}
+		}
 		return resourceItemList;
 	}
 

@@ -50,6 +50,12 @@ public class DataSourceConfiguration {
 		return DataSourceBuilder.create().build();
 	}
 
+	@Bean
+	@ConfigurationProperties(prefix = "app.dictionary.connection")
+	public DataSource dictionaryDataSource() {
+		return DataSourceBuilder.create().build();
+	}
+
 	/**
 	 * Adds all available datasources to datasource map.
 	 *
@@ -62,6 +68,7 @@ public class DataSourceConfiguration {
 		final HashMap<Object, Object> map = new HashMap<>(3);
 		map.put(DatabaseEnvironment.JPLATFORM, jplatformDataSource());
 		map.put(DatabaseEnvironment.TIGER, tigerDataSource());
+		map.put(DatabaseEnvironment.DICTIONARY, dictionaryDataSource());
 		router.setTargetDataSources(map);
 		return router;
 	}
