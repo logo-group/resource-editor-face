@@ -18,21 +18,6 @@ import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
-import com.lbs.re.model.languages.ReAlbaniankv;
-import com.lbs.re.model.languages.ReArabiceg;
-import com.lbs.re.model.languages.ReArabicjo;
-import com.lbs.re.model.languages.ReArabicsa;
-import com.lbs.re.model.languages.ReAzerbaijaniaz;
-import com.lbs.re.model.languages.ReBulgarianbg;
-import com.lbs.re.model.languages.ReEnglishus;
-import com.lbs.re.model.languages.ReFrenchfr;
-import com.lbs.re.model.languages.ReGeorgiange;
-import com.lbs.re.model.languages.ReGermande;
-import com.lbs.re.model.languages.RePersianir;
-import com.lbs.re.model.languages.ReRomanianro;
-import com.lbs.re.model.languages.ReRussianru;
-import com.lbs.re.model.languages.ReTurkishtr;
-import com.lbs.re.model.languages.ReTurkmentm;
 import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.components.grid.RETreeGrid;
 import com.lbs.re.ui.navigation.NavigationManager;
@@ -357,81 +342,22 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	}
 
 	public void deleteLanguagesByItem(ReResourceitem resourceItem) throws LocalizedException {
-
-		ReTurkishtr turkishTr = languageServices.getTurkishService().getLanguageByresourceitemref(resourceItem.getId());
-		if (turkishTr != null) {
-			languageServices.getTurkishService().delete(turkishTr);
-		}
-
-		ReAlbaniankv albanianKv = languageServices.getAlbanianService().getLanguageByresourceitemref(resourceItem.getId());
-		if (albanianKv != null) {
-			languageServices.getAlbanianService().delete(albanianKv);
-		}
-
-		ReArabiceg arabicEg = languageServices.getArabicEgService().getLanguageByresourceitemref(resourceItem.getId());
-		if (arabicEg != null) {
-			languageServices.getArabicEgService().delete(arabicEg);
-		}
-
-		ReArabicjo arabicJo = languageServices.getArabicJoService().getLanguageByresourceitemref(resourceItem.getId());
-		if (arabicJo != null) {
-			languageServices.getArabicJoService().delete(arabicJo);
-		}
-
-		ReArabicsa arabicSa = languageServices.getArabicSaService().getLanguageByresourceitemref(resourceItem.getId());
-		if (arabicSa != null) {
-			languageServices.getArabicSaService().delete(arabicSa);
-		}
-
-		ReAzerbaijaniaz azerbaijaniAz = languageServices.getAzerbaijaniazService().getLanguageByresourceitemref(resourceItem.getId());
-		if (azerbaijaniAz != null) {
-			languageServices.getAzerbaijaniazService().delete(azerbaijaniAz);
-		}
-
-		ReBulgarianbg bulgarianBg = languageServices.getBulgarianService().getLanguageByresourceitemref(resourceItem.getId());
-		if (bulgarianBg != null) {
-			languageServices.getBulgarianService().delete(bulgarianBg);
-		}
-
-		ReEnglishus englishUs = languageServices.getEnglishService().getLanguageByresourceitemref(resourceItem.getId());
-		if (englishUs != null) {
-			languageServices.getEnglishService().delete(englishUs);
-		}
-
-		ReFrenchfr frenchFr = languageServices.getFrenchService().getLanguageByresourceitemref(resourceItem.getId());
-		if (frenchFr != null) {
-			languageServices.getFrenchService().delete(frenchFr);
-		}
-
-		RePersianir persianIr = languageServices.getPersianService().getLanguageByresourceitemref(resourceItem.getId());
-		if (persianIr != null) {
-			languageServices.getPersianService().delete(persianIr);
-		}
-
-		ReGeorgiange georgianGe = languageServices.getGeorgianService().getLanguageByresourceitemref(resourceItem.getId());
-		if (georgianGe != null) {
-			languageServices.getGeorgianService().delete(georgianGe);
-		}
-
-		ReGermande germanDe = languageServices.getGermanService().getLanguageByresourceitemref(resourceItem.getId());
-		if (germanDe != null) {
-			languageServices.getGermanService().delete(germanDe);
-		}
-
-		ReRomanianro romanianRo = languageServices.getRomanianService().getLanguageByresourceitemref(resourceItem.getId());
-		if (romanianRo != null) {
-			languageServices.getRomanianService().delete(romanianRo);
-		}
-
-		ReRussianru russianRu = languageServices.getRussianruService().getLanguageByresourceitemref(resourceItem.getId());
-		if (russianRu != null) {
-			languageServices.getRussianruService().delete(russianRu);
-		}
-
-		ReTurkmentm turkmenTm = languageServices.getTurkmenService().getLanguageByresourceitemref(resourceItem.getId());
-		if (turkmenTm != null) {
-			languageServices.getTurkmenService().delete(turkmenTm);
-		}
+		languageServices.getTurkishService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getAlbanianService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getArabicEgService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getArabicJoService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getArabicSaService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getAzerbaijaniazService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getBulgarianService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getEnglishService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getFrenchService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getPersianService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getGeorgianService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getGermanService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getRomanianService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getRussianruService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getRomanianService().deleteLanguageByResourceItemref(resourceItem.getId());
+		languageServices.getTurkmenService().deleteLanguageByResourceItemref(resourceItem.getId());
 	}
 
 	@Override

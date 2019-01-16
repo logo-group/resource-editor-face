@@ -88,19 +88,6 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 		return resourceItemList;
 	}
 
-	public List<ReResourceitem> loadTurkishDataForDictionary(List<ReResourceitem> resourceItemList) throws LocalizedException {
-		List<ReTurkishtr> turkishList = languageServices.getTurkishService().getAll();
-		for (ReTurkishtr tr : turkishList) {
-			for (ReResourceitem item : resourceItemList) {
-				if (item.getId().equals(tr.getResourceitemref())) {
-					item.setTurkishTr(tr.getResourcestr());
-					break;
-				}
-			}
-		}
-		return resourceItemList;
-	}
-
 	private void loadTurkishData(ReResourceitem item, List<ReTurkishtr> trList) {
 		for (ReTurkishtr tr : trList) {
 			if (tr.getResourceitemref().equals(item.getId())) {
@@ -236,4 +223,25 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 			}
 		}
 	}
+
+	public List<ReResourceitem> loadTurkishDataForDictionary(List<ReResourceitem> resourceItemList) throws LocalizedException {
+		List<ReTurkishtr> turkishList = languageServices.getTurkishService().getAll();
+		List<ReEnglishus> englishList = languageServices.getEnglishService().getAll();
+		for (ReResourceitem item : resourceItemList) {
+			for (ReTurkishtr tr : turkishList) {
+				if (item.getId().equals(tr.getResourceitemref())) {
+					item.setTurkishTr(tr.getResourcestr());
+					break;
+				}
+			}
+			for (ReEnglishus us : englishList) {
+				if (item.getId().equals(us.getResourceitemref())) {
+					item.setEnglishUs(us.getResourcestr());
+					break;
+				}
+			}
+		}
+		return resourceItemList;
+	}
+
 }
