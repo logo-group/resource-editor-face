@@ -78,14 +78,14 @@ public class ResourceItemTreeDataProvider {
 		List<ReResourceitem> resourceItemList = resource.getReResourceitem();
 		List<ReResourceitem> preparedData = loadTransientData(resourceItemList, resource.getId());
 
-		orderList(preparedData);
+		orderResourceItemList(preparedData);
 		buildTreeDataProvider(buildTreeData(preparedData));
 	}
 
 	public void refreshDataProviderByItems(List<ReResourceitem> resourceItemList) {
 		getTreeDataProvider().getTreeData().clear();
 
-		orderList(resourceItemList);
+		orderResourceItemList(resourceItemList);
 
 		Stack<ReResourceitem> stack = new Stack<>();
 		for (int i = 0; i < resourceItemList.size(); i++) {
@@ -105,7 +105,7 @@ public class ResourceItemTreeDataProvider {
 		getTreeDataProvider().refreshAll();
 	}
 
-	public void orderList(List<ReResourceitem> preparedData) {
+	public void orderResourceItemList(List<ReResourceitem> preparedData) {
 		Collections.sort(preparedData, new Comparator<ReResourceitem>() {
 
 			@Override

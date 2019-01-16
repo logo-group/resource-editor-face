@@ -1,15 +1,24 @@
 package com.lbs.re.ui.view.resourceitem.edit;
 
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lbs.re.data.service.ResourceitemService;
+import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResourceitem;
+import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RETextArea;
 import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
+import com.lbs.re.ui.components.window.WindowDictionary;
+import com.lbs.re.ui.util.Enums.UIParameter;
+import com.lbs.re.ui.util.Enums.ViewMode;
+import com.lbs.re.ui.util.RENotification;
+import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.AbstractEditView;
 import com.lbs.re.ui.view.Operation;
 import com.vaadin.data.BeanValidationBinder;
@@ -80,14 +89,20 @@ public class ResourceItemEditView
 	private RETextArea russianRu;
 	private RETextArea turkishTr;
 	private RETextArea turkmenTm;
+	private RETextField dictionaryId;
+	private REButton btnDictionary;
+
+	private WindowDictionary windowDictionary;
 
 	@Autowired
-	public ResourceItemEditView(ResourceItemEditPresenter presenter) {
+	public ResourceItemEditView(ResourceItemEditPresenter presenter, WindowDictionary windowDictionary) {
 		super(presenter);
+		this.windowDictionary = windowDictionary;
 	}
 
 	@PostConstruct
 	private void initView() {
+		initButtons();
 		initTextFields();
 		initLangTextAreas();
 		initDeleteButtons();
@@ -101,11 +116,23 @@ public class ResourceItemEditView
 	}
 
 	private void initSections() {
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info,
+				btnDictionary, dictionaryId);
 		addSection(getLocaleValue("view.viewedit.section.languages"), 1, null, turkishTrLayout, englishUsLayout,
 				albanianKvLayout, arabicEgLayout, arabicJoLayout, arabicSaLayout, azerbaijaniAzLayout,
 				bulgarianBgLayout, frenchFrLayout, georgianGeLayout, germanDeLayout, persianIrLayout, romanianRoLayout,
 				russianRuLayout, turkmenTmLayout);
+	}
+
+	private void initButtons() {
+		btnDictionary = new REButton("view.testcaseedit.button.dictionary", VaadinIcons.GLOBE);
+		btnDictionary.addClickListener(e -> {
+			try {
+				getPresenter().prepareDictionaryWindow(getPresenter().getItem(), ViewMode.EDIT);
+			} catch (LocalizedException e1) {
+				logError(e1);
+			}
+		});
 	}
 
 	private void initTextFields() {
@@ -114,6 +141,7 @@ public class ResourceItemEditView
 		levelnr = new RETextField("column.resource.item.level.number", "full", true, true);
 		prefixstr = new RETextField("column.resource.item.prefix", "full", true, true);
 		info = new RETextArea("column.resource.item.info", "full", true, true);
+		dictionaryId = new RETextField("column.resource.item.dictionary", "full", true, false);
 	}
 
 	private void initREHorizontalLayouts() {
@@ -193,7 +221,19 @@ public class ResourceItemEditView
 		binder.forField(levelnr).withNullRepresentation("")
 				.withConverter(new StringToIntegerConverter("must be integer"))
 				.bind(ReResourceitem::getLevelnr, ReResourceitem::setLevelnr);
+		binder.forField(dictionaryId).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter("must be integer"))
+				.bind(ReResourceitem::getDictionaryId, ReResourceitem::setDictionaryId);
 		super.bindFormFields(binder);
+	}
+
+	public void openDictionaryWindow(Map<UIParameter, Object> windowParameters) throws LocalizedException {
+		try {
+			windowDictionary.open(windowParameters);
+		} catch (REWindowNotAbleToOpenException e) {
+			windowDictionary.close();
+			RENotification.showNotification(e.getMessage(), NotifyType.ERROR);
+		}
 	}
 
 	@Override
@@ -279,6 +319,10 @@ public class ResourceItemEditView
 
 	public RETextArea getTurkmenTm() {
 		return turkmenTm;
+	}
+
+	public RETextField getDictionaryId() {
+		return dictionaryId;
 	}
 
 	@Override

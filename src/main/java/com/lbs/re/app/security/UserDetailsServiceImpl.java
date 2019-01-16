@@ -74,6 +74,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			userDatabaseSession.setPreferredDb(DatabaseEnvironment.JPLATFORM);
 		} else if (prefferedDb.equals(Constants.TIGER)) {
 			userDatabaseSession.setPreferredDb(DatabaseEnvironment.TIGER);
+		} else if (prefferedDb.equals(Constants.DICTIONARY)) {
+			userDatabaseSession.setPreferredDb(DatabaseEnvironment.DICTIONARY);
 		}
 	}
 }

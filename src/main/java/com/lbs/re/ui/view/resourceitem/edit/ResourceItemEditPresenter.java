@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
-import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
+import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.data.service.ResourceitemService;
 import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReLanguageTable;
+import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.model.languages.ReAlbaniankv;
 import com.lbs.re.model.languages.ReArabiceg;
@@ -35,6 +36,7 @@ import com.lbs.re.model.languages.ReTurkmentm;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
+import com.lbs.re.ui.util.REStatic;
 import com.lbs.re.ui.view.AbstractEditPresenter;
 import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.vaadin.navigator.View;
@@ -70,15 +72,14 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 	private ReTurkmentm turkmenTm;
 
 	ReResourceitem resourceItem;
-
-	private REUserService reUserService;
+	ResourceService resourceService;
 
 	@Autowired
 	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceitemService resourceItemService, REUserService userService,
-			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, REUserService reUserService, LanguageServices languageServices) {
+			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices, ResourceService resourceService) {
 		super(viewEventBus, navigationManager, resourceItemService, ReResourceitem.class, beanFactory, userService);
 		this.languageServices = languageServices;
-		this.reUserService = reUserService;
+		this.resourceService = resourceService;
 	}
 
 	@Override
@@ -107,7 +108,11 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 
 	@Override
 	public ReResourceitem save(ReResourceitem item) throws LocalizedException {
-		return super.save(item);
+		super.save(item);
+		ReResource reResource = resourceService.getById(item.getResourceref());
+		reResource.orderResourceItems();
+		resourceService.save(reResource);
+		return item;
 	}
 
 	public void checkLanguageFields(ReResourceitem item) throws LocalizedException {
@@ -224,10 +229,8 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 			language.setReResourceitem(item);
 			language.setResourceitemref(item.getId());
 			if (language.getId() == 0) {
-				language.setCreatedby(SecurityUtils.getCurrentUser(reUserService).getReUser().getId());
 				language.setCreatedon(LocalDateTime.now());
 			} else {
-				language.setModifiedby(SecurityUtils.getCurrentUser(reUserService).getReUser().getId());
 				language.setModifiedon(LocalDateTime.now());
 			}
 			if (language instanceof ReTurkishtr) {
@@ -507,6 +510,12 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				getView().getTurkmenTm().setValue(turkmenTm.getResourcestr());
 			}
 		}
+	}
+
+	public void prepareDictionaryWindow(ReResourceitem item, ViewMode mode) throws LocalizedException {
+		Map<UIParameter, Object> windowParameters = REStatic.getUIParameterMap(item.getId(), ViewMode.VIEW);
+		windowParameters.put(UIParameter.RESOURCE_ID, getItem().getId());
+		getView().openDictionaryWindow(windowParameters);
 	}
 
 	@Override
