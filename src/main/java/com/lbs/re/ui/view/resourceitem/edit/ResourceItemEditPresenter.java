@@ -36,6 +36,7 @@ import com.lbs.re.model.languages.ReRussianru;
 import com.lbs.re.model.languages.ReTurkishtr;
 import com.lbs.re.model.languages.ReTurkmentm;
 import com.lbs.re.ui.AppUI;
+import com.lbs.re.ui.components.basic.RETextArea;
 import com.lbs.re.ui.dialog.ConfirmationListener;
 import com.lbs.re.ui.dialog.REDialog;
 import com.lbs.re.ui.navigation.NavigationManager;
@@ -46,6 +47,7 @@ import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.util.REStatic;
 import com.lbs.re.ui.view.AbstractEditPresenter;
 import com.lbs.re.ui.view.resource.ResourceGridView;
+import com.lbs.re.util.EnumsV2.Languages;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -475,21 +477,69 @@ public class ResourceItemEditPresenter extends
 		return user;
 	}
 
-	public LanguageServices getLanguageServices() {
-		return languageServices;
-	}
-
-	public void confirmDelete() {
+	public void confirmDelete(RETextArea area, Languages language) {
 		REDialog.confirm(AppUI.getCurrent(), new ConfirmationListener() {
 
 			@Override
 			public void onConfirm() {
-				System.out.println("confirmed!!!");
+				area.clear();
+				try {
+					switch (language) {
+					case ALBANIAN:
+						languageServices.getAlbanianService().delete(albanianKv);
+						break;
+					case ARABICEG:
+						languageServices.getArabicEgService().delete(arabicEg);
+						break;
+					case ARABISJO:
+						languageServices.getArabicJoService().delete(arabicJo);
+						break;
+					case ARABICSA:
+						languageServices.getArabicSaService().delete(arabicSa);
+						break;
+					case AZARBAIJAN:
+						languageServices.getAzerbaijaniazService().delete(azerbaijaniAz);
+						break;
+					case BULGARIAN:
+						languageServices.getBulgarianService().delete(bulgarianBg);
+						break;
+					case ENGLISH:
+						languageServices.getEnglishService().delete(englishUs);
+						break;
+					case FRENCH:
+						languageServices.getFrenchService().delete(frenchFr);
+						break;
+					case GEORGIAN:
+						languageServices.getGeorgianService().delete(georgianGe);
+						break;
+					case GERMAN:
+						languageServices.getGermanService().delete(germanDe);
+						break;
+					case PERSIAN:
+						languageServices.getPersianService().delete(persianIr);
+						break;
+					case ROMANIAN:
+						languageServices.getRomanianService().delete(romanianRo);
+						break;
+					case RUSSIAN:
+						languageServices.getRussianruService().delete(russianRu);
+						break;
+					case TURKISH:
+						languageServices.getTurkishService().delete(turkishTr);
+						break;
+					case TURKMEN:
+						languageServices.getTurkmenService().delete(turkmenTm);
+						break;
+					}
+				} catch (LocalizedException e) {
+					getView().logError(e);
+				}
 			}
 
 			@Override
 			public void onCancel() {
 			}
+
 		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
 				getLocaleValue("general.button.cancel"));
 	}

@@ -24,6 +24,7 @@ import com.lbs.re.ui.util.RENotification;
 import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.AbstractEditView;
 import com.lbs.re.ui.view.Operation;
+import com.lbs.re.util.EnumsV2.Languages;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
@@ -313,77 +314,77 @@ public class ResourceItemEditView
 	private void initDeleteButtons() {
 		albanianKvDelete = new REButton("albanianKvDelete", VaadinIcons.TRASH);
 		albanianKvDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(albanianKv, Languages.ALBANIAN);
 		});
 
 		arabicEgDelete = new REButton("arabicEgDelete", VaadinIcons.TRASH);
 		arabicEgDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(arabicEg, Languages.ARABICEG);
 		});
 
 		arabicJoDelete = new REButton("arabicJoDelete", VaadinIcons.TRASH);
 		arabicJoDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(arabicJo, Languages.ARABISJO);
 		});
 
 		arabicSaDelete = new REButton("arabicSaDelete", VaadinIcons.TRASH);
 		arabicSaDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(arabicSa, Languages.ARABICSA);
 		});
 
 		azerbaijaniAzDelete = new REButton("azerbaijaniAzDelete", VaadinIcons.TRASH);
 		azerbaijaniAzDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(azerbaijaniAz, Languages.AZARBAIJAN);
 		});
 
 		bulgarianBgDelete = new REButton("bulgarianBgDelete", VaadinIcons.TRASH);
 		bulgarianBgDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(bulgarianBg, Languages.BULGARIAN);
 		});
 
 		englishUsDelete = new REButton("englishUsDelete", VaadinIcons.TRASH);
 		englishUsDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(englishUs, Languages.ENGLISH);
 		});
 
 		frenchFrDelete = new REButton("frenchFrDelete", VaadinIcons.TRASH);
 		frenchFrDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(frenchFr, Languages.FRENCH);
 		});
 
 		georgianGeDelete = new REButton("georgianGeDelete", VaadinIcons.TRASH);
 		georgianGeDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(georgianGe, Languages.GEORGIAN);
 		});
 
 		germanDeDelete = new REButton("germanDeDelete", VaadinIcons.TRASH);
 		germanDeDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(germanDe, Languages.GERMAN);
 		});
 
 		persianIrDelete = new REButton("persianIrDelete", VaadinIcons.TRASH);
 		persianIrDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(persianIr, Languages.PERSIAN);
 		});
 
 		romanianRoDelete = new REButton("romanianRoDelete", VaadinIcons.TRASH);
 		romanianRoDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(romanianRo, Languages.ROMANIAN);
 		});
 
 		russianRuDelete = new REButton("russianRuDelete", VaadinIcons.TRASH);
 		russianRuDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(russianRu, Languages.RUSSIAN);
 		});
 
 		turkishTrDelete = new REButton("turkishTrDelete", VaadinIcons.TRASH);
 		turkishTrDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(turkishTr, Languages.TURKISH);
 		});
 
 		turkmenTmDelete = new REButton("turkmenTmDelete", VaadinIcons.TRASH);
 		turkmenTmDelete.addClickListener(e -> {
-			getPresenter().confirmDelete();
+			getPresenter().confirmDelete(turkmenTm, Languages.TURKMEN);
 		});
 
 	}
@@ -522,6 +523,12 @@ public class ResourceItemEditView
 	@Override
 	public String getEditOperationName() {
 		return Operation.EDIT_RESOURCE_ITEM;
+	}
+
+	@Override
+	protected void logError(LocalizedException e) {
+		getLogger().error(e.getLocalizedMessage(), e);
+		RENotification.showNotification(e.getLocalizedMessage(), NotifyType.ERROR);
 	}
 
 }
