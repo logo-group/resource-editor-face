@@ -87,182 +87,107 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 	}
 
 	private void loadTurkishData(ReResourceitem item, Integer resourceId) {
-		List<ReTurkishtr> trList = languageServices.getTurkishService().getLanguageListByresourceref(resourceId);
-		if (trList != null && !trList.isEmpty()) {
-			for (ReTurkishtr turkish : trList) {
-				if (turkish.getResourceitemref().equals(item.getId())) {
-					item.setTurkishTr(turkish.getResourcestr());
-					break;
-				}
-			}
+		ReTurkishtr tr = languageServices.getTurkishService().getLanguageByresourceitemref(item.getId());
+		if (tr != null) {
+			item.setTurkishTr(tr.getResourcestr());
 		}
 	}
 
 	private void loadAlbanianData(ReResourceitem item, Integer resourceId) {
-		List<ReAlbaniankv> albenianList = languageServices.getAlbanianService().getLanguageListByresourceref(resourceId);
-		if (albenianList != null && !albenianList.isEmpty()) {
-			for (ReAlbaniankv albanian : albenianList) {
-				if (albanian.getResourceitemref().equals(item.getId())) {
-					item.setAlbanianKv(albanian.getResourcestr());
-					break;
-				}
-			}
+		ReAlbaniankv kv = languageServices.getAlbanianService().getLanguageByresourceitemref(item.getId());
+		if (kv != null) {
+			item.setAlbanianKv(kv.getResourcestr());
 		}
 	}
 
 	private void loadArabicEgData(ReResourceitem item, Integer resourceId) {
-		List<ReArabiceg> arabicEgList = languageServices.getArabicEgService().getLanguageListByresourceref(resourceId);
-		if (arabicEgList != null && !arabicEgList.isEmpty()) {
-			for (ReArabiceg arabicEg : arabicEgList) {
-				if (arabicEg.getResourceitemref().equals(item.getId())) {
-					item.setArabicEg(arabicEg.getResourcestr());
-					break;
-				}
-			}
+		ReArabiceg eg = languageServices.getArabicEgService().getLanguageByresourceitemref(item.getId());
+		if (eg != null) {
+			item.setArabicEg(eg.getResourcestr());
 		}
 	}
 
 	private void loadArabicJoData(ReResourceitem item, Integer resourceId) {
-		List<ReArabicjo> arabicJoList = languageServices.getArabicJoService().getLanguageListByresourceref(resourceId);
-		if (arabicJoList != null && !arabicJoList.isEmpty()) {
-			for (ReArabicjo arabicJo : arabicJoList) {
-				if (arabicJo.getResourceitemref().equals(item.getId())) {
-					item.setArabicJo(arabicJo.getResourcestr());
-					break;
-				}
-			}
+		ReArabicjo jo = languageServices.getArabicJoService().getLanguageByresourceitemref(item.getId());
+		if (jo != null) {
+			item.setArabicJo(jo.getResourcestr());
 		}
 	}
 
 	private void loadArabicSaData(ReResourceitem item, Integer resourceId) {
-		List<ReArabicsa> arabicSaList = languageServices.getArabicSaService().getLanguageListByresourceref(resourceId);
-		if (arabicSaList != null && !arabicSaList.isEmpty()) {
-			for (ReArabicsa arabicSa : arabicSaList) {
-				if (arabicSa.getResourceitemref().equals(item.getId())) {
-					item.setArabicSa(arabicSa.getResourcestr());
-					break;
-				}
-			}
+		ReArabicsa sa = languageServices.getArabicSaService().getLanguageByresourceitemref(item.getId());
+		if (sa != null) {
+			item.setArabicSa(sa.getResourcestr());
 		}
 	}
 
 	private void loadBulgarianData(ReResourceitem item, Integer resourceId) {
-		List<ReBulgarianbg> bulgarianBgList = languageServices.getBulgarianService().getLanguageListByresourceref(resourceId);
-		if (bulgarianBgList != null && !bulgarianBgList.isEmpty()) {
-			for (ReBulgarianbg bulgarian : bulgarianBgList) {
-				if (bulgarian.getResourceitemref().equals(item.getId())) {
-					item.setBulgarianBg(bulgarian.getResourcestr());
-					break;
-				}
-			}
+		ReBulgarianbg bg = languageServices.getBulgarianService().getLanguageByresourceitemref(item.getId());
+		if (bg != null) {
+			item.setBulgarianBg(bg.getResourcestr());
 		}
 	}
 
 	private void loadAzerbaijaniAzData(ReResourceitem item, Integer resourceId) {
-		List<ReAzerbaijaniaz> azerbaijaniAzList = languageServices.getAzerbaijaniazService().getLanguageListByresourceref(resourceId);
-		if (azerbaijaniAzList != null && !azerbaijaniAzList.isEmpty()) {
-			for (ReAzerbaijaniaz azerbaijaniAz : azerbaijaniAzList) {
-				if (azerbaijaniAz.getResourceitemref().equals(item.getId())) {
-					item.setAzerbaijaniAz(azerbaijaniAz.getResourcestr());
-					break;
-				}
-			}
+		ReAzerbaijaniaz az = languageServices.getAzerbaijaniazService().getLanguageByresourceitemref(item.getId());
+		if (az != null) {
+			item.setAzerbaijaniAz(az.getResourcestr());
 		}
 	}
 
 	private void loadEnglishUsData(ReResourceitem item, Integer resourceId) {
-		List<ReEnglishus> englishUsList = languageServices.getEnglishService().getLanguageListByresourceref(resourceId);
-		if (englishUsList != null && !englishUsList.isEmpty()) {
-			for (ReEnglishus englishUs : englishUsList) {
-				if (englishUs.getResourceitemref().equals(item.getId())) {
-					item.setEnglishUs(englishUs.getResourcestr());
-					break;
-				}
-			}
+		ReEnglishus us = languageServices.getEnglishService().getLanguageByresourceitemref(item.getId());
+		if (us != null) {
+			item.setEnglishUs(us.getResourcestr());
 		}
 	}
 
 	private void loadFrenchFrData(ReResourceitem item, Integer resourceId) {
-		List<ReFrenchfr> frenchFrList = languageServices.getFrenchService().getLanguageListByresourceref(resourceId);
-		if (frenchFrList != null && !frenchFrList.isEmpty()) {
-			for (ReFrenchfr frenchFr : frenchFrList) {
-				if (frenchFr.getResourceitemref().equals(item.getId())) {
-					item.setFrenchFr(frenchFr.getResourcestr());
-					break;
-				}
-			}
+		ReFrenchfr fr = languageServices.getFrenchService().getLanguageByresourceitemref(item.getId());
+		if (fr != null) {
+			item.setFrenchFr(fr.getResourcestr());
 		}
 	}
 
 	private void loadGeorgianData(ReResourceitem item, Integer resourceId) {
-		List<ReGeorgiange> georgianList = languageServices.getGeorgianService().getLanguageListByresourceref(resourceId);
-		if (georgianList != null && !georgianList.isEmpty()) {
-			for (ReGeorgiange georgian : georgianList) {
-				if (georgian.getResourceitemref().equals(item.getId())) {
-					item.setGeorgianGe(georgian.getResourcestr());
-					break;
-				}
-			}
+		ReGeorgiange ge = languageServices.getGeorgianService().getLanguageByresourceitemref(item.getId());
+		if (ge != null) {
+			item.setGeorgianGe(ge.getResourcestr());
 		}
 	}
 
 	private void loadGermanData(ReResourceitem item, Integer resourceId) {
-		List<ReGermande> germanList = languageServices.getGermanService().getLanguageListByresourceref(resourceId);
-		if (germanList != null && !germanList.isEmpty()) {
-			for (ReGermande german : germanList) {
-				if (german.getResourceitemref().equals(item.getId())) {
-					item.setGermanDe(german.getResourcestr());
-					break;
-				}
-			}
+		ReGermande de = languageServices.getGermanService().getLanguageByresourceitemref(item.getId());
+		if (de != null) {
+			item.setGermanDe(de.getResourcestr());
 		}
 	}
 
 	private void loadPersianData(ReResourceitem item, Integer resourceId) {
-		List<RePersianir> persianList = languageServices.getPersianService().getLanguageListByresourceref(resourceId);
-		if (persianList != null && !persianList.isEmpty()) {
-			for (RePersianir persian : persianList) {
-				if (persian.getResourceitemref().equals(item.getId())) {
-					item.setPersianIr(persian.getResourcestr());
-					break;
-				}
-			}
+		RePersianir ir = languageServices.getPersianService().getLanguageByresourceitemref(item.getId());
+		if (ir != null) {
+			item.setPersianIr(ir.getResourcestr());
 		}
 	}
 
 	private void loadRomanianData(ReResourceitem item, Integer resourceId) {
-		List<ReRomanianro> romanianList = languageServices.getRomanianService().getLanguageListByresourceref(resourceId);
-		if (romanianList != null && !romanianList.isEmpty()) {
-			for (ReRomanianro romanian : romanianList) {
-				if (romanian.getResourceitemref().equals(item.getId())) {
-					item.setRomanianRo(romanian.getResourcestr());
-					break;
-				}
-			}
+		ReRomanianro ro = languageServices.getRomanianService().getLanguageByresourceitemref(item.getId());
+		if (ro != null) {
+			item.setRomanianRo(ro.getResourcestr());
 		}
 	}
 
 	private void loadRussianData(ReResourceitem item, Integer resourceId) {
-		List<ReRussianru> russianList = languageServices.getRussianruService().getLanguageListByresourceref(resourceId);
-		if (russianList != null && !russianList.isEmpty()) {
-			for (ReRussianru russian : russianList) {
-				if (russian.getResourceitemref().equals(item.getId())) {
-					item.setRussianRu(russian.getResourcestr());
-					break;
-				}
-			}
+		ReRussianru ru = languageServices.getRussianruService().getLanguageByresourceitemref(item.getId());
+		if (ru != null) {
+			item.setRussianRu(ru.getResourcestr());
 		}
 	}
 
 	private void loadTurkmenData(ReResourceitem item, Integer resourceId) {
-		List<ReTurkmentm> turkmenList = languageServices.getTurkmenService().getLanguageListByresourceref(resourceId);
-		if (turkmenList != null && !turkmenList.isEmpty()) {
-			for (ReTurkmentm turkmen : turkmenList) {
-				if (turkmen.getResourceitemref().equals(item.getId())) {
-					item.setTurkmenTm(turkmen.getResourcestr());
-					break;
-				}
-			}
+		ReTurkmentm tm = languageServices.getTurkmenService().getLanguageByresourceitemref(item.getId());
+		if (tm != null) {
+			item.setTurkmenTm(tm.getResourcestr());
 		}
 	}
 }
