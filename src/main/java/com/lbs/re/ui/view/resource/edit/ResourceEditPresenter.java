@@ -44,6 +44,7 @@ import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemDataProvider;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemTreeDataProvider;
 import com.lbs.re.util.EnumsV2.ResourceGroupType;
+import com.lbs.re.util.EnumsV2.ResourceType;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
@@ -87,22 +88,48 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		}
 		refreshView(resource, (ViewMode) parameters.get(UIParameter.MODE));
 		if (getItem().getId() != 0) {
-			if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+			ResourceGroupType resourceGroupType = getItem().getResourcegroup().getResourceGroupType();
+			ResourceType resourceType = getItem().getResourcetype();
+			if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.LOCALIZABLE) {
 				resourceItemDataProvider.provideResourceItems(resource);
 				getView().getGridResourceItems().setVisible(true);
 				getView().getTreeGridResourceItems().setVisible(false);
+				getView().getGridResourceItemsStandard().setVisible(false);
+				getView().getTreeGridResourceItemsStandard().setVisible(false);
+
 				getView().organizeResourceItemsGrid(resourceItemDataProvider);
-			} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+			} else if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.LOCALIZABLE) {
 				resourceItemTreeDataProvider.provideResourceItems(resource);
 				getView().getGridResourceItems().setVisible(false);
 				getView().getTreeGridResourceItems().setVisible(true);
+				getView().getGridResourceItemsStandard().setVisible(false);
+				getView().getTreeGridResourceItemsStandard().setVisible(false);
+
 				getView().organizeResourceItemsTreeGrid(resourceItemTreeDataProvider);
+			} else if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.NONLOCALIZABLE) {
+				resourceItemDataProvider.provideResourceItems(resource);
+				getView().getGridResourceItems().setVisible(false);
+				getView().getTreeGridResourceItems().setVisible(false);
+				getView().getGridResourceItemsStandard().setVisible(true);
+				getView().getTreeGridResourceItemsStandard().setVisible(false);
+
+				getView().organizeResourceItemsStandardGrid(resourceItemDataProvider);
+			} else if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.NONLOCALIZABLE) {
+				resourceItemTreeDataProvider.provideResourceItems(resource);
+				getView().getGridResourceItems().setVisible(false);
+				getView().getTreeGridResourceItems().setVisible(false);
+				getView().getGridResourceItemsStandard().setVisible(false);
+				getView().getTreeGridResourceItemsStandard().setVisible(true);
+
+				getView().organizeResourceItemsStandardTreeGrid(resourceItemTreeDataProvider);
 			}
 			setVisibleButtons(true);
 		} else {
 			setVisibleButtons(false);
 			getView().getGridResourceItems().setVisible(false);
 			getView().getTreeGridResourceItems().setVisible(false);
+			getView().getGridResourceItemsStandard().setVisible(false);
+			getView().getTreeGridResourceItemsStandard().setVisible(false);
 		}
 		getTitleForHeader();
 	}
@@ -116,8 +143,13 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	public void removeResourceItemRow() throws LocalizedException {
 		REFilterGrid<ReResourceitem> listGrid = getView().getGridResourceItems();
 		RETreeGrid<ReResourceitem> treeGrid = getView().getTreeGridResourceItems();
+		REFilterGrid<ReResourceitem> listGridStandard = getView().getGridResourceItemsStandard();
+		RETreeGrid<ReResourceitem> treeGridStandard = getView().getTreeGridResourceItemsStandard();
 
-		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+		ResourceGroupType resourceGroupType = getItem().getResourcegroup().getResourceGroupType();
+		ResourceType resourceType = getItem().getResourcetype();
+
+		if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.LOCALIZABLE) {
 			if (treeGrid.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
@@ -136,7 +168,26 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			treeGrid.getSelectedItems().forEach(resourceItem -> treeGrid.getGridDataProvider().removeItem((ReResourceitem) resourceItem));
 			treeGrid.deselectAll();
 			treeGrid.refreshAll();
-		} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+		} else if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.NONLOCALIZABLE) {
+			if (treeGridStandard.getSelectedItems().isEmpty()) {
+				getView().showGridRowNotSelected();
+				return;
+			} else if (isActiveItemExists(treeGridStandard.getSelectedItems())) {
+				getView().showActiveRowSelected();
+				return;
+			}
+			treeGridStandard.getSelectedItems().forEach(resourceItem -> {
+				try {
+					deleteLanguagesByItem((ReResourceitem) resourceItem);
+					resourceitemService.delete((ReResourceitem) resourceItem);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			});
+			treeGridStandard.getSelectedItems().forEach(resourceItem -> treeGridStandard.getGridDataProvider().removeItem((ReResourceitem) resourceItem));
+			treeGridStandard.deselectAll();
+			treeGridStandard.refreshAll();
+		} else if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.LOCALIZABLE) {
 			if (listGrid.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
@@ -156,6 +207,26 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			listGrid.getSelectedItems().forEach(resourceItem -> listGrid.getGridDataProvider().removeItem(resourceItem));
 			listGrid.deselectAll();
 			listGrid.refreshAll();
+		} else if (resourceGroupType == ResourceGroupType.LIST && getItem().getResourcetype() == ResourceType.NONLOCALIZABLE) {
+			if (listGridStandard.getSelectedItems().isEmpty()) {
+				getView().showGridRowNotSelected();
+				return;
+			} else if (isActiveItemExists(listGridStandard.getSelectedItems())) {
+				getView().showActiveRowSelected();
+				return;
+			}
+			listGridStandard.getSelectedItems().forEach(resourceItem -> {
+				try {
+					deleteLanguagesByItem(resourceItem);
+					resourceitemService.delete(resourceItem);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			});
+
+			listGridStandard.getSelectedItems().forEach(resourceItem -> listGridStandard.getGridDataProvider().removeItem(resourceItem));
+			listGridStandard.deselectAll();
+			listGridStandard.refreshAll();
 		}
 	}
 
@@ -172,8 +243,13 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	protected void setActiveItems(boolean isActive) {
 		REFilterGrid<ReResourceitem> listGrid = getView().getGridResourceItems();
 		RETreeGrid<ReResourceitem> treeGrid = getView().getTreeGridResourceItems();
+		REFilterGrid<ReResourceitem> listGridStandard = getView().getGridResourceItemsStandard();
+		RETreeGrid<ReResourceitem> treeGridStandard = getView().getTreeGridResourceItemsStandard();
 
-		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+		ResourceGroupType resourceGroupType = getItem().getResourcegroup().getResourceGroupType();
+		ResourceType resourceType = getItem().getResourcetype();
+
+		if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.LOCALIZABLE) {
 			if (treeGrid.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
@@ -193,7 +269,27 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			});
 			treeGrid.deselectAll();
 			treeGrid.refreshAll();
-		} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+		} else if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.NONLOCALIZABLE) {
+			if (treeGridStandard.getSelectedItems().isEmpty()) {
+				getView().showGridRowNotSelected();
+				return;
+			}
+			treeGridStandard.getSelectedItems().forEach(resourceItem -> {
+				try {
+					ReResourceitem item = (ReResourceitem) resourceItem;
+					if (isActive) {
+						item.setActive(1);
+					} else {
+						item.setActive(0);
+					}
+					resourceitemService.save(item);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			});
+			treeGridStandard.deselectAll();
+			treeGridStandard.refreshAll();
+		} else if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.LOCALIZABLE) {
 			if (listGrid.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
@@ -213,6 +309,26 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			});
 			listGrid.deselectAll();
 			listGrid.refreshAll();
+		} else if (resourceGroupType == ResourceGroupType.LIST && getItem().getResourcetype() == ResourceType.NONLOCALIZABLE) {
+			if (listGridStandard.getSelectedItems().isEmpty()) {
+				getView().showGridRowNotSelected();
+				return;
+			}
+			listGridStandard.getSelectedItems().forEach(resourceItem -> {
+				try {
+					ReResourceitem item = resourceItem;
+					if (isActive) {
+						item.setActive(1);
+					} else {
+						item.setActive(0);
+					}
+					resourceitemService.save(item);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			});
+			listGridStandard.deselectAll();
+			listGridStandard.refreshAll();
 		}
 	}
 
@@ -224,10 +340,18 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 
 	public void refreshGrid() {
 		List<ReResourceitem> itemList = resourceitemService.getItemListByResource(getItem().getId());
-		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
+
+		ResourceGroupType resourceGroupType = getItem().getResourcegroup().getResourceGroupType();
+		ResourceType resourceType = getItem().getResourcetype();
+
+		if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.LOCALIZABLE) {
 			getView().getTreeGridResourceItems().getGridDataProvider().refreshDataProviderByItems(itemList);
-		} else if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.LIST) {
+		} else if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.LOCALIZABLE) {
 			getView().getGridResourceItems().getGridDataProvider().refreshDataProviderByItems(itemList);
+		} else if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.NONLOCALIZABLE) {
+			getView().getTreeGridResourceItemsStandard().getGridDataProvider().refreshDataProviderByItems(itemList);
+		} else if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.NONLOCALIZABLE) {
+			getView().getGridResourceItemsStandard().getGridDataProvider().refreshDataProviderByItems(itemList);
 		}
 		resourceItemDataProvider.loadTransientData(itemList, getItem().getId());
 	}

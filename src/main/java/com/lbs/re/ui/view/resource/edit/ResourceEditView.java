@@ -44,8 +44,7 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 
 @SpringView
-public class ResourceEditView
-		extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
+public class ResourceEditView extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -62,13 +61,14 @@ public class ResourceEditView
 
 	private REFilterGrid<ReResourceitem> gridResourceItems;
 	private RETreeGrid<ReResourceitem> treeGridResourceItems;
+	private REFilterGrid<ReResourceitem> gridResourceItemsStandard;
+	private RETreeGrid<ReResourceitem> treeGridResourceItemsStandard;
 
 	private WindowResourceItem windowResourceItem;
 
 	@Autowired
-	public ResourceEditView(ResourceEditPresenter presenter, ResourceGroupComboBox resourcegroup,
-			ResourceCaseComboBox resourcecase, ResourceTypeComboBox resourcetype, OwnerProductComboBox ownerproduct,
-			WindowResourceItem windowResourceItem) {
+	public ResourceEditView(ResourceEditPresenter presenter, ResourceGroupComboBox resourcegroup, ResourceCaseComboBox resourcecase, ResourceTypeComboBox resourcetype,
+			OwnerProductComboBox ownerproduct, WindowResourceItem windowResourceItem) {
 		super(presenter);
 		this.resourcegroup = resourcegroup;
 		this.resourcecase = resourcecase;
@@ -82,10 +82,9 @@ public class ResourceEditView
 		resourceNr = new RETextField("view.resourceedit.textfield.number", "full", true, true);
 		description = new RETextArea("view.resourceedit.textfield.description", "full", true, true);
 		buildResourceItemsGrid();
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, description, resourcegroup,
-				resourcecase, resourcetype, ownerproduct);
-		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(),
-				gridResourceItems, treeGridResourceItems);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, description, resourcegroup, resourcecase, resourcetype, ownerproduct);
+		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(), gridResourceItems, treeGridResourceItems,
+				gridResourceItemsStandard, treeGridResourceItemsStandard);
 		getPresenter().setView(this);
 	}
 
@@ -127,8 +126,41 @@ public class ResourceEditView
 		gridResourceItems.initFilters();
 	}
 
+	protected void organizeResourceItemsStandardGrid(AbstractDataProvider<ReResourceitem> dataProvider) {
+		gridResourceItemsStandard.setGridDataProvider(dataProvider);
+		gridResourceItemsStandard.initFilters();
+	}
+
 	protected void organizeResourceItemsTreeGrid(ResourceItemTreeDataProvider dataProvider) {
 		treeGridResourceItems.setTreeGridDataProvider(dataProvider);
+	}
+
+	protected void organizeResourceItemsStandardTreeGrid(ResourceItemTreeDataProvider dataProvider) {
+		treeGridResourceItemsStandard.setTreeGridDataProvider(dataProvider);
+	}
+
+	private REGridConfig<ReResourceitem> buildResourceItemsStandardGridConfig() {
+		REGridConfig<ReResourceitem> resourceItemsGridConfig = new REGridConfig<ReResourceitem>() {
+
+			@Override
+			public List<GridColumn> getColumnList() {
+				return GridColumns.GridColumn.RESOURCE_ITEMS_STANDARD_COLUMNS;
+			}
+
+			@Override
+			public Class<ReResourceitem> getBeanType() {
+				return ReResourceitem.class;
+			}
+
+			@Override
+			public List<RUDOperations> getRUDOperations() {
+				List<RUDOperations> operations = new ArrayList<RUDOperations>();
+				operations.add(RUDOperations.VIEW);
+				return operations;
+			}
+
+		};
+		return resourceItemsGridConfig;
 	}
 
 	private REGridConfig<ReResourceitem> buildResourceItemsGridConfig() {
@@ -179,6 +211,30 @@ public class ResourceEditView
 		return resourceItemsGridConfig;
 	}
 
+	private REGridConfig<ReResourceitem> buildResourceItemsStandardTreeGridConfig() {
+		REGridConfig<ReResourceitem> resourceItemsGridConfig = new REGridConfig<ReResourceitem>() {
+
+			@Override
+			public List<GridColumn> getColumnList() {
+				return GridColumns.GridColumn.RESOURCE_ITEMS_STANDARD_COLUMNS;
+			}
+
+			@Override
+			public Class<ReResourceitem> getBeanType() {
+				return ReResourceitem.class;
+			}
+
+			@Override
+			public List<RUDOperations> getRUDOperations() {
+				List<RUDOperations> operations = new ArrayList<RUDOperations>();
+				operations.add(RUDOperations.VIEW);
+				return operations;
+			}
+
+		};
+		return resourceItemsGridConfig;
+	}
+
 	protected void buildResourceItemsGrid() {
 		gridResourceItems = new REFilterGrid<ReResourceitem>(buildResourceItemsGridConfig(), SelectionMode.MULTI) {
 
@@ -196,8 +252,23 @@ public class ResourceEditView
 		};
 		gridResourceItems.setId("ResourceItemGrid");
 
-		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(),
-				SelectionMode.MULTI) {
+		gridResourceItemsStandard = new REFilterGrid<ReResourceitem>(buildResourceItemsStandardGridConfig(), SelectionMode.MULTI) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onViewSelected(ReResourceitem resourceItem) {
+				try {
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT);
+				} catch (LocalizedException e) {
+					logError(e);
+				}
+			}
+
+		};
+		gridResourceItemsStandard.setId("ResourceItemStandardGrid");
+
+		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(), SelectionMode.MULTI) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -210,13 +281,26 @@ public class ResourceEditView
 			}
 		};
 		treeGridResourceItems.setId("ResourceItemTreeGrid");
+
+		treeGridResourceItemsStandard = new RETreeGrid<ReResourceitem>(buildResourceItemsStandardTreeGridConfig(), SelectionMode.MULTI) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onViewSelected(ReResourceitem resourceItem) {
+				try {
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT);
+				} catch (LocalizedException e) {
+					logError(e);
+				}
+			}
+		};
+		treeGridResourceItemsStandard.setId("ResourceItemStandardTreeGrid");
 	}
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResource> binder) {
-		binder.forField(resourceNr).withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter("must be integer"))
-				.bind(ReResource::getResourcenr, ReResource::setResourcenr);
+		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResource::getResourcenr,
+				ReResource::setResourcenr);
 		super.bindFormFields(binder);
 		binder.forField(resourcegroup).bind("resourcegroup");
 	}
@@ -241,13 +325,11 @@ public class ResourceEditView
 	}
 
 	public void showGridRowNotSelected() {
-		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"),
-				NotifyType.ERROR);
+		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"), NotifyType.ERROR);
 	}
 
 	public void showActiveRowSelected() {
-		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showActiveRowSelected"),
-				NotifyType.ERROR);
+		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showActiveRowSelected"), NotifyType.ERROR);
 	}
 
 	public ResourceGroupComboBox getResourcegroup() {
@@ -258,8 +340,16 @@ public class ResourceEditView
 		return gridResourceItems;
 	}
 
+	public REFilterGrid<ReResourceitem> getGridResourceItemsStandard() {
+		return gridResourceItemsStandard;
+	}
+
 	public RETreeGrid<ReResourceitem> getTreeGridResourceItems() {
 		return treeGridResourceItems;
+	}
+
+	public RETreeGrid<ReResourceitem> getTreeGridResourceItemsStandard() {
+		return treeGridResourceItemsStandard;
 	}
 
 	public REButton getBtnAddRow() {
