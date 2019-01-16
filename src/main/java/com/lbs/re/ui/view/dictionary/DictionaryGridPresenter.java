@@ -17,6 +17,7 @@ import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.view.AbstractGridPresenter;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemDataProvider;
+import com.lbs.re.util.Constants;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 
@@ -45,7 +46,7 @@ public class DictionaryGridPresenter extends AbstractGridPresenter<ReResourceite
 	public void enterView(Map<UIParameter, Object> parameters) {
 		try {
 			DatabaseEnvironment prefferedDb = preferredDatabaseSession.getPreferredDb();
-			DatabaseEnvironment dictionaryDb = DatabaseEnvironment.DICTIONARY;
+			DatabaseEnvironment dictionaryDb = DatabaseEnvironment.valueOf(Constants.DICTIONARY_DATABASE);
 			preferredDatabaseSession.setPreferredDb(dictionaryDb);
 			List<ReResourceitem> itemList = resourceItemDataProvider.loadTurkishDataForDictionary(getService().getAll());
 			getDataPovider().refreshDataProviderByItems(itemList);

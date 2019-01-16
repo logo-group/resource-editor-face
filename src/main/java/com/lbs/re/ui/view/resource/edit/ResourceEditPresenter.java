@@ -62,7 +62,6 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	private ResourceitemService resourceitemService;
 	private LanguageServices languageServices;
 
-	@SuppressWarnings("rawtypes")
 	@Autowired
 	public ResourceEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceService resourceService, REUserService userService,
 			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider,
@@ -74,7 +73,6 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		this.languageServices = languageServices;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void enterView(Map<UIParameter, Object> parameters) throws LocalizedException {
 		ReResource resource;
@@ -224,7 +222,6 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		getView().openResourceItemWindow(windowParameters);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void refreshGrid() {
 		List<ReResourceitem> itemList = resourceitemService.getItemListByResource(getItem().getId());
 		if (getItem().getResourcegroup().getResourceGroupType() == ResourceGroupType.TREE) {
