@@ -461,6 +461,14 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 		return innerLayout;
 	}
 
+	public REButton getDeleteButton() {
+		return deleteButton;
+	}
+
+	public REButton getClearFilterButton() {
+		return clearFilterButton;
+	}
+
 	protected void logError(LocalizedException e) {
 		getLogger().error(e.getLocalizedMessage(), e);
 		RENotification.showNotification(e.getLocalizedMessage(), NotifyType.ERROR);
