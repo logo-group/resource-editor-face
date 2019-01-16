@@ -29,7 +29,7 @@ public class DictionaryGridView extends AbstractGridView<ReResourceitem, Resourc
 
 		@Override
 		public List<GridColumn> getColumnList() {
-			return GridColumns.GridColumn.RESOURCE_ITEMS_COLUMNS;
+			return GridColumns.GridColumn.DICTIONARY_COLUMNS;
 		}
 
 		@Override
@@ -52,8 +52,11 @@ public class DictionaryGridView extends AbstractGridView<ReResourceitem, Resourc
 
 	@PostConstruct
 	private void init() {
+		getAddButton().setVisible(false);
+		getDeleteButton().setVisible(false);
+		getClearFilterButton().setVisible(false);
 		getPresenter().setView(this);
-		setHeader(getLocaleValue("usersGridLabel"));
+		setHeader(getLocaleValue("dictionaryGridLabel"));
 	}
 
 	@Override

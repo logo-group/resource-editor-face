@@ -17,11 +17,9 @@ public class GridColumns {
 
 		RESOURCE_DESCRIPTION("description", "column.resource.description", DataType.TEXT, null, true, false, true),
 		RESOURCE_NUMBER("resourcenr", "column.resource.number", DataType.INTEGER, null, true, false, true),
-		RESOURCE_GROUP_ID("resourceGroupId", "component.resourcegroupcombobox.caption", DataType.TEXT, null, true,
-				false, true),
+		RESOURCE_GROUP_ID("resourceGroupId", "component.resourcegroupcombobox.caption", DataType.TEXT, null, true, false, true),
 
-		MESSAGE_TYPE("mtype", "column.message.type", DataType.SELECT_ENUM, EnumsV2.MessageType.class, true, false,
-				true),
+		MESSAGE_TYPE("mtype", "column.message.type", DataType.SELECT_ENUM, EnumsV2.MessageType.class, true, false, true),
 		MESSAGE_CONSTANT("consId", "column.message.constant", DataType.TEXT, null, true, false, true),
 		MESSAGE_MODULE("module", "column.message.module", DataType.TEXT, null, true, false, true),
 
@@ -38,8 +36,7 @@ public class GridColumns {
 		ITEM_ARABICEG("arabicEg", "column.resource.item.arabiceg", DataType.TEXT, null, false, true, true),
 		ITEM_ARABICJO("arabicJo", "column.resource.item.arabicjo", DataType.TEXT, null, false, true, true),
 		ITEM_ARABICSA("arabicSa", "column.resource.item.arabicsa", DataType.TEXT, null, false, true, true),
-		ITEM_AZERBAIJANIAZ("azerbaijaniAz", "column.resource.item.azerbaijaniaz", DataType.TEXT, null, false, true,
-				true),
+		ITEM_AZERBAIJANIAZ("azerbaijaniAz", "column.resource.item.azerbaijaniaz", DataType.TEXT, null, false, true, true),
 		ITEM_BULGARIANBG("bulgarianBg", "column.resource.item.bulgarianbg", DataType.TEXT, null, false, true, true),
 		ITEM_FRENCHFR("frenchFr", "column.resource.item.frenchfr", DataType.TEXT, null, false, true, true),
 		ITEM_GEORGIANGE("georgianGe", "column.resource.item.georgiande", DataType.TEXT, null, false, true, true),
@@ -50,14 +47,13 @@ public class GridColumns {
 		ITEM_TURKMENTM("turkmenTm", "column.resource.item.turkmentm", DataType.TEXT, null, false, true, true);
 
 		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(USER_NAME, EMAIL);
-		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(RESOURCE_NUMBER, RESOURCE_DESCRIPTION,
-				RESOURCE_GROUP_ID);
-		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER,
-				ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_ACTIVE, ITEM_TURKISH, ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG,
-				ITEM_ARABICJO, ITEM_ARABICSA, ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE,
+		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(RESOURCE_NUMBER, RESOURCE_DESCRIPTION, RESOURCE_GROUP_ID);
+		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_ACTIVE,
+				ITEM_TURKISH, ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA, ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE,
 				ITEM_GERMANDE, ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
-		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(MESSAGE_TYPE, MESSAGE_CONSTANT,
-				MESSAGE_MODULE);
+		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(MESSAGE_TYPE, MESSAGE_CONSTANT, MESSAGE_MODULE);
+		public static final List<GridColumn> DICTIONARY_COLUMNS = Arrays.asList(ITEM_TURKISH, ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA,
+				ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE, ITEM_GERMANDE, ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
 
 		private final String columnName;
 		private final String resourceName;
@@ -67,8 +63,7 @@ public class GridColumns {
 		private final boolean hidden;
 		private final boolean sortable;
 
-		private GridColumn(String columnName, String resourceName, DataType filterType, Class<?> filterBeanType,
-				boolean editable, boolean hidden, boolean sortable) {
+		private GridColumn(String columnName, String resourceName, DataType filterType, Class<?> filterBeanType, boolean editable, boolean hidden, boolean sortable) {
 			this.columnName = columnName;
 			this.resourceName = resourceName;
 			this.dataType = filterType;
