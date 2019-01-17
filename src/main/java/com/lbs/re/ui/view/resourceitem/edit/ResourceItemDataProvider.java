@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.PrototypeScope;
 
 import com.lbs.re.data.service.ResourceitemService;
+import com.lbs.re.data.service.StandardService;
 import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
+import com.lbs.re.model.ReStandard;
 import com.lbs.re.model.languages.ReAlbaniankv;
 import com.lbs.re.model.languages.ReArabiceg;
 import com.lbs.re.model.languages.ReArabicjo;
@@ -39,10 +41,14 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 
 	private LanguageServices languageServices;
 
+	private StandardService standardService;
+
 	@Autowired
-	public ResourceItemDataProvider(BeanFactory beanFactory, LanguageServices languageServices, ResourceitemService resourceItemService) throws LocalizedException {
+	public ResourceItemDataProvider(BeanFactory beanFactory, LanguageServices languageServices, ResourceitemService resourceItemService, StandardService standardService)
+			throws LocalizedException {
 		this.beanFactory = beanFactory;
 		this.languageServices = languageServices;
+		this.standardService = standardService;
 		buildListDataProvider(new ArrayList<>());
 	}
 
@@ -67,6 +73,7 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 		List<ReRomanianro> roList = languageServices.getRomanianService().getLanguageListByresourceref(resourceId);
 		List<ReRussianru> ruList = languageServices.getRussianruService().getLanguageListByresourceref(resourceId);
 		List<ReTurkmentm> tmList = languageServices.getTurkmenService().getLanguageListByresourceref(resourceId);
+		List<ReStandard> stList = standardService.getStandardListByResourceref(resourceId);
 		for (ReResourceitem item : resourceItemList) {
 			loadTurkishData(item, trList);
 			loadAlbanianData(item, kvList);
@@ -83,6 +90,7 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 			loadRomanianData(item, roList);
 			loadRussianData(item, ruList);
 			loadTurkmenData(item, tmList);
+			loadStandardData(item, stList);
 		}
 
 		return resourceItemList;
@@ -219,6 +227,15 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 		for (ReTurkmentm tm : tmList) {
 			if (tm.getResourceitemref().equals(item.getId())) {
 				item.setTurkmenTm(tm.getResourcestr());
+				break;
+			}
+		}
+	}
+
+	private void loadStandardData(ReResourceitem item, List<ReStandard> stList) {
+		for (ReStandard st : stList) {
+			if (st.getResourceitemref().equals(item.getId())) {
+				item.setStandard(st.getResourceStr());
 				break;
 			}
 		}

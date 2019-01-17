@@ -1,6 +1,7 @@
 package com.lbs.re.ui.view.resourceitem.edit;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -14,11 +15,13 @@ import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.data.service.ResourceitemService;
+import com.lbs.re.data.service.StandardService;
 import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReLanguageTable;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
+import com.lbs.re.model.ReStandard;
 import com.lbs.re.model.ReUser;
 import com.lbs.re.model.languages.ReAlbaniankv;
 import com.lbs.re.model.languages.ReArabiceg;
@@ -48,15 +51,16 @@ import com.lbs.re.ui.util.REStatic;
 import com.lbs.re.ui.view.AbstractEditPresenter;
 import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.lbs.re.util.EnumsV2.Languages;
+import com.lbs.re.util.EnumsV2.ResourceType;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
+import com.vaadin.ui.Component;
 
 @SpringComponent
 @ViewScope
-public class ResourceItemEditPresenter extends
-		AbstractEditPresenter<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
+public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
 
 	/**
 	 * long serialVersionUID
@@ -64,6 +68,8 @@ public class ResourceItemEditPresenter extends
 	private static final long serialVersionUID = 1L;
 
 	private LanguageServices languageServices;
+
+	private StandardService standardService;
 
 	private ReTurkishtr turkishTr;
 	private ReAlbaniankv albanianKv;
@@ -80,6 +86,7 @@ public class ResourceItemEditPresenter extends
 	private ReRomanianro romanianRo;
 	private ReRussianru russianRu;
 	private ReTurkmentm turkmenTm;
+	private ReStandard standard;
 
 	private ReResourceitem resourceItem;
 	private ResourceService resourceService;
@@ -87,12 +94,12 @@ public class ResourceItemEditPresenter extends
 	private ReUser user = null;
 
 	@Autowired
-	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager,
-			ResourceitemService resourceItemService, REUserService userService, BeanFactory beanFactory,
-			BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices, ResourceService resourceService) {
+	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceitemService resourceItemService, REUserService userService,
+			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices, ResourceService resourceService, StandardService standardService) {
 		super(viewEventBus, navigationManager, resourceItemService, ReResourceitem.class, beanFactory, userService);
 		this.languageServices = languageServices;
 		this.resourceService = resourceService;
+		this.standardService = standardService;
 		try {
 			this.user = SecurityUtils.getCurrentUser(userService).getReUser();
 		} catch (LocalizedException e) {
@@ -108,10 +115,12 @@ public class ResourceItemEditPresenter extends
 			resourceItem.setResourceref(Integer.parseInt(parameters.get(UIParameter.RESOURCE_ID).toString()));
 		} else {
 			resourceItem = getService().getById((Integer) parameters.get(UIParameter.ID));
+			ResourceType resourceType = (ResourceType) parameters.get(UIParameter.RESOURCE_TYPE);
 			if (resourceItem == null) {
 				getView().showNotFound();
 				return;
 			}
+			organizeAccordionsByResourceType(resourceType);
 		}
 		refreshView(resourceItem, ViewMode.EDIT);
 		getLanguageFields(resourceItem);
@@ -149,10 +158,33 @@ public class ResourceItemEditPresenter extends
 		persistLanguage(romanianRo, item);
 		persistLanguage(russianRu, item);
 		persistLanguage(turkmenTm, item);
+		persistStandard(standard, item);
 	}
 
-	private <T extends ReLanguageTable> void persistLanguage(T language, ReResourceitem item)
-			throws LocalizedException {
+	private void persistStandard(ReStandard standard, ReResourceitem item) throws LocalizedException {
+		if (item.getResourceref() != null && standard != null) {
+			standard.setResourceItem(item);
+			if (standard.getId() == 0) {
+				standard.setCreatedon(LocalDateTime.now());
+				standard.setCreatedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
+			} else {
+				standard.setModifiedon(LocalDateTime.now());
+				standard.setModifiedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
+			}
+			String standardValue = getView().getStandard().getValue();
+			if (standard.getResourceStr() != null) {
+				if (!standard.getResourceStr().equals(standardValue)) {
+					standard.setResourceStr(standardValue);
+					standardService.save(standard);
+				}
+			} else {
+				standard.setResourceStr(standardValue);
+				standardService.save(standard);
+			}
+		}
+	}
+
+	private <T extends ReLanguageTable> void persistLanguage(T language, ReResourceitem item) throws LocalizedException {
 		if (item.getResourceref() != null && language != null) {
 			language.setResourceref(item.getResourceref());
 			language.setReResourceitem(item);
@@ -392,8 +424,7 @@ public class ResourceItemEditPresenter extends
 				getView().getArabicSa().setValue(arabicSa.getResourcestr());
 			}
 
-			azerbaijaniAz = languageServices.getAzerbaijaniazService()
-					.getLanguageByresourceitemref(resourceItem.getId());
+			azerbaijaniAz = languageServices.getAzerbaijaniazService().getLanguageByresourceitemref(resourceItem.getId());
 			if (azerbaijaniAz != null) {
 				getView().getAzerbaijaniAz().setValue(azerbaijaniAz.getResourcestr());
 			}
@@ -442,6 +473,12 @@ public class ResourceItemEditPresenter extends
 			if (turkmenTm != null) {
 				getView().getTurkmenTm().setValue(turkmenTm.getResourcestr());
 			}
+
+			standard = standardService.getStandardByResourceItemref(resourceItem.getId());
+			if (standard != null) {
+				getView().getStandard().setValue(standard.getResourceStr());
+			}
+
 		}
 	}
 
@@ -530,6 +567,8 @@ public class ResourceItemEditPresenter extends
 					case TURKMEN:
 						languageServices.getTurkmenService().delete(turkmenTm);
 						break;
+					case STANDARD:
+						standardService.delete(standard);
 					}
 				} catch (LocalizedException e) {
 					getView().logError(e);
@@ -540,8 +579,23 @@ public class ResourceItemEditPresenter extends
 			public void onCancel() {
 			}
 
-		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
-				getLocaleValue("general.button.cancel"));
+		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"), getLocaleValue("general.button.cancel"));
 	}
 
+	private void organizeAccordionsByResourceType(ResourceType resourceType) {
+		Iterator<Component> iterator = getView().getAccordion().iterator();
+		int componentCount = getView().getAccordion().getComponentCount();
+		int count = 0;
+		while (iterator.hasNext()) {
+			Component component = iterator.next();
+			if (resourceType.equals(ResourceType.NONLOCALIZABLE) && componentCount == 4 && count == 1) {
+				getView().getAccordion().removeComponent(component);
+				break;
+			} else if (resourceType.equals(ResourceType.LOCALIZABLE) && componentCount == 4 && count == 2) {
+				getView().getAccordion().removeComponent(component);
+				break;
+			}
+			count++;
+		}
+	}
 }

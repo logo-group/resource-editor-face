@@ -99,7 +99,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 		btnAddRow.addClickListener(e -> {
 			try {
-				getPresenter().prepareResourceItemWindow(new ReResourceitem(), ViewMode.EDIT);
+				getPresenter().prepareResourceItemWindow(new ReResourceitem(), ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 			} catch (LocalizedException e1) {
 				logError(e1);
 			}
@@ -243,7 +243,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
 				try {
-					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT);
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 				} catch (LocalizedException e) {
 					logError(e);
 				}
@@ -259,7 +259,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
 				try {
-					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT);
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 				} catch (LocalizedException e) {
 					logError(e);
 				}
@@ -274,7 +274,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
 				try {
-					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT);
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 				} catch (LocalizedException e) {
 					logError(e);
 				}
@@ -288,7 +288,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
 				try {
-					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT);
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 				} catch (LocalizedException e) {
 					logError(e);
 				}

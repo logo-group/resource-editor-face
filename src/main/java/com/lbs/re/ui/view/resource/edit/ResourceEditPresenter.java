@@ -317,9 +317,10 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		}
 	}
 
-	public void prepareResourceItemWindow(ReResourceitem item, ViewMode mode) throws LocalizedException {
+	public void prepareResourceItemWindow(ReResourceitem item, ViewMode mode, ResourceType type) throws LocalizedException {
 		Map<UIParameter, Object> windowParameters = REStatic.getUIParameterMap(item.getId(), ViewMode.VIEW);
 		windowParameters.put(UIParameter.RESOURCE_ID, getItem().getId());
+		windowParameters.put(UIParameter.RESOURCE_TYPE, type);
 		getView().openResourceItemWindow(windowParameters);
 	}
 

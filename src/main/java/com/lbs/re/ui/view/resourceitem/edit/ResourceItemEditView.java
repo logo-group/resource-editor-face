@@ -33,8 +33,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 
 @SpringView
-public class ResourceItemEditView
-		extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
+public class ResourceItemEditView extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
 
 	/**
 	 * 
@@ -60,6 +59,7 @@ public class ResourceItemEditView
 	private REHorizontalLayoutWithState russianRuLayout;
 	private REHorizontalLayoutWithState turkishTrLayout;
 	private REHorizontalLayoutWithState turkmenTmLayout;
+	private REHorizontalLayoutWithState standardLayout;
 
 	private REHorizontalLayout albanianKvButtonLayout;
 	private REHorizontalLayout arabicEgButtonLayout;
@@ -76,6 +76,7 @@ public class ResourceItemEditView
 	private REHorizontalLayout russianRuButtonLayout;
 	private REHorizontalLayout turkishTrButtonLayout;
 	private REHorizontalLayout turkmenTmButtonLayout;
+	private REHorizontalLayout standardButtonLayout;
 
 	private REButton albanianKvDelete;
 	private REButton arabicEgDelete;
@@ -92,6 +93,7 @@ public class ResourceItemEditView
 	private REButton russianRuDelete;
 	private REButton turkishTrDelete;
 	private REButton turkmenTmDelete;
+	private REButton standardDelete;
 
 	private RETextField ordernr;
 	private RETextField tagnr;
@@ -113,6 +115,7 @@ public class ResourceItemEditView
 	private RETextArea russianRu;
 	private RETextArea turkishTr;
 	private RETextArea turkmenTm;
+	private RETextArea standard;
 	private RETextField dictionaryId;
 	private REButton btnDictionary;
 
@@ -135,16 +138,17 @@ public class ResourceItemEditView
 		initDeleteButtons();
 		initButtonHorizontalLayouts();
 		initHorizontalLayouts();
-		initSections();
 
 		getCancel().setVisible(false);
 		getSave().setVisible(false);
 
 		getPresenter().setView(this);
+		initSections();
 	}
 
 	private void initSections() {
 		List<REHorizontalLayoutWithState> list = new ArrayList<REHorizontalLayoutWithState>();
+		List<REHorizontalLayoutWithState> standardList = new ArrayList<REHorizontalLayoutWithState>();
 		if (turkishTrLayout.isRemove() == false) {
 			list.add(turkishTrLayout);
 		}
@@ -190,11 +194,16 @@ public class ResourceItemEditView
 		if (turkmenTmLayout.isRemove() == false) {
 			list.add(turkmenTmLayout);
 		}
+		if (standardLayout.isRemove() == false) {
+			standardList.add(standardLayout);
+		}
 		REHorizontalLayoutWithState[] array = new REHorizontalLayoutWithState[list.size()];
+		REHorizontalLayoutWithState[] standardArray = new REHorizontalLayoutWithState[standardList.size()];
 		list.toArray(array);
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info,
-				btnDictionary, dictionaryId);
-		addSection(getLocaleValue("view.viewedit.section.languages"), 1, null, array);
+		standardList.toArray(standardArray);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info, btnDictionary, dictionaryId);
+		addSection("languages", getLocaleValue("view.viewedit.section.languages"), 1, null, array);
+		addSection("standards", getLocaleValue("view.viewedit.section.standard"), 2, null, standardArray);
 	}
 
 	private void initButtons() {
@@ -233,6 +242,7 @@ public class ResourceItemEditView
 		russianRuButtonLayout = initREHorizontalLayout("russianRuButtonLayout", russianRuDelete);
 		turkishTrButtonLayout = initREHorizontalLayout("turkishTrButtonLayout", turkishTrDelete);
 		turkmenTmButtonLayout = initREHorizontalLayout("turkmenTmButtonLayout", turkmenTmDelete);
+		standardButtonLayout = initREHorizontalLayout("standardButtonLayout", standardDelete);
 	}
 
 	private void initHorizontalLayouts() {
@@ -251,6 +261,7 @@ public class ResourceItemEditView
 		russianRuLayout = initREHorizontalLayout("russianRuLayout", russianRuButtonLayout, russianRu);
 		turkishTrLayout = initREHorizontalLayout("turkishTrLayout", turkishTrButtonLayout, turkishTr);
 		turkmenTmLayout = initREHorizontalLayout("turkmenTmLayout", turkmenTmButtonLayout, turkmenTm);
+		standardLayout = initREHorizontalLayout("standardLayout", standardButtonLayout, standard);
 
 		checkForUserRight(sessionUser.getSqkvaccessrights(), albanianKvLayout);
 		checkForUserRight(sessionUser.getAregaccessrights(), arabicEgLayout);
@@ -267,6 +278,7 @@ public class ResourceItemEditView
 		checkForUserRight(sessionUser.getRuruaccessrights(), russianRuLayout);
 		checkForUserRight(sessionUser.getTrtraccessrights(), turkishTrLayout);
 		checkForUserRight(sessionUser.getTktmaccessrights(), turkmenTmLayout);
+		checkForUserRight(sessionUser.getStdaccessrights(), standardLayout);
 	}
 
 	private void checkForUserRight(int userValue, REHorizontalLayoutWithState layout) {
@@ -309,6 +321,7 @@ public class ResourceItemEditView
 		russianRu = new RETextArea("column.resource.item.russianru", "full", true, true);
 		turkishTr = new RETextArea("column.resource.item.turkish", "full", true, true);
 		turkmenTm = new RETextArea("column.resource.item.turkmentm", "full", true, true);
+		standard = new RETextArea("column.resource.item.standard", "full", true, true);
 	}
 
 	private void initDeleteButtons() {
@@ -387,6 +400,11 @@ public class ResourceItemEditView
 			getPresenter().confirmDelete(turkmenTm, Languages.TURKMEN);
 		});
 
+		standardDelete = new REButton("standardDelete", VaadinIcons.TRASH);
+		standardDelete.addClickListener(e -> {
+			getPresenter().confirmDelete(standard, Languages.TURKMEN);
+		});
+
 	}
 
 	private REHorizontalLayoutWithState initREHorizontalLayout(String id, Component... components) {
@@ -403,17 +421,13 @@ public class ResourceItemEditView
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResourceitem> binder) {
-		binder.forField(ordernr).withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter("must be integer"))
-				.bind(ReResourceitem::getOrdernr, ReResourceitem::setOrdernr);
-		binder.forField(tagnr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer"))
-				.bind(ReResourceitem::getTagnr, ReResourceitem::setTagnr);
-		binder.forField(levelnr).withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter("must be integer"))
-				.bind(ReResourceitem::getLevelnr, ReResourceitem::setLevelnr);
-		binder.forField(dictionaryId).withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter("must be integer"))
-				.bind(ReResourceitem::getDictionaryId, ReResourceitem::setDictionaryId);
+		binder.forField(ordernr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getOrdernr,
+				ReResourceitem::setOrdernr);
+		binder.forField(tagnr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getTagnr, ReResourceitem::setTagnr);
+		binder.forField(levelnr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getLevelnr,
+				ReResourceitem::setLevelnr);
+		binder.forField(dictionaryId).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getDictionaryId,
+				ReResourceitem::setDictionaryId);
 		super.bindFormFields(binder);
 	}
 
@@ -513,6 +527,10 @@ public class ResourceItemEditView
 
 	public RETextField getDictionaryId() {
 		return dictionaryId;
+	}
+
+	public RETextArea getStandard() {
+		return standard;
 	}
 
 	@Override
