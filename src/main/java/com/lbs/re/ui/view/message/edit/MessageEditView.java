@@ -56,10 +56,10 @@ public class MessageEditView
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReMessage> binder) {
 		binder.forField(listid).withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter("must be integer"))
+				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReMessage::getListid, ReMessage::setListid);
 		binder.forField(strtag).withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter("must be integer"))
+				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReMessage::getStrtag, ReMessage::setStrtag);
 		super.bindFormFields(binder);
 		binder.forField(mtype).asRequired().bind("mtype");

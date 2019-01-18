@@ -311,7 +311,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResource> binder) {
-		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResource::getResourcenr,
+		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue"))).bind(ReResource::getResourcenr,
 				ReResource::setResourcenr);
 		super.bindFormFields(binder);
 		binder.forField(resourcegroup).bind("resourcegroup");

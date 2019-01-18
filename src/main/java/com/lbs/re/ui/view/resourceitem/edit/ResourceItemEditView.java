@@ -421,13 +421,14 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResourceitem> binder) {
-		binder.forField(ordernr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getOrdernr,
-				ReResourceitem::setOrdernr);
-		binder.forField(tagnr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getTagnr, ReResourceitem::setTagnr);
-		binder.forField(levelnr).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getLevelnr,
-				ReResourceitem::setLevelnr);
-		binder.forField(dictionaryId).withNullRepresentation("").withConverter(new StringToIntegerConverter("must be integer")).bind(ReResourceitem::getDictionaryId,
-				ReResourceitem::setDictionaryId);
+		binder.forField(ordernr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+				.bind(ReResourceitem::getOrdernr, ReResourceitem::setOrdernr);
+		binder.forField(tagnr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue"))).bind(ReResourceitem::getTagnr,
+				ReResourceitem::setTagnr);
+		binder.forField(levelnr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+				.bind(ReResourceitem::getLevelnr, ReResourceitem::setLevelnr);
+		binder.forField(dictionaryId).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+				.bind(ReResourceitem::getDictionaryId, ReResourceitem::setDictionaryId);
 		super.bindFormFields(binder);
 	}
 
