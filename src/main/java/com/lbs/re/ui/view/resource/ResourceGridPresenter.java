@@ -13,6 +13,8 @@ import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
+import com.lbs.re.ui.util.Enums.ViewMode;
+import com.lbs.re.ui.util.REStatic;
 import com.lbs.re.ui.view.AbstractGridPresenter;
 import com.lbs.re.ui.view.resource.edit.ResourceEditPresenter;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -53,4 +55,8 @@ public class ResourceGridPresenter extends AbstractGridPresenter<ReResource, Res
 		super.deleteSelectedLines(entities);
 	}
 
+	protected void prepareCopyWindow(ReResource resource) throws LocalizedException {
+		Map<UIParameter, Object> windowParameters = REStatic.getUIParameterMap(resource.getId(), ViewMode.VIEW);
+		getView().openCopyWindow(windowParameters);
+	}
 }
