@@ -381,4 +381,18 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		getView().getBtnActive().setVisible(isVisible);
 		getView().getBtnDeActive().setVisible(isVisible);
 	}
+
+	public void generateResourceNumber() {
+		if (getView().getViewMode() == ViewMode.NEW) {
+			int newNumber = getService().getMaxResourceNumber() + 1;
+			getItem().setResourcenr(newNumber);
+			try {
+				refreshView(getItem(), getView().getViewMode());
+			} catch (LocalizedException e) {
+				e.printStackTrace();
+			}
+		} else {
+			getView().showGridRowNotSelected();
+		}
+	}
 }

@@ -42,6 +42,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Button.ClickEvent;
 
 @SpringView
 public class ResourceEditView extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
@@ -49,6 +50,7 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	private static final long serialVersionUID = 1L;
 
 	private RETextField resourceNr;
+	private REButton btnGenerateResourceNr;
 	private RETextArea description;
 	private ResourceGroupComboBox resourcegroup;
 	private ResourceCaseComboBox resourcecase;
@@ -80,9 +82,15 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	@PostConstruct
 	protected void initView() {
 		resourceNr = new RETextField("view.resourceedit.textfield.number", "full", true, true);
+		btnGenerateResourceNr = new REButton("view.resourceedit.button.generate", VaadinIcons.AUTOMATION);
+
+		btnGenerateResourceNr.addClickListener(e -> {
+			getPresenter().generateResourceNumber();
+		});
 		description = new RETextArea("view.resourceedit.textfield.description", "full", true, true);
 		buildResourceItemsGrid();
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, description, resourcegroup, resourcecase, resourcetype, ownerproduct);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, btnGenerateResourceNr, description, resourcegroup, resourcecase, resourcetype,
+				ownerproduct);
 		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(), gridResourceItems, treeGridResourceItems,
 				gridResourceItemsStandard, treeGridResourceItemsStandard);
 		getPresenter().setView(this);
@@ -119,6 +127,10 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 			getPresenter().setActiveItems(false);
 		});
 		return hLayButtons;
+	}
+
+	public void setResourceNumber(int value) {
+		resourceNr.setValue(String.valueOf(value));
 	}
 
 	protected void organizeResourceItemsGrid(AbstractDataProvider<ReResourceitem> dataProvider) {
@@ -326,6 +338,10 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	public void showGridRowNotSelected() {
 		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"), NotifyType.ERROR);
+	}
+
+	public void showResourceAlreadyPersisted() {
+		RENotification.showNotification(getLocaleValue("view.resourceedit.messages.showResourceAlreadyPersisted"), NotifyType.ERROR);
 	}
 
 	public void showActiveRowSelected() {
