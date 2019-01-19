@@ -32,8 +32,8 @@ public class WindowResourceItem extends REWindow {
 	private ResourceEditPresenter resourceEditPresenter;
 
 	@Autowired
-	public WindowResourceItem(ViewEventBus viewEventBus, ResourceItemEditView resourceItemEditView, ResourceItemEditPresenter resourceItemEditPresenter,
-			ResourceEditPresenter resourceEditPresenter) {
+	public WindowResourceItem(ViewEventBus viewEventBus, ResourceItemEditView resourceItemEditView,
+			ResourceItemEditPresenter resourceItemEditPresenter, ResourceEditPresenter resourceEditPresenter) {
 		super(WindowSize.BIG, viewEventBus);
 		this.resourceItemEditView = resourceItemEditView;
 		this.resourceItemEditPresenter = resourceItemEditPresenter;
@@ -67,7 +67,9 @@ public class WindowResourceItem extends REWindow {
 
 	@Override
 	protected boolean readyToClose() {
-		// control null values
+		if (resourceItemEditPresenter.focusFirstErrorField()) {
+			return false;
+		}
 		return true;
 	}
 
@@ -81,6 +83,7 @@ public class WindowResourceItem extends REWindow {
 			RENotification.showNotification(getLocaleValue("view.abstractedit.messages.FailedSave"), NotifyType.ERROR);
 			e.printStackTrace();
 		}
-		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
+		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"),
+				NotifyType.SUCCESS);
 	}
 }

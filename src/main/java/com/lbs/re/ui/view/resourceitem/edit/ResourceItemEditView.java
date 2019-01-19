@@ -423,13 +423,13 @@ public class ResourceItemEditView
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResourceitem> binder) {
-		binder.forField(ordernr).withNullRepresentation("")
+		binder.forField(ordernr).asRequired().withNullRepresentation("")
 				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getOrdernr, ReResourceitem::setOrdernr);
-		binder.forField(tagnr).withNullRepresentation("")
+		binder.forField(tagnr).asRequired().withNullRepresentation("")
 				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getTagnr, ReResourceitem::setTagnr);
-		binder.forField(levelnr).withNullRepresentation("")
+		binder.forField(levelnr).asRequired().withNullRepresentation("")
 				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getLevelnr, ReResourceitem::setLevelnr);
 		binder.forField(dictionaryId).withNullRepresentation("")
