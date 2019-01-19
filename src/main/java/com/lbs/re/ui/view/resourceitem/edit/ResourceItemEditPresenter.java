@@ -110,18 +110,18 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 	@Override
 	public void enterView(Map<UIParameter, Object> parameters) throws LocalizedException {
 		subscribeToEventBus();
+		ResourceType resourceType = (ResourceType) parameters.get(UIParameter.RESOURCE_TYPE);
 		if ((Integer) parameters.get(UIParameter.ID) == 0) {
 			resourceItem = new ReResourceitem();
 			resourceItem.setResourceref(Integer.parseInt(parameters.get(UIParameter.RESOURCE_ID).toString()));
 		} else {
 			resourceItem = getService().getById((Integer) parameters.get(UIParameter.ID));
-			ResourceType resourceType = (ResourceType) parameters.get(UIParameter.RESOURCE_TYPE);
 			if (resourceItem == null) {
 				getView().showNotFound();
 				return;
 			}
-			organizeAccordionsByResourceType(resourceType);
 		}
+		organizeAccordionsByResourceType(resourceType);
 		refreshView(resourceItem, ViewMode.EDIT);
 		getLanguageFields(resourceItem);
 		getTitleForHeader();
@@ -135,350 +135,437 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 
 	@Override
 	public ReResourceitem save(ReResourceitem item) throws LocalizedException {
-		super.save(item);
-		ReResource reResource = resourceService.getById(item.getResourceref());
+		ReResourceitem savedItem = super.save(item);
+		ReResource reResource = resourceService.getById(savedItem.getResourceref());
 		reResource.orderResourceItems();
 		resourceService.save(reResource);
-		return item;
+		return savedItem;
 	}
 
 	public void checkLanguageFields(ReResourceitem item) throws LocalizedException {
-		persistLanguage(turkishTr, item);
-		persistLanguage(englishUs, item);
-		persistLanguage(albanianKv, item);
-		persistLanguage(arabicEg, item);
-		persistLanguage(arabicJo, item);
-		persistLanguage(arabicSa, item);
-		persistLanguage(azerbaijaniAz, item);
-		persistLanguage(bulgarianBg, item);
-		persistLanguage(frenchFr, item);
-		persistLanguage(georgianGe, item);
-		persistLanguage(germanDe, item);
-		persistLanguage(persianIr, item);
-		persistLanguage(romanianRo, item);
-		persistLanguage(russianRu, item);
-		persistLanguage(turkmenTm, item);
-		persistStandard(standard, item);
+		if (turkishTr == null) {
+			turkishTr = new ReTurkishtr();
+		}
+		if (!getView().getTurkishTr().getValue().isEmpty()) {
+			persistLanguage(turkishTr, item);
+		}
+
+		if (englishUs == null) {
+			englishUs = new ReEnglishus();
+		}
+		if (!getView().getEnglishUs().getValue().isEmpty()) {
+			persistLanguage(englishUs, item);
+		}
+
+		if (albanianKv == null) {
+			albanianKv = new ReAlbaniankv();
+		}
+		if (!getView().getAlbanianKv().getValue().isEmpty()) {
+			persistLanguage(albanianKv, item);
+		}
+
+		if (arabicEg == null) {
+			arabicEg = new ReArabiceg();
+		}
+		if (!getView().getArabicEg().getValue().isEmpty()) {
+			persistLanguage(arabicEg, item);
+		}
+
+		if (arabicJo == null) {
+			arabicJo = new ReArabicjo();
+		}
+		if (!getView().getArabicJo().getValue().isEmpty()) {
+			persistLanguage(arabicJo, item);
+		}
+
+		if (arabicSa == null) {
+			arabicSa = new ReArabicsa();
+		}
+		if (!getView().getArabicSa().getValue().isEmpty()) {
+			persistLanguage(arabicSa, item);
+		}
+
+		if (azerbaijaniAz == null) {
+			azerbaijaniAz = new ReAzerbaijaniaz();
+		}
+		if (!getView().getAzerbaijaniAz().getValue().isEmpty()) {
+			persistLanguage(azerbaijaniAz, item);
+		}
+
+		if (bulgarianBg == null) {
+			bulgarianBg = new ReBulgarianbg();
+		}
+		if (!getView().getBulgarianBg().getValue().isEmpty()) {
+			persistLanguage(bulgarianBg, item);
+		}
+
+		if (frenchFr == null) {
+			frenchFr = new ReFrenchfr();
+		}
+		if (!getView().getFrenchFr().getValue().isEmpty()) {
+			persistLanguage(frenchFr, item);
+		}
+
+		if (georgianGe == null) {
+			georgianGe = new ReGeorgiange();
+		}
+		if (!getView().getGeorgianGe().getValue().isEmpty()) {
+			persistLanguage(georgianGe, item);
+		}
+
+		if (germanDe == null) {
+			germanDe = new ReGermande();
+		}
+		if (!getView().getGermanDe().getValue().isEmpty()) {
+			persistLanguage(germanDe, item);
+		}
+
+		if (persianIr == null) {
+			persianIr = new RePersianir();
+		}
+		if (!getView().getPersianIr().getValue().isEmpty()) {
+			persistLanguage(persianIr, item);
+		}
+
+		if (romanianRo == null) {
+			romanianRo = new ReRomanianro();
+		}
+		if (!getView().getRomanianRo().getValue().isEmpty()) {
+			persistLanguage(romanianRo, item);
+		}
+
+		if (russianRu == null) {
+			russianRu = new ReRussianru();
+		}
+		if (!getView().getRussianRu().getValue().isEmpty()) {
+			persistLanguage(russianRu, item);
+		}
+
+		if (turkmenTm == null) {
+			turkmenTm = new ReTurkmentm();
+		}
+		if (!getView().getTurkmenTm().getValue().isEmpty()) {
+			persistLanguage(turkmenTm, item);
+		}
+
+		if (standard == null) {
+			standard = new ReStandard();
+		}
+		if (!getView().getStandard().getValue().isEmpty()) {
+			persistStandard(standard, item);
+		}
 	}
 
 	private void persistStandard(ReStandard standard, ReResourceitem item) throws LocalizedException {
-		if (item.getResourceref() != null && standard != null) {
-			standard.setResourceItem(item);
-			if (standard.getId() == 0) {
-				standard.setCreatedon(LocalDateTime.now());
-				standard.setCreatedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
-			} else {
-				standard.setModifiedon(LocalDateTime.now());
-				standard.setModifiedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
-			}
-			String standardValue = getView().getStandard().getValue();
-			if (standard.getResourceStr() != null) {
-				if (!standard.getResourceStr().equals(standardValue)) {
-					standard.setResourceStr(standardValue);
-					standardService.save(standard);
-				}
-			} else {
+		standard.setResourceitemref(item.getId());
+		standard.setResourceref(item.getResourceref());
+		if (standard.getId() == 0) {
+			standard.setCreatedon(LocalDateTime.now());
+			standard.setCreatedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
+		} else {
+			standard.setModifiedon(LocalDateTime.now());
+			standard.setModifiedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
+		}
+		String standardValue = getView().getStandard().getValue();
+		if (standard.getResourceStr() != null) {
+			if (!standard.getResourceStr().equals(standardValue)) {
 				standard.setResourceStr(standardValue);
 				standardService.save(standard);
 			}
+		} else {
+			standard.setResourceStr(standardValue);
+			standardService.save(standard);
 		}
 	}
 
 	private <T extends ReLanguageTable> void persistLanguage(T language, ReResourceitem item) throws LocalizedException {
-		if (item.getResourceref() != null && language != null) {
-			language.setResourceref(item.getResourceref());
-			language.setReResourceitem(item);
-			language.setResourceitemref(item.getId());
-			if (language.getId() == 0) {
-				language.setCreatedon(LocalDateTime.now());
-				language.setCreatedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
-			} else {
-				language.setModifiedon(LocalDateTime.now());
-				language.setModifiedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
-			}
+		language.setResourceref(item.getResourceref());
+		language.setResourceitemref(item.getId());
+		if (language.getId() == 0) {
+			language.setCreatedon(LocalDateTime.now());
+			language.setCreatedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
+		} else {
+			language.setModifiedon(LocalDateTime.now());
+			language.setModifiedby(SecurityUtils.getCurrentUser(getUserService()).getReUser().getId());
+		}
 
-			if (language instanceof ReTurkishtr) {
-				String trValue = getView().getTurkishTr().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(trValue)) {
-						language.setResourcestr(trValue);
-						languageServices.getTurkishService().save((ReTurkishtr) language);
-					}
-				} else {
+		if (language instanceof ReTurkishtr) {
+			String trValue = getView().getTurkishTr().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(trValue)) {
 					language.setResourcestr(trValue);
 					languageServices.getTurkishService().save((ReTurkishtr) language);
 				}
-
+			} else {
+				language.setResourcestr(trValue);
+				languageServices.getTurkishService().save((ReTurkishtr) language);
 			}
 
-			else if (language instanceof ReEnglishus) {
-				String enValue = getView().getEnglishUs().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(enValue)) {
-						language.setResourcestr(enValue);
-						languageServices.getEnglishService().save((ReEnglishus) language);
-					}
-				} else {
+		}
+
+		else if (language instanceof ReEnglishus) {
+			String enValue = getView().getEnglishUs().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(enValue)) {
 					language.setResourcestr(enValue);
 					languageServices.getEnglishService().save((ReEnglishus) language);
 				}
+			} else {
+				language.setResourcestr(enValue);
+				languageServices.getEnglishService().save((ReEnglishus) language);
 			}
+		}
 
-			else if (language instanceof ReAlbaniankv) {
-				String kvValue = getView().getAlbanianKv().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(kvValue)) {
-						language.setResourcestr(kvValue);
-						languageServices.getAlbanianService().save((ReAlbaniankv) language);
-					}
-				} else {
+		else if (language instanceof ReAlbaniankv) {
+			String kvValue = getView().getAlbanianKv().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(kvValue)) {
 					language.setResourcestr(kvValue);
 					languageServices.getAlbanianService().save((ReAlbaniankv) language);
 				}
+			} else {
+				language.setResourcestr(kvValue);
+				languageServices.getAlbanianService().save((ReAlbaniankv) language);
 			}
+		}
 
-			else if (language instanceof ReArabiceg) {
-				String egValue = getView().getArabicEg().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(egValue)) {
-						language.setResourcestr(egValue);
-						languageServices.getArabicEgService().save((ReArabiceg) language);
-					}
-				} else {
+		else if (language instanceof ReArabiceg) {
+			String egValue = getView().getArabicEg().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(egValue)) {
 					language.setResourcestr(egValue);
 					languageServices.getArabicEgService().save((ReArabiceg) language);
 				}
+			} else {
+				language.setResourcestr(egValue);
+				languageServices.getArabicEgService().save((ReArabiceg) language);
 			}
+		}
 
-			else if (language instanceof ReArabicjo) {
-				String joValue = getView().getArabicJo().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(joValue)) {
-						language.setResourcestr(joValue);
-						languageServices.getArabicJoService().save((ReArabicjo) language);
-					}
-				} else {
+		else if (language instanceof ReArabicjo) {
+			String joValue = getView().getArabicJo().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(joValue)) {
 					language.setResourcestr(joValue);
 					languageServices.getArabicJoService().save((ReArabicjo) language);
 				}
+			} else {
+				language.setResourcestr(joValue);
+				languageServices.getArabicJoService().save((ReArabicjo) language);
 			}
+		}
 
-			else if (language instanceof ReArabicsa) {
-				String saValue = getView().getArabicSa().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(saValue)) {
-						language.setResourcestr(saValue);
-						languageServices.getArabicSaService().save((ReArabicsa) language);
-					}
-				} else {
+		else if (language instanceof ReArabicsa) {
+			String saValue = getView().getArabicSa().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(saValue)) {
 					language.setResourcestr(saValue);
 					languageServices.getArabicSaService().save((ReArabicsa) language);
 				}
+			} else {
+				language.setResourcestr(saValue);
+				languageServices.getArabicSaService().save((ReArabicsa) language);
 			}
+		}
 
-			else if (language instanceof ReAzerbaijaniaz) {
-				String azValue = getView().getAzerbaijaniAz().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(azValue)) {
-						language.setResourcestr(azValue);
-						languageServices.getAzerbaijaniazService().save((ReAzerbaijaniaz) language);
-					}
-				} else {
+		else if (language instanceof ReAzerbaijaniaz) {
+			String azValue = getView().getAzerbaijaniAz().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(azValue)) {
 					language.setResourcestr(azValue);
 					languageServices.getAzerbaijaniazService().save((ReAzerbaijaniaz) language);
 				}
+			} else {
+				language.setResourcestr(azValue);
+				languageServices.getAzerbaijaniazService().save((ReAzerbaijaniaz) language);
 			}
+		}
 
-			else if (language instanceof ReBulgarianbg) {
-				String bgValue = getView().getBulgarianBg().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(bgValue)) {
-						language.setResourcestr(bgValue);
-						languageServices.getBulgarianService().save((ReBulgarianbg) language);
-					}
-				} else {
+		else if (language instanceof ReBulgarianbg) {
+			String bgValue = getView().getBulgarianBg().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(bgValue)) {
 					language.setResourcestr(bgValue);
 					languageServices.getBulgarianService().save((ReBulgarianbg) language);
 				}
+			} else {
+				language.setResourcestr(bgValue);
+				languageServices.getBulgarianService().save((ReBulgarianbg) language);
 			}
+		}
 
-			else if (language instanceof ReFrenchfr) {
-				String frValue = getView().getFrenchFr().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(frValue)) {
-						language.setResourcestr(frValue);
-						languageServices.getFrenchService().save((ReFrenchfr) language);
-					}
-				} else {
+		else if (language instanceof ReFrenchfr) {
+			String frValue = getView().getFrenchFr().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(frValue)) {
 					language.setResourcestr(frValue);
 					languageServices.getFrenchService().save((ReFrenchfr) language);
 				}
-
+			} else {
+				language.setResourcestr(frValue);
+				languageServices.getFrenchService().save((ReFrenchfr) language);
 			}
 
-			else if (language instanceof ReGeorgiange) {
-				String geValue = getView().getGeorgianGe().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(geValue)) {
-						language.setResourcestr(geValue);
-						languageServices.getGeorgianService().save((ReGeorgiange) language);
-					}
-				} else {
+		}
+
+		else if (language instanceof ReGeorgiange) {
+			String geValue = getView().getGeorgianGe().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(geValue)) {
 					language.setResourcestr(geValue);
 					languageServices.getGeorgianService().save((ReGeorgiange) language);
 				}
+			} else {
+				language.setResourcestr(geValue);
+				languageServices.getGeorgianService().save((ReGeorgiange) language);
 			}
+		}
 
-			else if (language instanceof ReGermande) {
-				String deValue = getView().getGermanDe().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(deValue)) {
-						language.setResourcestr(deValue);
-						languageServices.getGermanService().save((ReGermande) language);
-					}
-				} else {
+		else if (language instanceof ReGermande) {
+			String deValue = getView().getGermanDe().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(deValue)) {
 					language.setResourcestr(deValue);
 					languageServices.getGermanService().save((ReGermande) language);
 				}
+			} else {
+				language.setResourcestr(deValue);
+				languageServices.getGermanService().save((ReGermande) language);
 			}
+		}
 
-			else if (language instanceof RePersianir) {
-				String irValue = getView().getPersianIr().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(irValue)) {
-						language.setResourcestr(irValue);
-						languageServices.getPersianService().save((RePersianir) language);
-					}
-				} else {
+		else if (language instanceof RePersianir) {
+			String irValue = getView().getPersianIr().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(irValue)) {
 					language.setResourcestr(irValue);
 					languageServices.getPersianService().save((RePersianir) language);
 				}
+			} else {
+				language.setResourcestr(irValue);
+				languageServices.getPersianService().save((RePersianir) language);
 			}
+		}
 
-			else if (language instanceof ReRomanianro) {
-				String roValue = getView().getRomanianRo().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(roValue)) {
-						language.setResourcestr(roValue);
-						languageServices.getRomanianService().save((ReRomanianro) language);
-					}
-				} else {
+		else if (language instanceof ReRomanianro) {
+			String roValue = getView().getRomanianRo().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(roValue)) {
 					language.setResourcestr(roValue);
 					languageServices.getRomanianService().save((ReRomanianro) language);
 				}
+			} else {
+				language.setResourcestr(roValue);
+				languageServices.getRomanianService().save((ReRomanianro) language);
 			}
+		}
 
-			else if (language instanceof ReRussianru) {
-				String ruValue = getView().getRussianRu().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(ruValue)) {
-						language.setResourcestr(ruValue);
-						languageServices.getRussianruService().save((ReRussianru) language);
-					}
-				} else {
+		else if (language instanceof ReRussianru) {
+			String ruValue = getView().getRussianRu().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(ruValue)) {
 					language.setResourcestr(ruValue);
 					languageServices.getRussianruService().save((ReRussianru) language);
 				}
+			} else {
+				language.setResourcestr(ruValue);
+				languageServices.getRussianruService().save((ReRussianru) language);
 			}
+		}
 
-			else if (language instanceof ReTurkmentm) {
-				String tmValue = getView().getTurkmenTm().getValue();
-				if (language.getResourcestr() != null) {
-					if (!language.getResourcestr().equals(tmValue)) {
-						language.setResourcestr(tmValue);
-						languageServices.getTurkmenService().save((ReTurkmentm) language);
-					}
-				} else {
+		else if (language instanceof ReTurkmentm) {
+			String tmValue = getView().getTurkmenTm().getValue();
+			if (language.getResourcestr() != null) {
+				if (!language.getResourcestr().equals(tmValue)) {
 					language.setResourcestr(tmValue);
 					languageServices.getTurkmenService().save((ReTurkmentm) language);
 				}
+			} else {
+				language.setResourcestr(tmValue);
+				languageServices.getTurkmenService().save((ReTurkmentm) language);
 			}
-
 		}
 	}
 
 	private void getLanguageFields(ReResourceitem resourceItem) {
-		if (resourceItem.getId() != 0) {
-			turkishTr = languageServices.getTurkishService().getLanguageByresourceitemref(resourceItem.getId());
-			if (turkishTr != null) {
-				getView().getTurkishTr().setValue(turkishTr.getResourcestr());
-			}
+		turkishTr = languageServices.getTurkishService().getLanguageByresourceitemref(resourceItem.getId());
+		if (turkishTr != null) {
+			getView().getTurkishTr().setValue(turkishTr.getResourcestr());
+		}
 
-			albanianKv = languageServices.getAlbanianService().getLanguageByresourceitemref(resourceItem.getId());
-			if (albanianKv != null) {
-				getView().getAlbanianKv().setValue(albanianKv.getResourcestr());
-			}
+		albanianKv = languageServices.getAlbanianService().getLanguageByresourceitemref(resourceItem.getId());
+		if (albanianKv != null) {
+			getView().getAlbanianKv().setValue(albanianKv.getResourcestr());
+		}
 
-			arabicEg = languageServices.getArabicEgService().getLanguageByresourceitemref(resourceItem.getId());
-			if (arabicEg != null) {
-				getView().getArabicEg().setValue(arabicEg.getResourcestr());
-			}
+		arabicEg = languageServices.getArabicEgService().getLanguageByresourceitemref(resourceItem.getId());
+		if (arabicEg != null) {
+			getView().getArabicEg().setValue(arabicEg.getResourcestr());
+		}
 
-			arabicJo = languageServices.getArabicJoService().getLanguageByresourceitemref(resourceItem.getId());
-			if (arabicJo != null) {
-				getView().getArabicJo().setValue(arabicJo.getResourcestr());
-			}
+		arabicJo = languageServices.getArabicJoService().getLanguageByresourceitemref(resourceItem.getId());
+		if (arabicJo != null) {
+			getView().getArabicJo().setValue(arabicJo.getResourcestr());
+		}
 
-			arabicSa = languageServices.getArabicSaService().getLanguageByresourceitemref(resourceItem.getId());
-			if (arabicSa != null) {
-				getView().getArabicSa().setValue(arabicSa.getResourcestr());
-			}
+		arabicSa = languageServices.getArabicSaService().getLanguageByresourceitemref(resourceItem.getId());
+		if (arabicSa != null) {
+			getView().getArabicSa().setValue(arabicSa.getResourcestr());
+		}
 
-			azerbaijaniAz = languageServices.getAzerbaijaniazService().getLanguageByresourceitemref(resourceItem.getId());
-			if (azerbaijaniAz != null) {
-				getView().getAzerbaijaniAz().setValue(azerbaijaniAz.getResourcestr());
-			}
+		azerbaijaniAz = languageServices.getAzerbaijaniazService().getLanguageByresourceitemref(resourceItem.getId());
+		if (azerbaijaniAz != null) {
+			getView().getAzerbaijaniAz().setValue(azerbaijaniAz.getResourcestr());
+		}
 
-			bulgarianBg = languageServices.getBulgarianService().getLanguageByresourceitemref(resourceItem.getId());
-			if (bulgarianBg != null) {
-				getView().getBulgarianBg().setValue(bulgarianBg.getResourcestr());
-			}
+		bulgarianBg = languageServices.getBulgarianService().getLanguageByresourceitemref(resourceItem.getId());
+		if (bulgarianBg != null) {
+			getView().getBulgarianBg().setValue(bulgarianBg.getResourcestr());
+		}
 
-			englishUs = languageServices.getEnglishService().getLanguageByresourceitemref(resourceItem.getId());
-			if (englishUs != null) {
-				getView().getEnglishUs().setValue(englishUs.getResourcestr());
-			}
+		englishUs = languageServices.getEnglishService().getLanguageByresourceitemref(resourceItem.getId());
+		if (englishUs != null) {
+			getView().getEnglishUs().setValue(englishUs.getResourcestr());
+		}
 
-			frenchFr = languageServices.getFrenchService().getLanguageByresourceitemref(resourceItem.getId());
-			if (frenchFr != null) {
-				getView().getFrenchFr().setValue(frenchFr.getResourcestr());
-			}
+		frenchFr = languageServices.getFrenchService().getLanguageByresourceitemref(resourceItem.getId());
+		if (frenchFr != null) {
+			getView().getFrenchFr().setValue(frenchFr.getResourcestr());
+		}
 
-			persianIr = languageServices.getPersianService().getLanguageByresourceitemref(resourceItem.getId());
-			if (persianIr != null) {
-				getView().getPersianIr().setValue(persianIr.getResourcestr());
-			}
+		persianIr = languageServices.getPersianService().getLanguageByresourceitemref(resourceItem.getId());
+		if (persianIr != null) {
+			getView().getPersianIr().setValue(persianIr.getResourcestr());
+		}
 
-			georgianGe = languageServices.getGeorgianService().getLanguageByresourceitemref(resourceItem.getId());
-			if (georgianGe != null) {
-				getView().getGeorgianGe().setValue(georgianGe.getResourcestr());
-			}
+		georgianGe = languageServices.getGeorgianService().getLanguageByresourceitemref(resourceItem.getId());
+		if (georgianGe != null) {
+			getView().getGeorgianGe().setValue(georgianGe.getResourcestr());
+		}
 
-			germanDe = languageServices.getGermanService().getLanguageByresourceitemref(resourceItem.getId());
-			if (germanDe != null) {
-				getView().getGermanDe().setValue(germanDe.getResourcestr());
-			}
+		germanDe = languageServices.getGermanService().getLanguageByresourceitemref(resourceItem.getId());
+		if (germanDe != null) {
+			getView().getGermanDe().setValue(germanDe.getResourcestr());
+		}
 
-			romanianRo = languageServices.getRomanianService().getLanguageByresourceitemref(resourceItem.getId());
-			if (romanianRo != null) {
-				getView().getRomanianRo().setValue(romanianRo.getResourcestr());
-			}
+		romanianRo = languageServices.getRomanianService().getLanguageByresourceitemref(resourceItem.getId());
+		if (romanianRo != null) {
+			getView().getRomanianRo().setValue(romanianRo.getResourcestr());
+		}
 
-			russianRu = languageServices.getRussianruService().getLanguageByresourceitemref(resourceItem.getId());
-			if (russianRu != null) {
-				getView().getRussianRu().setValue(russianRu.getResourcestr());
-			}
+		russianRu = languageServices.getRussianruService().getLanguageByresourceitemref(resourceItem.getId());
+		if (russianRu != null) {
+			getView().getRussianRu().setValue(russianRu.getResourcestr());
+		}
 
-			turkmenTm = languageServices.getTurkmenService().getLanguageByresourceitemref(resourceItem.getId());
-			if (turkmenTm != null) {
-				getView().getTurkmenTm().setValue(turkmenTm.getResourcestr());
-			}
+		turkmenTm = languageServices.getTurkmenService().getLanguageByresourceitemref(resourceItem.getId());
+		if (turkmenTm != null) {
+			getView().getTurkmenTm().setValue(turkmenTm.getResourcestr());
+		}
 
-			standard = standardService.getStandardByResourceItemref(resourceItem.getId());
-			if (standard != null) {
-				getView().getStandard().setValue(standard.getResourceStr());
-			}
-
+		standard = standardService.getStandardByResourceItemref(resourceItem.getId());
+		if (standard != null) {
+			getView().getStandard().setValue(standard.getResourceStr());
 		}
 	}
 
