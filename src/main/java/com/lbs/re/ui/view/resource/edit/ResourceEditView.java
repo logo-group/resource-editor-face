@@ -42,7 +42,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 
 @SpringView
 public class ResourceEditView extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
@@ -311,8 +310,8 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResource> binder) {
-		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue"))).bind(ReResource::getResourcenr,
-				ReResource::setResourcenr);
+		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+				.bind(ReResource::getResourcenr, ReResource::setResourcenr);
 		super.bindFormFields(binder);
 		binder.forField(resourcegroup).bind("resourcegroup");
 	}

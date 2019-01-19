@@ -14,6 +14,7 @@ import org.vaadin.spring.events.EventBus.ViewEventBus;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.data.service.ResourceitemService;
+import com.lbs.re.data.service.StandardService;
 import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
@@ -47,16 +48,19 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	private ResourceItemTreeDataProvider resourceItemTreeDataProvider;
 	private ResourceitemService resourceitemService;
 	private LanguageServices languageServices;
+	private StandardService standardService;
 
 	@Autowired
 	public ResourceEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceService resourceService, REUserService userService,
 			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider,
-			ResourceItemTreeDataProvider resourceItemTreeDataProvider, ResourceitemService resourceitemService, LanguageServices languageServices) {
+			ResourceItemTreeDataProvider resourceItemTreeDataProvider, ResourceitemService resourceitemService, LanguageServices languageServices,
+			StandardService standardService) {
 		super(viewEventBus, navigationManager, resourceService, ReResource.class, beanFactory, userService);
 		this.resourceItemDataProvider = resourceItemDataProvider;
 		this.resourceItemTreeDataProvider = resourceItemTreeDataProvider;
 		this.resourceitemService = resourceitemService;
 		this.languageServices = languageServices;
+		this.standardService = standardService;
 	}
 
 	@Override
@@ -357,8 +361,8 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		languageServices.getGermanService().deleteLanguageByResourceItemref(resourceItem.getId());
 		languageServices.getRomanianService().deleteLanguageByResourceItemref(resourceItem.getId());
 		languageServices.getRussianruService().deleteLanguageByResourceItemref(resourceItem.getId());
-		languageServices.getRomanianService().deleteLanguageByResourceItemref(resourceItem.getId());
 		languageServices.getTurkmenService().deleteLanguageByResourceItemref(resourceItem.getId());
+		standardService.deleteStandardByResourceItemref(resourceItem.getId());
 	}
 
 	@Override
