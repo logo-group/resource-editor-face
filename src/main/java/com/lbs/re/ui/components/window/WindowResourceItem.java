@@ -79,11 +79,11 @@ public class WindowResourceItem extends REWindow {
 			ReResourceitem item = resourceItemEditPresenter.save(resourceItemEditPresenter.getResourceItem());
 			resourceItemEditPresenter.checkLanguageFields(item);
 			resourceEditPresenter.refreshGrid();
+			RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"),
+					NotifyType.SUCCESS);
 		} catch (LocalizedException e) {
 			RENotification.showNotification(getLocaleValue("view.abstractedit.messages.FailedSave"), NotifyType.ERROR);
 			e.printStackTrace();
 		}
-		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"),
-				NotifyType.SUCCESS);
 	}
 }
