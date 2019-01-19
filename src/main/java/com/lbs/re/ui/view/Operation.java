@@ -26,10 +26,6 @@ public class Operation {
 	public static final String EDIT_USER = "EDIT_USER";
 	public static final String DELETE_USER = "DELETE_USER";
 
-	/** User setting operations. **/
-	public static final String VIEW_USER_SETTING = "VIEW_USER_SETTING";
-	public static final String EDIT_USER_SETTING = "EDIT_USER_SETTING";
-
 	/** Resource item operations. **/
 	public static final String VIEW_RESOURCE_ITEM = "VIEW_RESOURCE_ITEM";
 	public static final String EDIT_RESOURCE_ITEM = "EDIT_RESOURCE_ITEM";
