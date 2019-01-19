@@ -26,25 +26,30 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public class RETextField extends TextField implements ResourceEditorLocalizerWrapper {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public RETextField(String id, String style, boolean isSizeFull, boolean isEnabled) {
-        super();
-        setStyleName(style);
-        if (isSizeFull) {
-            setSizeFull();
-        }
-        setEnabled(isEnabled);
-        init(id);
-    }
+	public RETextField(String id, String style, boolean isSizeFull, boolean isEnabled, int maximumLength) {
+		this(id, style, isSizeFull, isEnabled);
+		setMaxLength(maximumLength);
+	}
 
-    private void init(String id) {
-        addStyleName(ValoTheme.TEXTFIELD_SMALL);
-        setWidth("100%");
-        setResponsive(true);
-        if (!id.isEmpty()) {
-            setId(id);
-            setCaption(getLocaleValue(id));
-        }
-    }
+	public RETextField(String id, String style, boolean isSizeFull, boolean isEnabled) {
+		super();
+		setStyleName(style);
+		if (isSizeFull) {
+			setSizeFull();
+		}
+		setEnabled(isEnabled);
+		init(id);
+	}
+
+	private void init(String id) {
+		addStyleName(ValoTheme.TEXTFIELD_SMALL);
+		setWidth("100%");
+		setResponsive(true);
+		if (!id.isEmpty()) {
+			setId(id);
+			setCaption(getLocaleValue(id));
+		}
+	}
 }

@@ -220,9 +220,9 @@ public class ResourceItemEditView
 	}
 
 	private void initTextFields() {
-		ordernr = new RETextField("column.resource.item.order.number", "full", true, true);
-		tagnr = new RETextField("column.resource.item.tag.number", "full", true, true);
-		levelnr = new RETextField("column.resource.item.level.number", "full", true, true);
+		ordernr = new RETextField("column.resource.item.order.number", "full", true, true, 10);
+		tagnr = new RETextField("column.resource.item.tag.number", "full", true, true, 10);
+		levelnr = new RETextField("column.resource.item.level.number", "full", true, true, 10);
 		prefixstr = new RETextField("column.resource.item.prefix", "full", true, true);
 		info = new RETextArea("column.resource.item.info", "full", true, true);
 		dictionaryId = new RETextField("column.resource.item.dictionary", "full", true, false);
