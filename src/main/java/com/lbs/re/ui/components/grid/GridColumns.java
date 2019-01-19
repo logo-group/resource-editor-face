@@ -30,6 +30,7 @@ public class GridColumns {
 		ITEM_PREFIX("prefixstr", "column.resource.item.prefix", DataType.TEXT, null, false, false, true),
 		ITEM_INFO("info", "column.resource.item.info", DataType.TEXT, null, false, false, true),
 		ITEM_ACTIVE("activeValue", "column.resource.item.active", DataType.TEXT, null, false, true, true),
+		ITEM_DICTIONARY_ID("dictionaryId", "column.resource.item.dictionary.number", DataType.INTEGER, null, false, false, true),
 		ITEM_TURKISH("turkishTr", "column.resource.item.turkish", DataType.TEXT, null, false, false, true),
 		ITEM_ENGLISH("englishUs", "column.resource.item.english", DataType.TEXT, null, false, false, true),
 		ITEM_ALBANIANKV("albanianKv", "column.resource.item.albanian", DataType.TEXT, null, false, true, true),
@@ -49,7 +50,7 @@ public class GridColumns {
 
 		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(USER_NAME, EMAIL);
 		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(RESOURCE_NUMBER, RESOURCE_DESCRIPTION, RESOURCE_GROUP_ID);
-		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_ACTIVE,
+		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_ACTIVE, ITEM_DICTIONARY_ID,
 				ITEM_TURKISH, ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA, ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE,
 				ITEM_GERMANDE, ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
 		public static final List<GridColumn> RESOURCE_ITEMS_STANDARD_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO,
