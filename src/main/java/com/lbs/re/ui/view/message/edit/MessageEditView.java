@@ -96,4 +96,9 @@ public class MessageEditView
 		return Operation.EDIT_MESSAGE;
 	}
 
+	@Override
+	public String getAddOperationName() {
+		return Operation.ADD_MESSAGE;
+	}
+
 }

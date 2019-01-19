@@ -79,4 +79,9 @@ public class UserSettingsView extends AbstractEditView<ReUser, REUserService, Us
 		return Operation.NO_CHECK;
 	}
 
+	@Override
+	public String getAddOperationName() {
+		return Operation.NO_CHECK;
+	}
+
 }

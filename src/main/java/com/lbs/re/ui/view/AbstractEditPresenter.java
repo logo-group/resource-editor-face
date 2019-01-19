@@ -345,4 +345,8 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 		SecurityUtils.checkForOperation(userService, getView().getViewOperationName());
 	}
 
+	public void checkForAddOperation() throws LocalizedException {
+		SecurityUtils.checkForOperation(userService, getView().getAddOperationName());
+	}
+
 }

@@ -164,4 +164,9 @@ public class UserEditView extends AbstractEditView<ReUser, REUserService, UserEd
 		return Operation.EDIT_USER;
 	}
 
+	@Override
+	public String getAddOperationName() {
+		return Operation.ADD_USER;
+	}
+
 }

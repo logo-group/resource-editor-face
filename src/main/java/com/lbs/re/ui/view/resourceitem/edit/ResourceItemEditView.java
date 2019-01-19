@@ -33,7 +33,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 
 @SpringView
-public class ResourceItemEditView extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
+public class ResourceItemEditView
+		extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
 
 	/**
 	 * 
@@ -201,7 +202,8 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 		REHorizontalLayoutWithState[] standardArray = new REHorizontalLayoutWithState[standardList.size()];
 		list.toArray(array);
 		standardList.toArray(standardArray);
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info, btnDictionary, dictionaryId);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info,
+				btnDictionary, dictionaryId);
 		addSection("languages", getLocaleValue("view.viewedit.section.languages"), 1, null, array);
 		addSection("standards", getLocaleValue("view.viewedit.section.standard"), 2, null, standardArray);
 	}
@@ -421,13 +423,17 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResourceitem> binder) {
-		binder.forField(ordernr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+		binder.forField(ordernr).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getOrdernr, ReResourceitem::setOrdernr);
-		binder.forField(tagnr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue"))).bind(ReResourceitem::getTagnr,
-				ReResourceitem::setTagnr);
-		binder.forField(levelnr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+		binder.forField(tagnr).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+				.bind(ReResourceitem::getTagnr, ReResourceitem::setTagnr);
+		binder.forField(levelnr).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getLevelnr, ReResourceitem::setLevelnr);
-		binder.forField(dictionaryId).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+		binder.forField(dictionaryId).withNullRepresentation("")
+				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getDictionaryId, ReResourceitem::setDictionaryId);
 		super.bindFormFields(binder);
 	}
@@ -542,6 +548,11 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 	@Override
 	public String getEditOperationName() {
 		return Operation.EDIT_RESOURCE_ITEM;
+	}
+
+	@Override
+	public String getAddOperationName() {
+		return Operation.NO_CHECK;
 	}
 
 	@Override
