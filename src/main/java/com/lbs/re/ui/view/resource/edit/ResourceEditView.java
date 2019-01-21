@@ -82,7 +82,6 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	protected void initView() {
 		resourceNr = new RETextField("view.resourceedit.textfield.uniquenumber", "full", true, true);
 		btnGenerateResourceNr = new REButton("view.resourceedit.button.generate", VaadinIcons.AUTOMATION);
-
 		btnGenerateResourceNr.addClickListener(e -> {
 			getPresenter().generateResourceNumber();
 		});
@@ -344,6 +343,10 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	protected void showGridRowNotSelected() {
 		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"), NotifyType.ERROR);
+	}
+
+	protected void showSelectEditMode() {
+		RENotification.showNotification(getLocaleValue("view.resourceedit.messages.showSelectEditMode"), NotifyType.ERROR);
 	}
 
 	protected void showResourceAlreadyPersisted() {

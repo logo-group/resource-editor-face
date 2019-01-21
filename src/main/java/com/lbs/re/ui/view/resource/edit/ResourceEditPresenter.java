@@ -396,16 +396,11 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	}
 
 	public void generateResourceNumber() {
-		if (getView().getViewMode() == ViewMode.NEW) {
-			int newNumber = getService().getMaxResourceNumber() + 1;
-			getItem().setResourcenr(newNumber);
-			try {
-				refreshView(getItem(), getView().getViewMode());
-			} catch (LocalizedException e) {
-				e.printStackTrace();
-			}
+		if (getView().getViewMode() == ViewMode.NEW || getView().getViewMode() == ViewMode.EDIT) {
+			Integer newNumber = getService().getMaxResourceNumber() + 1;
+			getView().getResourceNr().setValue(newNumber.toString());
 		} else {
-			getView().showGridRowNotSelected();
+			getView().showSelectEditMode();
 		}
 	}
 }
