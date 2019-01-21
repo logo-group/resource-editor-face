@@ -44,8 +44,7 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 
 @SpringView
-public class ResourceEditView
-		extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
+public class ResourceEditView extends AbstractEditView<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -69,9 +68,8 @@ public class ResourceEditView
 	private WindowResourceItem windowResourceItem;
 
 	@Autowired
-	public ResourceEditView(ResourceEditPresenter presenter, ResourceGroupComboBox resourcegroup,
-			ResourceCaseComboBox resourcecase, ResourceTypeComboBox resourcetype, OwnerProductComboBox ownerproduct,
-			WindowResourceItem windowResourceItem) {
+	public ResourceEditView(ResourceEditPresenter presenter, ResourceGroupComboBox resourcegroup, ResourceCaseComboBox resourcecase, ResourceTypeComboBox resourcetype,
+			OwnerProductComboBox ownerproduct, WindowResourceItem windowResourceItem) {
 		super(presenter);
 		this.resourcegroup = resourcegroup;
 		this.resourcecase = resourcecase;
@@ -82,7 +80,7 @@ public class ResourceEditView
 
 	@PostConstruct
 	protected void initView() {
-		resourceNr = new RETextField("view.resourceedit.textfield.number", "full", true, true);
+		resourceNr = new RETextField("view.resourceedit.textfield.uniquenumber", "full", true, true);
 		btnGenerateResourceNr = new REButton("view.resourceedit.button.generate", VaadinIcons.AUTOMATION);
 
 		btnGenerateResourceNr.addClickListener(e -> {
@@ -90,10 +88,10 @@ public class ResourceEditView
 		});
 		description = new RETextArea("view.resourceedit.textfield.description", "full", true, true);
 		buildResourceItemsGrid();
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, btnGenerateResourceNr,
-				description, resourcegroup, resourcecase, resourcetype, ownerproduct);
-		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(),
-				gridResourceItems, treeGridResourceItems, gridResourceItemsStandard, treeGridResourceItemsStandard);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, resourceNr, btnGenerateResourceNr, description, resourcegroup, resourcecase, resourcetype,
+				ownerproduct);
+		addSection(getLocaleValue("view.viewedit.section.resourceitems"), 1, null, buildResourceItemsGridButtons(), gridResourceItems, treeGridResourceItems,
+				gridResourceItemsStandard, treeGridResourceItemsStandard);
 		getPresenter().setView(this);
 	}
 
@@ -108,8 +106,7 @@ public class ResourceEditView
 
 		btnAddRow.addClickListener(e -> {
 			try {
-				getPresenter().prepareResourceItemWindow(new ReResourceitem(), ViewMode.EDIT,
-						getPresenter().getItem().getResourcetype());
+				getPresenter().prepareResourceItemWindow(new ReResourceitem(), ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 			} catch (LocalizedException e1) {
 				logError(e1);
 			}
@@ -257,8 +254,7 @@ public class ResourceEditView
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
 				try {
-					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT,
-							getPresenter().getItem().getResourcetype());
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 				} catch (LocalizedException e) {
 					logError(e);
 				}
@@ -267,16 +263,14 @@ public class ResourceEditView
 		};
 		gridResourceItems.setId("ResourceItemGrid");
 
-		gridResourceItemsStandard = new REFilterGrid<ReResourceitem>(buildResourceItemsStandardGridConfig(),
-				SelectionMode.MULTI) {
+		gridResourceItemsStandard = new REFilterGrid<ReResourceitem>(buildResourceItemsStandardGridConfig(), SelectionMode.MULTI) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
 				try {
-					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT,
-							getPresenter().getItem().getResourcetype());
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 				} catch (LocalizedException e) {
 					logError(e);
 				}
@@ -285,15 +279,13 @@ public class ResourceEditView
 		};
 		gridResourceItemsStandard.setId("ResourceItemStandardGrid");
 
-		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(),
-				SelectionMode.MULTI) {
+		treeGridResourceItems = new RETreeGrid<ReResourceitem>(buildResourceItemsTreeGridConfig(), SelectionMode.MULTI) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
 				try {
-					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT,
-							getPresenter().getItem().getResourcetype());
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 				} catch (LocalizedException e) {
 					logError(e);
 				}
@@ -301,15 +293,13 @@ public class ResourceEditView
 		};
 		treeGridResourceItems.setId("ResourceItemTreeGrid");
 
-		treeGridResourceItemsStandard = new RETreeGrid<ReResourceitem>(buildResourceItemsStandardTreeGridConfig(),
-				SelectionMode.MULTI) {
+		treeGridResourceItemsStandard = new RETreeGrid<ReResourceitem>(buildResourceItemsStandardTreeGridConfig(), SelectionMode.MULTI) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onViewSelected(ReResourceitem resourceItem) {
 				try {
-					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT,
-							getPresenter().getItem().getResourcetype());
+					getPresenter().prepareResourceItemWindow(resourceItem, ViewMode.EDIT, getPresenter().getItem().getResourcetype());
 				} catch (LocalizedException e) {
 					logError(e);
 				}
@@ -320,11 +310,13 @@ public class ResourceEditView
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResource> binder) {
-		binder.forField(resourceNr).withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResource::getResourcenr, ReResource::setResourcenr);
 		super.bindFormFields(binder);
-		binder.forField(resourcegroup).bind("resourcegroup");
+		binder.forField(resourcegroup).asRequired().bind("resourcegroup");
+		binder.forField(resourcecase).asRequired().bind("resourcecase");
+		binder.forField(resourcetype).asRequired().bind("resourcetype");
+		binder.forField(ownerproduct).asRequired().bind("ownerproduct");
 	}
 
 	@Override
@@ -346,19 +338,20 @@ public class ResourceEditView
 		}
 	}
 
-	public void showGridRowNotSelected() {
-		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"),
-				NotifyType.ERROR);
+	protected void showEmptyResourceNumber() {
+		RENotification.showNotification(getLocaleValue("view.resourceedit.messages.emptyresourcenumber"), NotifyType.ERROR);
 	}
 
-	public void showResourceAlreadyPersisted() {
-		RENotification.showNotification(getLocaleValue("view.resourceedit.messages.showResourceAlreadyPersisted"),
-				NotifyType.ERROR);
+	protected void showGridRowNotSelected() {
+		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showGridRowNotSelected"), NotifyType.ERROR);
 	}
 
-	public void showActiveRowSelected() {
-		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showActiveRowSelected"),
-				NotifyType.ERROR);
+	protected void showResourceAlreadyPersisted() {
+		RENotification.showNotification(getLocaleValue("view.resourceedit.messages.showResourceAlreadyPersisted"), NotifyType.ERROR);
+	}
+
+	protected void showActiveRowSelected() {
+		RENotification.showNotification(getLocaleValue("view.testcaseedit.messages.showActiveRowSelected"), NotifyType.ERROR);
 	}
 
 	public ResourceGroupComboBox getResourcegroup() {
@@ -395,6 +388,22 @@ public class ResourceEditView
 
 	public REButton getBtnDeActive() {
 		return btnDeActive;
+	}
+
+	public RETextField getResourceNr() {
+		return resourceNr;
+	}
+
+	public ResourceCaseComboBox getResourcecase() {
+		return resourcecase;
+	}
+
+	public ResourceTypeComboBox getResourcetype() {
+		return resourcetype;
+	}
+
+	public OwnerProductComboBox getOwnerproduct() {
+		return ownerproduct;
 	}
 
 	@Override

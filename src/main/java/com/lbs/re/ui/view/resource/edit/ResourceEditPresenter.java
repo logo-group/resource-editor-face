@@ -128,6 +128,15 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		subscribeToEventBus();
 	}
 
+	@Override
+	protected ReResource save(ReResource item) throws LocalizedException {
+		if (getView().getResourceNr().getValue().isEmpty()) {
+			getView().showEmptyResourceNumber();
+			return null;
+		}
+		return super.save(item);
+	}
+
 	@SuppressWarnings("unchecked")
 	public void removeResourceItemRow() throws LocalizedException {
 		REFilterGrid<ReResourceitem> listGrid = getView().getGridResourceItems();
