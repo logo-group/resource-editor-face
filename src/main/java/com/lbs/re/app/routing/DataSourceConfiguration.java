@@ -24,6 +24,8 @@ import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 @Configuration
 @EnableJpaRepositories(basePackages = { "com.lbs.re.data.repository" }, entityManagerFactoryRef = "appEntityManager", transactionManagerRef = "appTransactionManager")
 @ComponentScan(basePackages = { "com.lbs.re.data.dao" })
@@ -41,19 +43,19 @@ public class DataSourceConfiguration {
 	@Bean
 	@ConfigurationProperties(prefix = "app.jplatform.connection")
 	public DataSource jplatformDataSource() {
-		return DataSourceBuilder.create().build();
+		return DataSourceBuilder.create().type(HikariDataSource.class).build();
 	}
 
 	@Bean
 	@ConfigurationProperties(prefix = "app.tiger.connection")
 	public DataSource tigerDataSource() {
-		return DataSourceBuilder.create().build();
+		return DataSourceBuilder.create().type(HikariDataSource.class).build();
 	}
 
 	@Bean
 	@ConfigurationProperties(prefix = "app.dictionary.connection")
 	public DataSource dictionaryDataSource() {
-		return DataSourceBuilder.create().build();
+		return DataSourceBuilder.create().type(HikariDataSource.class).build();
 	}
 
 	/**
