@@ -11,6 +11,7 @@ import org.vaadin.spring.events.EventBus.ViewEventBus;
 
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
+import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RECheckBox;
 import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.components.basic.REWindow;
@@ -21,6 +22,7 @@ import com.lbs.re.ui.util.Enums.WindowSize;
 import com.lbs.re.ui.util.RENotification;
 import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.resource.edit.ResourceEditView;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
@@ -36,6 +38,7 @@ public class WindowResourceCopy extends REWindow {
 	private RECheckBox tagAll;
 	private ResourceGroupComboBox resourcegroup;
 	private RETextField resourceNr;
+	private REButton btnGenerateResourceNr;
 
 	private ResourceCopyWindowPresenter resourceCopyWindowPresenter;
 
@@ -61,6 +64,11 @@ public class WindowResourceCopy extends REWindow {
 		tagAll = new RECheckBox("view.resource.copy.tagall", null, true, true);
 		resourceNr = new RETextField("view.resourceedit.textfield.uniquenumber", "half", true, true);
 
+		btnGenerateResourceNr = new REButton("view.resourceedit.button.generate", VaadinIcons.AUTOMATION);
+		btnGenerateResourceNr.addClickListener(e -> {
+			resourceCopyWindowPresenter.generateResourceNumber();
+		});
+
 		tagAll.addValueChangeListener(event -> {
 			if (!tagAll.getValue()) {
 				tagStart.setEnabled(true);
@@ -75,7 +83,7 @@ public class WindowResourceCopy extends REWindow {
 	@Override
 	protected Component buildContent() throws LocalizedException {
 		initFields();
-		addSection(getLocaleValue("view.viewedit.section.values"), tagStart, tagEnd, tagAll, resourcegroup, resourceNr);
+		addSection(getLocaleValue("view.viewedit.section.values"), tagStart, tagEnd, tagAll, resourcegroup, resourceNr, btnGenerateResourceNr);
 		return getMainLayout();
 	}
 
@@ -132,4 +140,11 @@ public class WindowResourceCopy extends REWindow {
 		}
 	}
 
+	public RETextField getResourceNr() {
+		return resourceNr;
+	}
+
+	public void setResourceNr(RETextField resourceNr) {
+		this.resourceNr = resourceNr;
+	}
 }

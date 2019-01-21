@@ -463,6 +463,11 @@ public class ResourceCopyWindowPresenter extends AbstractWindowPresenter<WindowR
 		}
 	}
 
+	public void generateResourceNumber() {
+		Integer newNumber = resourceService.getMaxResourceNumber() + 1;
+		getWindow().getResourceNr().setValue(newNumber.toString());
+	}
+
 	public ReResource getResource() {
 		return resource;
 	}
