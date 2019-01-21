@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.lbs.re.app.routing.PreferredDatabaseSession;
 import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
@@ -51,12 +52,10 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
- * The main view containing the menu and the content area where actual views are
- * shown.
+ * The main view containing the menu and the content area where actual views are shown.
  * <p>
- * Created as a single View class because the logic is so simple that using a
- * pattern like MVP would add much overhead for little gain. If more complexity
- * is added to the class, you should consider splitting out a presenter.
+ * Created as a single View class because the logic is so simple that using a pattern like MVP would add much overhead for little gain. If more complexity is added to the class,
+ * you should consider splitting out a presenter.
  */
 @SpringViewDisplay
 @UIScope
@@ -68,6 +67,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 	private final NavigationManager navigationManager;
 	private final SecuredViewAccessControl viewAccessControl;
 	private final REUserService userService;
+	private PreferredDatabaseSession preferredDatabaseSession;
 
 	private REVerticalLayout content;
 	private RECssLayout menu;
@@ -79,10 +79,12 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 	private REButton logout;
 
 	@Autowired
-	public MainView(NavigationManager navigationManager, SecuredViewAccessControl viewAccessControl, REUserService userService) throws LocalizedException {
+	public MainView(NavigationManager navigationManager, SecuredViewAccessControl viewAccessControl, REUserService userService, PreferredDatabaseSession preferredDatabaseSession)
+			throws LocalizedException {
 		this.navigationManager = navigationManager;
 		this.viewAccessControl = viewAccessControl;
 		this.userService = userService;
+		this.preferredDatabaseSession = preferredDatabaseSession;
 	}
 
 	@PostConstruct
@@ -130,7 +132,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		menuButton.setStyleName("menu borderless");
 		menuButton.setWidthUndefined();
 		navigation.setWidthUndefined();
-		navigation.addComponents(buildHeader(), menuButton, buildMenu());
+		navigation.addComponents(buildHeader(), buildProject(), menuButton, buildMenu());
 
 		return navigation;
 	}
@@ -141,6 +143,13 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		header.setWidth("100%");
 		header.setValue(getLocaleValue("view.mainview.header"));
 		return header;
+	}
+
+	private Component buildProject() {
+		RELabel projectLabel = new RELabel(preferredDatabaseSession.getPreferredDb().name());
+		projectLabel.setStyleName("logo");
+		projectLabel.setWidth("100%");
+		return projectLabel;
 	}
 
 	private Component buildMenu() throws LocalizedException {
