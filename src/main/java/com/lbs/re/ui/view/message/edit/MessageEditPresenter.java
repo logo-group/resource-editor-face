@@ -21,7 +21,7 @@ import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
 import com.lbs.re.ui.view.AbstractEditPresenter;
-import com.lbs.re.ui.view.resource.ResourceGridView;
+import com.lbs.re.ui.view.message.MessageGridView;
 import com.lbs.re.util.EnumsV2.MessageButton;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -252,7 +252,7 @@ public class MessageEditPresenter
 
 	@Override
 	protected Class<? extends View> getGridView() {
-		return ResourceGridView.class;
+		return MessageGridView.class;
 	}
 
 	@Override

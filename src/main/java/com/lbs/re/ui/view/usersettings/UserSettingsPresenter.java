@@ -35,7 +35,7 @@ import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
 import com.lbs.re.ui.view.AbstractEditPresenter;
-import com.lbs.re.ui.view.user.UserGridView;
+import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
@@ -44,52 +44,52 @@ import com.vaadin.spring.annotation.ViewScope;
 @ViewScope
 public class UserSettingsPresenter extends AbstractEditPresenter<ReUser, REUserService, UserSettingsPresenter, UserSettingsView> {
 
-    /**
-     * long serialVersionUID
-     */
-    private static final long serialVersionUID = 1L;
-    private BCryptPasswordEncoder passwordEncoder;
+	/**
+	 * long serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+	private BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
+	@Autowired
 	public UserSettingsPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, REUserService userService, BeanFactory beanFactory,
 			BCryptPasswordEncoder passwordEncoder) {
 		super(viewEventBus, navigationManager, userService, ReUser.class, beanFactory, userService);
-        this.passwordEncoder = passwordEncoder;
-    }
+		this.passwordEncoder = passwordEncoder;
+	}
 
-    @Override
-    protected void enterView(Map<UIParameter, Object> parameters) throws LocalizedException {
+	@Override
+	protected void enterView(Map<UIParameter, Object> parameters) throws LocalizedException {
 		ReUser reUser = getService().getById((Integer) parameters.get(UIParameter.ID));
-        ViewMode mode = (ViewMode) parameters.get(UIParameter.MODE);
+		ViewMode mode = (ViewMode) parameters.get(UIParameter.MODE);
 		if (reUser == null) {
-            getView().showNotFound();
-            return;
-        }
+			getView().showNotFound();
+			return;
+		}
 		checkAuthority(reUser);
 		refreshView(reUser, mode);
-        organizeComponents(getView().getAccordion(), mode == ViewMode.VIEW);
-    }
+		organizeComponents(getView().getAccordion(), mode == ViewMode.VIEW);
+	}
 
-    @PostConstruct
-    public void init() {
-        subscribeToEventBus();
-    }
+	@PostConstruct
+	public void init() {
+		subscribeToEventBus();
+	}
 
-    public void setNewPassword(String value) {
-        getBinder().getBean().setPassword(passwordEncoder.encode(value));
-    }
+	public void setNewPassword(String value) {
+		getBinder().getBean().setPassword(passwordEncoder.encode(value));
+	}
 
-    @Override
-    protected Class<? extends View> getGridView() {
-		return UserGridView.class;
-    }
+	@Override
+	protected Class<? extends View> getGridView() {
+		return ResourceGridView.class;
+	}
 
 	private void checkAuthority(ReUser reUser) throws LocalizedException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		ReUser user = getService().getUserListByUsername(auth.getName());
 		if (!user.getId().equals(reUser.getId())) {
-            getView().showNotAuthorized();
-            return;
-        }
-    }
+			getView().showNotAuthorized();
+			return;
+		}
+	}
 }
