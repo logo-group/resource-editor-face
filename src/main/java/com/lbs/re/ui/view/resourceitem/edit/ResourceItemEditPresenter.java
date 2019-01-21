@@ -18,6 +18,7 @@ import com.lbs.re.data.service.ResourceitemService;
 import com.lbs.re.data.service.StandardService;
 import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
+import com.lbs.re.exception.localized.UniqueConstraintException;
 import com.lbs.re.model.ReLanguageTable;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
@@ -135,11 +136,16 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 
 	@Override
 	public ReResourceitem save(ReResourceitem item) throws LocalizedException {
-		ReResourceitem savedItem = super.save(item);
-		ReResource reResource = resourceService.getById(savedItem.getResourceref());
-		reResource.orderResourceItems();
-		resourceService.save(reResource);
-		return savedItem;
+		try {
+			ReResourceitem savedItem = super.save(item);
+			ReResource reResource = resourceService.getById(savedItem.getResourceref());
+			reResource.orderResourceItems();
+			resourceService.save(reResource);
+			return savedItem;
+		} catch (UniqueConstraintException e) {
+			getView().showTagUniqueException();
+			return null;
+		}
 	}
 
 	public void checkLanguageFields(ReResourceitem item) throws LocalizedException {
@@ -685,4 +691,5 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 			count++;
 		}
 	}
+
 }

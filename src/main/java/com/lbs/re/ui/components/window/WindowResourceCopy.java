@@ -59,7 +59,7 @@ public class WindowResourceCopy extends REWindow {
 		tagStart = new RETextField("view.resource.copy.tagstart", "half", true, true);
 		tagEnd = new RETextField("view.resource.copy.tagend", "half", true, true);
 		tagAll = new RECheckBox("view.resource.copy.tagall", null, true, true);
-		resourceNr = new RETextField("view.resource.copy.resourcenumber", "half", true, true);
+		resourceNr = new RETextField("view.resourceedit.textfield.uniquenumber", "half", true, true);
 
 		tagAll.addValueChangeListener(event -> {
 			if (!tagAll.getValue()) {
@@ -94,18 +94,18 @@ public class WindowResourceCopy extends REWindow {
 				tagStartValue = Integer.parseInt(tagStart.getValue());
 				tagEndValue = Integer.parseInt(tagEnd.getValue());
 				if (tagStartValue < 0 || tagEndValue < 0) {
-					RENotification.showNotification(getLocaleValue("view.resourcecopy.messages.unvalidtag"), NotifyType.WARNING);
+					RENotification.showNotification(getLocaleValue("view.resourcecopy.messages.unvalidtag"), NotifyType.ERROR);
 					return;
 				} else if (tagStartValue > tagEndValue) {
-					RENotification.showNotification(getLocaleValue("view.resourcecopy.messages.inconsistenttag"), NotifyType.WARNING);
+					RENotification.showNotification(getLocaleValue("view.resourcecopy.messages.inconsistenttag"), NotifyType.ERROR);
 					return;
 				}
 			}
 			resourceCopyWindowPresenter.copyResource(tagStartValue, tagEndValue, tagAll.getValue(), resourcegroup.getSelectedItem().get(), resourceNumberValue);
 		} catch (NumberFormatException e) {
-			RENotification.showNotification(getLocaleValue("view.resourcecopy.messages.numberformat"), NotifyType.WARNING);
+			RENotification.showNotification(getLocaleValue("view.resourcecopy.messages.numberformat"), NotifyType.ERROR);
 		} catch (NoSuchElementException ne) {
-			RENotification.showNotification(getLocaleValue("view.resourcecopy.messages.emptyresourcegroup"), NotifyType.WARNING);
+			RENotification.showNotification(getLocaleValue("view.resourcecopy.messages.emptyresourcegroup"), NotifyType.ERROR);
 		}
 	}
 

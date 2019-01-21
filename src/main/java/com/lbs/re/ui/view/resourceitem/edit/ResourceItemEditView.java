@@ -33,8 +33,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 
 @SpringView
-public class ResourceItemEditView
-		extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
+public class ResourceItemEditView extends AbstractEditView<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
 
 	/**
 	 * 
@@ -202,8 +201,7 @@ public class ResourceItemEditView
 		REHorizontalLayoutWithState[] standardArray = new REHorizontalLayoutWithState[standardList.size()];
 		list.toArray(array);
 		standardList.toArray(standardArray);
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info,
-				btnDictionary, dictionaryId);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info, btnDictionary, dictionaryId);
 		addSection("languages", getLocaleValue("view.viewedit.section.languages"), 1, null, array);
 		addSection("standards", getLocaleValue("view.viewedit.section.standard"), 2, null, standardArray);
 	}
@@ -423,17 +421,13 @@ public class ResourceItemEditView
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResourceitem> binder) {
-		binder.forField(ordernr).asRequired().withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+		binder.forField(ordernr).asRequired().withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getOrdernr, ReResourceitem::setOrdernr);
-		binder.forField(tagnr).asRequired().withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+		binder.forField(tagnr).asRequired().withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getTagnr, ReResourceitem::setTagnr);
-		binder.forField(levelnr).asRequired().withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+		binder.forField(levelnr).asRequired().withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getLevelnr, ReResourceitem::setLevelnr);
-		binder.forField(dictionaryId).withNullRepresentation("")
-				.withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
+		binder.forField(dictionaryId).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
 				.bind(ReResourceitem::getDictionaryId, ReResourceitem::setDictionaryId);
 		super.bindFormFields(binder);
 	}
@@ -559,6 +553,10 @@ public class ResourceItemEditView
 	protected void logError(LocalizedException e) {
 		getLogger().error(e.getLocalizedMessage(), e);
 		RENotification.showNotification(e.getLocalizedMessage(), NotifyType.ERROR);
+	}
+
+	public void showTagUniqueException() {
+		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.UniqueTagException"), NotifyType.ERROR);
 	}
 
 }

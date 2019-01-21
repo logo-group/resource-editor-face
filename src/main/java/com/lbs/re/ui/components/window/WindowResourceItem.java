@@ -32,8 +32,8 @@ public class WindowResourceItem extends REWindow {
 	private ResourceEditPresenter resourceEditPresenter;
 
 	@Autowired
-	public WindowResourceItem(ViewEventBus viewEventBus, ResourceItemEditView resourceItemEditView,
-			ResourceItemEditPresenter resourceItemEditPresenter, ResourceEditPresenter resourceEditPresenter) {
+	public WindowResourceItem(ViewEventBus viewEventBus, ResourceItemEditView resourceItemEditView, ResourceItemEditPresenter resourceItemEditPresenter,
+			ResourceEditPresenter resourceEditPresenter) {
 		super(WindowSize.BIG, viewEventBus);
 		this.resourceItemEditView = resourceItemEditView;
 		this.resourceItemEditPresenter = resourceItemEditPresenter;
@@ -77,10 +77,11 @@ public class WindowResourceItem extends REWindow {
 	public void publishCloseSuccessEvent() {
 		try {
 			ReResourceitem item = resourceItemEditPresenter.save(resourceItemEditPresenter.getResourceItem());
-			resourceItemEditPresenter.checkLanguageFields(item);
-			resourceEditPresenter.refreshGrid();
-			RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"),
-					NotifyType.SUCCESS);
+			if (item != null) {
+				resourceItemEditPresenter.checkLanguageFields(item);
+				resourceEditPresenter.refreshGrid();
+				RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
+			}
 		} catch (LocalizedException e) {
 			RENotification.showNotification(getLocaleValue("view.abstractedit.messages.FailedSave"), NotifyType.ERROR);
 			e.printStackTrace();
