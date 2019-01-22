@@ -2,6 +2,7 @@ package com.lbs.re.ui.view.resourceitem.edit;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -139,8 +140,10 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 		try {
 			ReResourceitem savedItem = super.save(item);
 			ReResource reResource = resourceService.getById(savedItem.getResourceref());
-			reResource.orderResourceItems();
-			resourceService.save(reResource);
+			List<ReResourceitem> reOrderedItemList = reResource.orderResourceItems();
+			if (!reOrderedItemList.isEmpty()) {
+				getService().updateOrderNumbers(reOrderedItemList);
+			}
 			return savedItem;
 		} catch (UniqueConstraintException e) {
 			getView().showTagUniqueException();
