@@ -32,6 +32,7 @@ import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
 import com.lbs.re.model.AbstractBaseEntity;
+import com.lbs.re.model.ReUser;
 import com.lbs.re.ui.components.ConfirmPopup;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.REDateField;
@@ -81,8 +82,8 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 	private ViewEventBus viewEventBus;
 	private boolean hasChanges;
 
-	protected AbstractEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, S service,
-			Class<T> entityType, BeanFactory beanFactory, REUserService userService) {
+	protected AbstractEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, S service, Class<T> entityType, BeanFactory beanFactory,
+			REUserService userService) {
 		this.service = service;
 		this.navigationManager = navigationManager;
 		this.entityType = entityType;
@@ -243,8 +244,7 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 		Optional<Object> firstErrorField = getView().validate().findFirst();
 		if (firstErrorField.isPresent()) {
 			String emptyField = ((Component) firstErrorField.get()).getCaption();
-			RENotification.showNotification(emptyField + getLocaleValue("view.jobedit.messages.emptyField"),
-					NotifyType.ERROR);
+			RENotification.showNotification(emptyField + getLocaleValue("view.jobedit.messages.emptyField"), NotifyType.ERROR);
 			((Focusable) firstErrorField.get()).focus();
 			return true;
 		}
@@ -291,8 +291,7 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 
 			} else if (component instanceof REButton) {
 				REButton tedamButton = (REButton) component;
-				if (!tedamButton.getId().equals("general.button.cancel")
-						&& !tedamButton.getId().equals("general.button.save")) {
+				if (!tedamButton.getId().equals("general.button.cancel") && !tedamButton.getId().equals("general.button.save")) {
 					tedamButton.setEnabled(!isReadOnly);
 				}
 			} else if (component instanceof REMenuBar) {
@@ -347,6 +346,29 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 
 	public void checkForAddOperation() throws LocalizedException {
 		SecurityUtils.checkForOperation(userService, getView().getAddOperationName());
+	}
+
+	public <T extends AbstractBaseEntity> void loadCreatedAndModifiedInformations(T entity) {
+		ReUser createdUser = null;
+		ReUser modifiedUser = null;
+		try {
+			if (entity.getCreatedby() != null) {
+				createdUser = userService.getById(entity.getCreatedby());
+			}
+			if (entity.getModifiedby() != null) {
+				modifiedUser = userService.getById(entity.getModifiedby());
+			}
+			if (createdUser != null) {
+				getView().getCreatedUser().setValue(createdUser.getUsername());
+			}
+			if (modifiedUser != null) {
+				getView().getUpdatedUser().setValue(modifiedUser.getUsername());
+			}
+		} catch (LocalizedException e) {
+			e.printStackTrace();
+		}
+		getView().getDateCreated().setValue(entity.getCreatedon());
+		getView().getDateUpdated().setValue(entity.getModifiedon());
 	}
 
 }
