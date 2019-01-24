@@ -122,6 +122,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				getView().showNotFound();
 				return;
 			}
+			loadCreatedAndModifiedInformations(resourceItem);
 		}
 		organizeAccordionsByResourceType(resourceType);
 		refreshView(resourceItem, ViewMode.EDIT);

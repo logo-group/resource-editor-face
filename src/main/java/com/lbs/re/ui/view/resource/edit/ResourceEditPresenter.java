@@ -74,6 +74,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 				getView().showNotFound();
 				return;
 			}
+			loadCreatedAndModifiedInformations(resource);
 		}
 		refreshView(resource, (ViewMode) parameters.get(UIParameter.MODE));
 		if (getItem().getId() != 0) {

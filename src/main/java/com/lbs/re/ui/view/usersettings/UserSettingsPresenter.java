@@ -66,6 +66,7 @@ public class UserSettingsPresenter extends AbstractEditPresenter<ReUser, REUserS
 			return;
 		}
 		checkAuthority(reUser);
+		loadCreatedAndModifiedInformations(reUser);
 		refreshView(reUser, mode);
 		organizeComponents(getView().getAccordion(), mode == ViewMode.VIEW);
 	}

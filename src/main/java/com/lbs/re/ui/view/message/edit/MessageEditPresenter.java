@@ -51,6 +51,7 @@ public class MessageEditPresenter
 				getView().showNotFound();
 				return;
 			}
+			loadCreatedAndModifiedInformations(message);
 		}
 		refreshView(message, (ViewMode) parameters.get(UIParameter.MODE));
 		getTitleForHeader();

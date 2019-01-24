@@ -66,6 +66,7 @@ public class UserEditPresenter extends AbstractEditPresenter<ReUser, REUserServi
 				getView().showNotFound();
 				return;
 			}
+			loadCreatedAndModifiedInformations(reUser);
 		}
 		refreshView(reUser, (ViewMode) parameters.get(UIParameter.MODE));
 		getTitleForHeader();
