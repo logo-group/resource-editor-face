@@ -23,6 +23,7 @@ import com.lbs.re.ui.view.AbstractDataProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.Grid.SelectionMode;
@@ -198,6 +199,7 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 			boolean view = rudOperations.contains(RUDOperations.VIEW);
 			boolean delete = rudOperations.contains(RUDOperations.DELETE);
 			boolean edit = rudOperations.contains(RUDOperations.EDIT);
+			boolean item = rudOperations.contains(RUDOperations.ITEM);
 
 			if (edit) {
 				REButton editButton = new REButton("general.button.edit", VaadinIcons.EDIT);
@@ -252,7 +254,11 @@ public class REGridWrapper<T> implements ResourceEditorLocalizerWrapper {
 
 				layout.addComponent(deleteButton);
 			}
-			getGrid().buildCustomComponentForItem(param).forEach(customComponent -> layout.addComponent(customComponent));
+			for (Component customComponent : getGrid().buildCustomComponentForItem(param)) {
+				if (customComponent != null) {
+					layout.addComponent(customComponent);
+				}
+			}
 			return layout;
 		});
 		setRUDMenuColumn(column);

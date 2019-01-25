@@ -6,14 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
 import com.lbs.re.exception.localized.LocalizedException;
-import com.lbs.re.model.ReResourceitem;
+import com.lbs.re.ui.REFaceEvents.ResourceItemEvent;
 import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
 import com.lbs.re.ui.components.basic.REWindow;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.WindowSize;
-import com.lbs.re.ui.util.RENotification;
-import com.lbs.re.ui.util.RENotification.NotifyType;
-import com.lbs.re.ui.view.resource.edit.ResourceEditPresenter;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemEditPresenter;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemEditView;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -29,15 +26,12 @@ public class WindowResourceItem extends REWindow {
 
 	private ResourceItemEditView resourceItemEditView;
 	private ResourceItemEditPresenter resourceItemEditPresenter;
-	private ResourceEditPresenter resourceEditPresenter;
 
 	@Autowired
-	public WindowResourceItem(ViewEventBus viewEventBus, ResourceItemEditView resourceItemEditView, ResourceItemEditPresenter resourceItemEditPresenter,
-			ResourceEditPresenter resourceEditPresenter) {
+	public WindowResourceItem(ViewEventBus viewEventBus, ResourceItemEditView resourceItemEditView, ResourceItemEditPresenter resourceItemEditPresenter) {
 		super(WindowSize.BIG, viewEventBus);
 		this.resourceItemEditView = resourceItemEditView;
 		this.resourceItemEditPresenter = resourceItemEditPresenter;
-		this.resourceEditPresenter = resourceEditPresenter;
 	}
 
 	@Override
@@ -75,16 +69,17 @@ public class WindowResourceItem extends REWindow {
 
 	@Override
 	public void publishCloseSuccessEvent() {
-		try {
-			ReResourceitem item = resourceItemEditPresenter.save(resourceItemEditPresenter.getResourceItem());
-			if (item != null) {
-				resourceItemEditPresenter.checkLanguageFields(item);
-				resourceEditPresenter.refreshGrid();
-				RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
-			}
-		} catch (LocalizedException e) {
-			RENotification.showNotification(getLocaleValue("view.abstractedit.messages.FailedSave"), NotifyType.ERROR);
-			e.printStackTrace();
-		}
+		getEventBus().publish(this, new ResourceItemEvent(resourceItemEditPresenter.getResourceItem()));
+		// try {
+		// ReResourceitem item = resourceItemEditPresenter.save(resourceItemEditPresenter.getResourceItem());
+		// if (item != null) {
+		// resourceItemEditPresenter.checkLanguageFields(item);
+		// resourceEditPresenter.refreshGrid();
+		// RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
+		// }
+		// } catch (LocalizedException e) {
+		// RENotification.showNotification(getLocaleValue("view.abstractedit.messages.FailedSave"), NotifyType.ERROR);
+		// e.printStackTrace();
+		// }
 	}
 }

@@ -18,6 +18,7 @@ import com.lbs.re.ui.view.Operation;
 import com.lbs.re.ui.view.message.edit.MessageEditView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
 
 @SpringView
@@ -88,4 +89,9 @@ public class MessageGridView
 		return Operation.DELETE_MESSAGE;
 	}
 
+	@Override
+	public List<Component> buildCustomComponent(ReMessage item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

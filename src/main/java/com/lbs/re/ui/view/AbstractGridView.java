@@ -1,6 +1,7 @@
 package com.lbs.re.ui.view;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +29,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalSplitPanel;
@@ -256,8 +258,7 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 						@Override
 						public void onCancel() {
 						}
-					}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
-							getLocaleValue("general.button.cancel"));
+					}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"), getLocaleValue("general.button.cancel"));
 				}
 
 			}
@@ -286,7 +287,7 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	/**
 	 * Inits grid.
 	 */
-	private void initGrid() {
+	protected void initGrid() {
 		AbstractDataProvider<T> dataPovider = getPresenter().getDataPovider();
 		grid = new REFilterGrid<T>(getTedamGridConfig(), dataPovider, selectionMode) {
 
@@ -301,6 +302,13 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 			public void onDeleteSelected(T item) {
 				confirmDelete(item);
 			}
+
+			@Override
+			public List<Component> buildCustomComponentForItem(T item) {
+				// TODO Auto-generated method stub
+				return buildCustomComponent(item);
+			}
+
 		};
 
 		grid.setSizeFull();
@@ -318,6 +326,8 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 			}
 		});
 	}
+
+	public abstract List<Component> buildCustomComponent(T item);
 
 	/**
 	 * Inits all components.
@@ -375,7 +385,8 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	/**
 	 * To be called when view selected.
 	 *
-	 * @param item Item
+	 * @param item
+	 *            Item
 	 */
 	public void onGridViewSelected(T item) {
 		if (getEditView() != null) {
@@ -386,7 +397,8 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	/**
 	 * To be called when delete selected.
 	 *
-	 * @param item Item
+	 * @param item
+	 *            Item
 	 * @throws LocalizedException
 	 */
 	public void onGridDeleteSelected(T item) throws LocalizedException {
@@ -398,7 +410,8 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	/**
 	 * Executes confirmation for delete operations.
 	 *
-	 * @param item Item
+	 * @param item
+	 *            Item
 	 */
 	private void confirmDelete(T item) {
 		REDialog.confirm(AppUI.getCurrent(), new ConfirmationListener() {
@@ -415,8 +428,7 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 			@Override
 			public void onCancel() {
 			}
-		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
-				getLocaleValue("general.button.cancel"));
+		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"), getLocaleValue("general.button.cancel"));
 	}
 
 	/**

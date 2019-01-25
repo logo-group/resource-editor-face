@@ -20,6 +20,8 @@ public class ResourceTypeComboBox extends REComboBox<ResourceType> implements Re
 		setCaption(getLocaleValue("component.resourcetypecombobox.caption"));
 		setStyleName("half");
 		setEnabled(true);
+		setEmptySelectionAllowed(false);
 		setDataProvider(dataProvider.getListDataProvider());
+		setSelectedItem(ResourceType.LOCALIZABLE);
 	}
 }

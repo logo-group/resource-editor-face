@@ -10,6 +10,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
+import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
@@ -19,11 +20,14 @@ import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
+import com.lbs.re.ui.REFaceEvents.ResourceItemEvent;
 import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.components.grid.RETreeGrid;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
+import com.lbs.re.ui.util.RENotification;
+import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.util.REStatic;
 import com.lbs.re.ui.view.AbstractEditPresenter;
 import com.lbs.re.ui.view.resource.ResourceGridView;
@@ -403,5 +407,11 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		} else {
 			getView().showSelectEditMode();
 		}
+	}
+
+	@EventBusListenerMethod
+	public void resourceItemPreparedEvent(ResourceItemEvent resourceItemEvent) {
+		refreshGrid();
+		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
 	}
 }

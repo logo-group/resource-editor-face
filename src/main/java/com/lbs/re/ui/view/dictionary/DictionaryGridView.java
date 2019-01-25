@@ -18,6 +18,7 @@ import com.lbs.re.ui.view.Operation;
 import com.lbs.re.ui.view.user.edit.UserEditView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
 
 @SpringView
@@ -88,5 +89,10 @@ public class DictionaryGridView extends AbstractGridView<ReResourceitem, Resourc
 	@Override
 	public String getDeleteOperationName() {
 		return Operation.NO_CHECK;
+	}
+
+	@Override
+	public List<Component> buildCustomComponent(ReResourceitem item) {
+		return null;
 	}
 }

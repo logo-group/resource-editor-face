@@ -3,6 +3,7 @@ package com.lbs.re.ui.view.resourceitem.edit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.criterion.Criterion;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.PrototypeScope;
@@ -43,18 +44,63 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 
 	private StandardService standardService;
 
+	private ResourceitemService resourceItemService;
+
 	@Autowired
 	public ResourceItemDataProvider(BeanFactory beanFactory, LanguageServices languageServices, ResourceitemService resourceItemService, StandardService standardService)
 			throws LocalizedException {
 		this.beanFactory = beanFactory;
 		this.languageServices = languageServices;
 		this.standardService = standardService;
+		this.resourceItemService = resourceItemService;
 		buildListDataProvider(new ArrayList<>());
 	}
 
 	public void provideResourceItems(ReResource resource) throws LocalizedException {
 		List<ReResourceitem> resourceItemList = resource.getReResourceitem();
 		buildListDataProvider(loadTransientData(resourceItemList, resource.getId()));
+	}
+
+	public void provideLimitedResourceItems() throws LocalizedException {
+		buildListDataProvider(loadItemGridTransientData(resourceItemService.getLimitedItemList()));
+	}
+
+	public List<ReResourceitem> provideSearchedResourceItems(List<Criterion> resourceItemCriterias, List<Criterion> resourceCriterias) throws LocalizedException {
+		return loadItemGridTransientData(resourceItemService.getAdvancedSearchedItemList(resourceItemCriterias, resourceCriterias));
+	}
+
+	public List<ReResourceitem> loadItemGridTransientData(List<ReResourceitem> resourceItemList) {
+		List<Integer> resourceItemIdList = new ArrayList<>();
+		for (ReResourceitem item : resourceItemList) {
+			if (resourceItemIdList.size() == 2000) {
+				break;
+			}
+			resourceItemIdList.add(item.getId());
+		}
+		List<ReTurkishtr> trList = languageServices.getTurkishService().getAllByResourceitemrefIn(resourceItemIdList);
+		List<ReEnglishus> usList = languageServices.getEnglishService().getAllByResourceitemrefIn(resourceItemIdList);
+		List<ReStandard> stList = standardService.getAllByResourceitemrefIn(resourceItemIdList);
+		for (ReResourceitem item : resourceItemList) {
+			for (ReTurkishtr tr : trList) {
+				if (item.getId().equals(tr.getResourceitemref())) {
+					item.setTurkishTr(tr.getResourcestr());
+					break;
+				}
+			}
+			for (ReEnglishus us : usList) {
+				if (item.getId().equals(us.getResourceitemref())) {
+					item.setEnglishUs(us.getResourcestr());
+					break;
+				}
+			}
+			for (ReStandard st : stList) {
+				if (item.getId().equals(st.getResourceitemref())) {
+					item.setStandard(st.getResourceStr());
+					break;
+				}
+			}
+		}
+		return resourceItemList;
 	}
 
 	public List<ReResourceitem> loadTransientData(List<ReResourceitem> resourceItemList, Integer resourceId) {

@@ -21,5 +21,7 @@ public enum RUDOperations {
 	/**
 	 * None operation
 	 */
-	NONE;
+	NONE,
+
+	ITEM;
 }
