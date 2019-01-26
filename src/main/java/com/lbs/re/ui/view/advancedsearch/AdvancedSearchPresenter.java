@@ -85,11 +85,13 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 				int levelNumberEnd = Integer.parseInt(advancedSearchView.getLevelNrEnd().getValue());
 				criterions.add(Restrictions.le("levelnr", levelNumberEnd));
 			}
-			if (!advancedSearchView.getPrefix().getValue().isEmpty()) {
+			if (!advancedSearchView.getPrefix().getValue().isEmpty() || advancedSearchView.getPrefixSearchFilterComboBox().getValue().equals(SearchFilter.ISEMPTY)
+					|| advancedSearchView.getPrefixSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
 				String prefix = advancedSearchView.getPrefix().getValue();
 				criterions.add(generateCriterion(advancedSearchView.getPrefixSearchFilterComboBox().getValue(), "prefixstr", prefix, isMatchCase()));
 			}
-			if (!advancedSearchView.getInfo().getValue().isEmpty()) {
+			if (!advancedSearchView.getInfo().getValue().isEmpty() || advancedSearchView.getInfoSearchFilterComboBox().getValue().equals(SearchFilter.ISEMPTY)
+					|| advancedSearchView.getInfoSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
 				String info = advancedSearchView.getInfo().getValue();
 				criterions.add(generateCriterion(advancedSearchView.getInfoSearchFilterComboBox().getValue(), "info", info, isMatchCase()));
 			}
@@ -110,7 +112,8 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 				int resourceNumberEnd = Integer.parseInt(advancedSearchView.getResourceNrEnd().getValue());
 				criterions.add(Restrictions.le("resourceNr", resourceNumberEnd));
 			}
-			if (!advancedSearchView.getResourceDescription().getValue().isEmpty()) {
+			if (!advancedSearchView.getResourceDescription().getValue().isEmpty() || advancedSearchView.getDescriptionSearchFilterComboBox().getValue().equals(SearchFilter.ISEMPTY)
+					|| advancedSearchView.getDescriptionSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
 				String resourceDescription = advancedSearchView.getResourceDescription().getValue();
 				criterions.add(generateCriterion(advancedSearchView.getDescriptionSearchFilterComboBox().getValue(), "description", resourceDescription, isMatchCase()));
 			}
@@ -139,11 +142,11 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 		case ENDSWITH:
 			return matchCase ? Restrictions.like(propertyName, parameter, MatchMode.END) : Restrictions.like(propertyName, parameter, MatchMode.END);
 		case ISEMPTY:
-			return Restrictions.isEmpty(propertyName);
+			return Restrictions.eq(propertyName, "");
 		case ISEQUALTO:
 			return matchCase ? Restrictions.ilike(propertyName, parameter, MatchMode.EXACT) : Restrictions.like(propertyName, parameter, MatchMode.EXACT);
 		case ISNOTEMPTY:
-			return Restrictions.isNotEmpty(propertyName);
+			return Restrictions.not(Restrictions.eq(propertyName, ""));
 		case ISNOTEQUALTO:
 			return matchCase ? Restrictions.not(Restrictions.ilike(propertyName, parameter, MatchMode.EXACT))
 					: Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.EXACT));

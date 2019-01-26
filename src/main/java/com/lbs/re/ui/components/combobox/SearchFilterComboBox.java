@@ -21,6 +21,7 @@ public class SearchFilterComboBox extends REComboBox<SearchFilter> implements Re
 		setStyleName("full");
 		setEnabled(true);
 		setDataProvider(dataProvider.getListDataProvider());
+		setSelectedItem(SearchFilter.CONTAINS);
 	}
 
 }
