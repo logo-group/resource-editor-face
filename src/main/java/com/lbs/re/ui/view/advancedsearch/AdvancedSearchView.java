@@ -60,6 +60,7 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 	private ResourceCaseComboBox resourceCaseComboBox;
 	private StateComboBox stateComboBox;
 	private RECheckBox matchCase;
+	private RECheckBox modifiedByMe;
 
 	@Autowired
 	public AdvancedSearchView(AdvancedSearchPresenter advancedSearchPresenter, SearchFilterComboBox descriptionSearchFilterComboBox, ResourceGroupComboBox resourceGroupComboBox,
@@ -158,6 +159,8 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 
 		matchCase = new RECheckBox("view.advancedsearch.matchcase", null, true, true);
 
+		modifiedByMe = new RECheckBox("view.advancedsearch.modifiedbyme", null, true, true);
+
 		btnSearch = new REButton("general.button.search", VaadinIcons.SEARCH);
 		btnSearch.addClickListener(e -> {
 			advancedSearchPresenter.search();
@@ -175,7 +178,7 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		stateComboBox.setWidth("100%");
 
 		mainLayout.addComponents(resourceNumberLayout, descriptionLayout, groupAndTypeLayout, caseAndStateLayout, seperator, orderNumberLayout, tagNumberLayout, levelNumberLayout,
-				prefixLayout, infoLayout, turkishLayout, englishLayout, standardLayout, matchCase, btnSearch);
+				prefixLayout, infoLayout, turkishLayout, englishLayout, standardLayout, matchCase, modifiedByMe, btnSearch);
 		return mainLayout;
 	}
 
@@ -183,216 +186,112 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		return mainLayout;
 	}
 
-	public void setMainLayout(REVerticalLayout mainLayout) {
-		this.mainLayout = mainLayout;
-	}
-
 	public REButton getBtnSearch() {
 		return btnSearch;
-	}
-
-	public void setBtnSearch(REButton btnSearch) {
-		this.btnSearch = btnSearch;
 	}
 
 	public RETextField getResourceNrStart() {
 		return resourceNrStart;
 	}
 
-	public void setResourceNrStart(RETextField resourceNrStart) {
-		this.resourceNrStart = resourceNrStart;
-	}
-
 	public RETextField getResourceNrEnd() {
 		return resourceNrEnd;
-	}
-
-	public void setResourceNrEnd(RETextField resourceNrEnd) {
-		this.resourceNrEnd = resourceNrEnd;
 	}
 
 	public RETextField getOrderNrEnd() {
 		return orderNrEnd;
 	}
 
-	public void setOrderNrEnd(RETextField orderNrEnd) {
-		this.orderNrEnd = orderNrEnd;
-	}
-
 	public RETextField getOrderNrStart() {
 		return orderNrStart;
-	}
-
-	public void setOrderNrStart(RETextField orderNrStart) {
-		this.orderNrStart = orderNrStart;
 	}
 
 	public RETextField getTagNrStart() {
 		return tagNrStart;
 	}
 
-	public void setTagNrStart(RETextField tagNrStart) {
-		this.tagNrStart = tagNrStart;
-	}
-
 	public RETextField getTagNrEnd() {
 		return tagNrEnd;
-	}
-
-	public void setTagNrEnd(RETextField tagNrEnd) {
-		this.tagNrEnd = tagNrEnd;
 	}
 
 	public RETextField getLevelNrStart() {
 		return levelNrStart;
 	}
 
-	public void setLevelNrStart(RETextField levelNrStart) {
-		this.levelNrStart = levelNrStart;
-	}
-
 	public RETextField getLevelNrEnd() {
 		return levelNrEnd;
-	}
-
-	public void setLevelNrEnd(RETextField levelNrEnd) {
-		this.levelNrEnd = levelNrEnd;
 	}
 
 	public SearchFilterComboBox getDescriptionSearchFilterComboBox() {
 		return descriptionSearchFilterComboBox;
 	}
 
-	public void setDescriptionSearchFilterComboBox(SearchFilterComboBox descriptionSearchFilterComboBox) {
-		this.descriptionSearchFilterComboBox = descriptionSearchFilterComboBox;
-	}
-
 	public SearchFilterComboBox getPrefixSearchFilterComboBox() {
 		return prefixSearchFilterComboBox;
-	}
-
-	public void setPrefixSearchFilterComboBox(SearchFilterComboBox prefixSearchFilterComboBox) {
-		this.prefixSearchFilterComboBox = prefixSearchFilterComboBox;
 	}
 
 	public SearchFilterComboBox getInfoSearchFilterComboBox() {
 		return infoSearchFilterComboBox;
 	}
 
-	public void setInfoSearchFilterComboBox(SearchFilterComboBox infoSearchFilterComboBox) {
-		this.infoSearchFilterComboBox = infoSearchFilterComboBox;
-	}
-
 	public SearchFilterComboBox getTurkishSearchFilterComboBox() {
 		return turkishSearchFilterComboBox;
-	}
-
-	public void setTurkishSearchFilterComboBox(SearchFilterComboBox turkishSearchFilterComboBox) {
-		this.turkishSearchFilterComboBox = turkishSearchFilterComboBox;
 	}
 
 	public SearchFilterComboBox getEnglishSearchFilterComboBox() {
 		return englishSearchFilterComboBox;
 	}
 
-	public void setEnglishSearchFilterComboBox(SearchFilterComboBox englishSearchFilterComboBox) {
-		this.englishSearchFilterComboBox = englishSearchFilterComboBox;
-	}
-
 	public SearchFilterComboBox getStandardSearchFilterComboBox() {
 		return standardSearchFilterComboBox;
-	}
-
-	public void setStandardSearchFilterComboBox(SearchFilterComboBox standardSearchFilterComboBox) {
-		this.standardSearchFilterComboBox = standardSearchFilterComboBox;
 	}
 
 	public RETextField getResourceDescription() {
 		return resourceDescription;
 	}
 
-	public void setDescription(RETextField resourceDescription) {
-		this.resourceDescription = resourceDescription;
-	}
-
 	public RETextField getPrefix() {
 		return prefix;
-	}
-
-	public void setPrefix(RETextField prefix) {
-		this.prefix = prefix;
 	}
 
 	public RETextField getInfo() {
 		return info;
 	}
 
-	public void setInfo(RETextField info) {
-		this.info = info;
-	}
-
 	public RETextField getTurkish() {
 		return turkish;
-	}
-
-	public void setTurkish(RETextField turkish) {
-		this.turkish = turkish;
 	}
 
 	public RETextField getEnglish() {
 		return english;
 	}
 
-	public void setEnglish(RETextField english) {
-		this.english = english;
-	}
-
 	public RETextField getStandard() {
 		return standard;
-	}
-
-	public void setStandard(RETextField standard) {
-		this.standard = standard;
 	}
 
 	public ResourceGroupComboBox getResourceGroupComboBox() {
 		return resourceGroupComboBox;
 	}
 
-	public void setResourceGroupComboBox(ResourceGroupComboBox resourceGroupComboBox) {
-		this.resourceGroupComboBox = resourceGroupComboBox;
-	}
-
 	public ResourceTypeComboBox getResourceTypeComboBox() {
 		return resourceTypeComboBox;
-	}
-
-	public void setResourceTypeComboBox(ResourceTypeComboBox resourceTypeComboBox) {
-		this.resourceTypeComboBox = resourceTypeComboBox;
 	}
 
 	public ResourceCaseComboBox getResourceCaseComboBox() {
 		return resourceCaseComboBox;
 	}
 
-	public void setResourceCaseComboBox(ResourceCaseComboBox resourceCaseComboBox) {
-		this.resourceCaseComboBox = resourceCaseComboBox;
-	}
-
 	public StateComboBox getStateComboBox() {
 		return stateComboBox;
-	}
-
-	public void setStateComboBox(StateComboBox stateComboBox) {
-		this.stateComboBox = stateComboBox;
 	}
 
 	public RECheckBox getMatchCase() {
 		return matchCase;
 	}
 
-	public void setMatchCase(RECheckBox matchCase) {
-		this.matchCase = matchCase;
+	public RECheckBox getModifiedByMe() {
+		return modifiedByMe;
 	}
 
 	public AdvancedSearchPresenter getAdvancedSearchPresenter() {

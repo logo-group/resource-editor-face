@@ -9,7 +9,8 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.lbs.re.data.service.ResourceitemService;
+import com.lbs.re.app.security.SecurityUtils;
+import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResourceGroup;
 import com.lbs.re.ui.view.resourceitem.ResourceItemGridPresenter;
@@ -29,15 +30,14 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 
 	private AdvancedSearchView advancedSearchView;
 	private ResourceItemDataProvider resourceItemDataProvider;
-	private ResourceitemService resourceItemService;
 	private ResourceItemGridPresenter resourceItemGridPresenter;
+	private REUserService userService;
 
 	@Autowired
-	public AdvancedSearchPresenter(ResourceItemDataProvider resourceItemDataProvider, ResourceitemService resourceItemService,
-			ResourceItemGridPresenter resourceItemGridPresenter) {
+	public AdvancedSearchPresenter(ResourceItemDataProvider resourceItemDataProvider, ResourceItemGridPresenter resourceItemGridPresenter, REUserService userService) {
 		this.resourceItemDataProvider = resourceItemDataProvider;
-		this.resourceItemService = resourceItemService;
 		this.resourceItemGridPresenter = resourceItemGridPresenter;
+		this.userService = userService;
 	}
 
 	public void setAdvancedSearchView(AdvancedSearchView advancedSearchView) {
@@ -56,6 +56,10 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 
 	private boolean isMatchCase() {
 		return advancedSearchView.getMatchCase().getValue();
+	}
+
+	private boolean isModifiedByMeSelected() {
+		return advancedSearchView.getModifiedByMe().getValue();
 	}
 
 	private List<Criterion> generateResourceItemCriterias() {
@@ -95,7 +99,12 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 				String info = advancedSearchView.getInfo().getValue();
 				criterions.add(generateCriterion(advancedSearchView.getInfoSearchFilterComboBox().getValue(), "info", info, isMatchCase()));
 			}
+			if (isModifiedByMeSelected()) {
+				criterions.add(Restrictions.eq("modifiedby", SecurityUtils.getCurrentUser(userService).getReUser().getId()));
+			}
 		} catch (NumberFormatException e) {
+			// TODO: handle exception
+		} catch (LocalizedException e) {
 			// TODO: handle exception
 		}
 		return criterions;
