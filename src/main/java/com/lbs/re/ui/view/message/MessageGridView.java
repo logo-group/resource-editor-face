@@ -22,8 +22,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
 
 @SpringView
-public class MessageGridView
-		extends AbstractGridView<ReMessage, MessageService, MessageGridPresenter, MessageGridView> {
+public class MessageGridView extends AbstractGridView<ReMessage, MessageService, MessageGridPresenter, MessageGridView> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -91,7 +90,6 @@ public class MessageGridView
 
 	@Override
 	public List<Component> buildCustomComponent(ReMessage item) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>();
 	}
 }

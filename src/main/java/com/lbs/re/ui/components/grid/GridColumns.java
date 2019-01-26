@@ -46,18 +46,26 @@ public class GridColumns {
 		ITEM_ROMANIANRO("romanianRo", "column.resource.item.romanianro", DataType.TEXT, null, false, true, true),
 		ITEM_RUSSIANRU("russianRu", "column.resource.item.russianru", DataType.TEXT, null, false, true, true),
 		ITEM_TURKMENTM("turkmenTm", "column.resource.item.turkmentm", DataType.TEXT, null, false, true, true),
-		ITEM_STANDARD("standard", "column.resource.item.standard", DataType.TEXT, null, false, false, true);
+		ITEM_STANDARD("standard", "column.resource.item.standard", DataType.TEXT, null, false, false, true),
+
+		// ADVANCED SEARCH ALTERNATIVES
+		SEARCHED_LEVEL_NUMBER("levelnr", "column.resource.item.level.number", DataType.INTEGER, null, false, true, true),
+		SEARCHED_PREFIX("prefixstr", "column.resource.item.prefix", DataType.TEXT, null, false, true, true),
+		SEARCHED_INFO("info", "column.resource.item.info", DataType.TEXT, null, false, true, true),
+		SEARCHED_DICTIONARY_ID("dictionaryId", "column.resource.item.dictionary.number", DataType.INTEGER, null, false, true, true);
 
 		public static final List<GridColumn> USER_COLUMNS = Arrays.asList(USER_NAME, EMAIL);
 		public static final List<GridColumn> RESOURCE_COLUMNS = Arrays.asList(RESOURCE_NUMBER, RESOURCE_DESCRIPTION, RESOURCE_GROUP_ID);
-		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_ACTIVE, ITEM_DICTIONARY_ID,
-				ITEM_TURKISH, ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA, ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE,
-				ITEM_GERMANDE, ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
+		public static final List<GridColumn> RESOURCE_ITEMS_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO, ITEM_ACTIVE,
+				ITEM_DICTIONARY_ID, ITEM_TURKISH, ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA, ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR,
+				ITEM_GEORGIANGE, ITEM_GERMANDE, ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
 		public static final List<GridColumn> RESOURCE_ITEMS_STANDARD_COLUMNS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_LEVEL_NUMBER, ITEM_PREFIX, ITEM_INFO,
 				ITEM_ACTIVE, ITEM_STANDARD);
 		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(MESSAGE_TYPE, MESSAGE_CONSTANT, MESSAGE_MODULE);
 		public static final List<GridColumn> DICTIONARY_COLUMNS = Arrays.asList(ITEM_TURKISH, ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA,
 				ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE, ITEM_GERMANDE, ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
+		public static final List<GridColumn> ADVANCED_SEARCH_GRIDS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_TURKISH, ITEM_ENGLISH, ITEM_STANDARD,
+				SEARCHED_LEVEL_NUMBER, SEARCHED_PREFIX, SEARCHED_INFO, SEARCHED_DICTIONARY_ID);
 
 		private final String columnName;
 		private final String resourceName;

@@ -36,6 +36,7 @@ import com.lbs.re.ui.components.layout.REVerticalLayout;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.view.message.MessageGridView;
 import com.lbs.re.ui.view.resource.ResourceGridView;
+import com.lbs.re.ui.view.resourceitem.ResourceItemGridView;
 import com.lbs.re.ui.view.user.UserGridView;
 import com.lbs.re.ui.view.usersettings.UserSettingsView;
 import com.vaadin.icons.VaadinIcons;
@@ -75,6 +76,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 	private REButton users;
 	private REButton resources;
 	private REButton messages;
+	private REButton advancedSearch;
 	private REButton userSettings;
 	private REButton logout;
 
@@ -94,6 +96,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		attachNavigation(users, UserGridView.class, "");
 		attachNavigation(resources, ResourceGridView.class, "");
 		attachNavigation(messages, MessageGridView.class, "");
+		attachNavigation(advancedSearch, ResourceItemGridView.class, "");
 	}
 
 	private void initComponents() throws LocalizedException {
@@ -166,6 +169,9 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		messages = new REButton("view.mainview.messages", VaadinIcons.COMMENT_ELLIPSIS);
 		messages.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 
+		advancedSearch = new REButton("view.mainview.advancedsearch", VaadinIcons.SEARCH);
+		advancedSearch.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+
 		users = new REButton("view.mainview.usersview", VaadinIcons.USERS);
 		users.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 
@@ -176,7 +182,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		logout.addClickListener(e -> logout());
 
-		menu.addComponents(resources, messages, userLabel, userSettings, users, logout);
+		menu.addComponents(resources, messages, advancedSearch, userLabel, userSettings, users, logout);
 		return menu;
 	}
 

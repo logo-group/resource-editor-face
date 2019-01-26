@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RECheckBox;
-import com.lbs.re.ui.components.basic.RELabel;
 import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.components.combobox.ResourceCaseComboBox;
 import com.lbs.re.ui.components.combobox.ResourceGroupComboBox;
@@ -24,10 +23,8 @@ import com.vaadin.navigator.View;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.themes.ValoTheme;
 
 @SpringView
 public class AdvancedSearchView extends CssLayout implements Serializable, View, HasLogger, ResourceEditorLocalizerWrapper {
@@ -35,7 +32,6 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 	private static final long serialVersionUID = 1L;
 
 	private final AdvancedSearchPresenter advancedSearchPresenter;
-	private REHorizontalLayout topBarLayout;
 	private REVerticalLayout mainLayout;
 	private REButton btnSearch;
 
@@ -92,10 +88,7 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 	private void initView() {
 		setResponsive(true);
 		setWidth("100%");
-		initTopBarLayout();
-		RELabel gridLabel = initGridLabel();
-		topBarLayout.addComponents(gridLabel);
-		addComponents(topBarLayout, buildMainLayout());
+		addComponents(buildMainLayout());
 	}
 
 	private REVerticalLayout buildMainLayout() {
@@ -184,28 +177,6 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		mainLayout.addComponents(resourceNumberLayout, descriptionLayout, groupAndTypeLayout, caseAndStateLayout, seperator, orderNumberLayout, tagNumberLayout, levelNumberLayout,
 				prefixLayout, infoLayout, turkishLayout, englishLayout, standardLayout, matchCase, btnSearch);
 		return mainLayout;
-	}
-
-	private RELabel initGridLabel() {
-		RELabel gridLabel = new RELabel(getLocaleValue("view.advancedsearch.label"));
-		gridLabel.setStyleName(ValoTheme.LABEL_H3 + " bold");
-		return gridLabel;
-	}
-
-	private void initTopBarLayout() {
-		topBarLayout = new REHorizontalLayout();
-		topBarLayout.setStyleName("top-bar");
-		topBarLayout.setWidth("100%");
-		topBarLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-		topBarLayout.setSpacing(true);
-	}
-
-	public REHorizontalLayout getTopBarLayout() {
-		return topBarLayout;
-	}
-
-	public void setTopBarLayout(REHorizontalLayout topBarLayout) {
-		this.topBarLayout = topBarLayout;
 	}
 
 	public REVerticalLayout getMainLayout() {

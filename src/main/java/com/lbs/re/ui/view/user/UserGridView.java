@@ -92,8 +92,7 @@ public class UserGridView extends AbstractGridView<ReUser, REUserService, UserGr
 
 	@Override
 	public List<Component> buildCustomComponent(ReUser item) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>();
 	}
 
 }

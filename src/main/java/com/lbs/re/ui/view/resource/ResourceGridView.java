@@ -23,7 +23,6 @@ import com.lbs.re.ui.util.RENotification;
 import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.AbstractGridView;
 import com.lbs.re.ui.view.Operation;
-import com.lbs.re.ui.view.advancedsearch.AdvancedSearchView;
 import com.lbs.re.ui.view.resource.edit.ResourceEditView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
@@ -38,7 +37,6 @@ public class ResourceGridView extends AbstractGridView<ReResource, ResourceServi
 	private static final long serialVersionUID = 1L;
 
 	private WindowResourceCopy windowResourceCopy;
-	private AdvancedSearchView advancedSearchView;
 
 	private REGridConfig<ReResource> config = new REGridConfig<ReResource>() {
 
@@ -63,10 +61,9 @@ public class ResourceGridView extends AbstractGridView<ReResource, ResourceServi
 	};
 
 	@Autowired
-	public ResourceGridView(ResourceGridPresenter presenter, WindowResourceCopy windowResourceCopy, AdvancedSearchView advancedSearchView) {
+	public ResourceGridView(ResourceGridPresenter presenter, WindowResourceCopy windowResourceCopy) {
 		super(presenter, SelectionMode.MULTI);
 		this.windowResourceCopy = windowResourceCopy;
-		this.advancedSearchView = advancedSearchView;
 	}
 
 	@PostConstruct
@@ -74,16 +71,6 @@ public class ResourceGridView extends AbstractGridView<ReResource, ResourceServi
 		getPresenter().setView(this);
 		setHeader(getLocaleValue("view.resourcegrid.header"));
 		getTopBarLayout().addComponents(buildCopyButton());
-		buildAdvancedSearch();
-	}
-
-	private void buildAdvancedSearch() {
-		getGridLayout().setSecondComponent(getGrid());
-		getGridLayout().setFirstComponent(advancedSearchView);
-		getGridLayout().setMinSplitPosition(250, Unit.PIXELS);
-		getGridLayout().setMaxSplitPosition(40, Unit.PERCENTAGE);
-		getGridLayout().setSplitPosition(20, Unit.PERCENTAGE);
-		getGridLayout().setLocked(false);
 	}
 
 	private Component buildCopyButton() {

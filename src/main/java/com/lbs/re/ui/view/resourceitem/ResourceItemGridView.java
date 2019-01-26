@@ -46,7 +46,7 @@ public class ResourceItemGridView extends AbstractGridView<ReResourceitem, Resou
 
 		@Override
 		public List<GridColumn> getColumnList() {
-			return GridColumns.GridColumn.RESOURCE_ITEMS_COLUMNS;
+			return GridColumns.GridColumn.ADVANCED_SEARCH_GRIDS;
 		}
 
 		@Override
@@ -73,7 +73,10 @@ public class ResourceItemGridView extends AbstractGridView<ReResourceitem, Resou
 	@PostConstruct
 	private void init() {
 		getPresenter().setView(this);
-		setHeader(getLocaleValue("view.resourcegrid.header"));
+		getAddButton().setVisible(false);
+		getDeleteButton().setVisible(false);
+		getClearFilterButton().setVisible(false);
+		setHeader(getLocaleValue("view.advancedsearch.label"));
 		buildAdvancedSearch();
 	}
 
