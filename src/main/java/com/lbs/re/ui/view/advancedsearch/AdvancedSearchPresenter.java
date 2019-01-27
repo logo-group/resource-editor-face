@@ -19,6 +19,7 @@ import com.lbs.re.util.EnumsV2.ResourceState;
 import com.lbs.re.util.EnumsV2.ResourceType;
 import com.lbs.re.util.EnumsV2.SearchFilter;
 import com.lbs.re.util.HasLogger;
+import com.lbs.re.util.LogoResConstants;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 
@@ -47,8 +48,12 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 	protected void search() {
 		List<Criterion> resourceCriterias = generateResourceCriterias();
 		List<Criterion> resourceItemCriterias = generateResourceItemCriterias();
+		List<Criterion> turkishCriterias = generateTurkishCriterias();
+		List<Criterion> englishCriterias = generateEnglishCriterias();
+		List<Criterion> standardCriterias = generateStandardCriterias();
 		try {
-			resourceItemGridPresenter.getDataPovider().refreshDataProviderByItems(resourceItemDataProvider.provideSearchedResourceItems(resourceItemCriterias, resourceCriterias));
+			resourceItemGridPresenter.getDataPovider().refreshDataProviderByItems(
+					resourceItemDataProvider.provideSearchedResourceItems(resourceItemCriterias, resourceCriterias, turkishCriterias, englishCriterias, standardCriterias));
 		} catch (LocalizedException e) {
 			e.printStackTrace();
 		}
@@ -139,6 +144,55 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 		} catch (NumberFormatException e) {
 			// TODO: handle exception
 		}
+		return criterions;
+	}
+
+	private List<Criterion> generateTurkishCriterias() {
+		List<Criterion> criterions = new ArrayList<>();
+
+		if (advancedSearchView.getTurkish().getValue().isEmpty()) {
+			if (advancedSearchView.getTurkishSearchFilterComboBox().getValue().equals(SearchFilter.ISEMPTY)) {
+				criterions.add(Restrictions.eq("resourcestr", LogoResConstants.ISEMPTY_CONTROL));
+			} else if (advancedSearchView.getTurkishSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
+				criterions.add(generateCriterion(SearchFilter.CONTAINS, "resourcestr", "", isMatchCase()));
+			}
+		} else {
+			String turkish = advancedSearchView.getTurkish().getValue();
+			criterions.add(generateCriterion(advancedSearchView.getTurkishSearchFilterComboBox().getValue(), "resourcestr", turkish, isMatchCase()));
+		}
+		return criterions;
+	}
+
+	private List<Criterion> generateEnglishCriterias() {
+		List<Criterion> criterions = new ArrayList<>();
+
+		if (advancedSearchView.getEnglish().getValue().isEmpty()) {
+			if (advancedSearchView.getEnglishSearchFilterComboBox().getValue().equals(SearchFilter.ISEMPTY)) {
+				criterions.add(Restrictions.eq("resourcestr", LogoResConstants.ISEMPTY_CONTROL));
+			} else if (advancedSearchView.getEnglishSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
+				criterions.add(generateCriterion(SearchFilter.CONTAINS, "resourcestr", "", isMatchCase()));
+			}
+		} else {
+			String english = advancedSearchView.getEnglish().getValue();
+			criterions.add(generateCriterion(advancedSearchView.getEnglishSearchFilterComboBox().getValue(), "resourcestr", english, isMatchCase()));
+		}
+		return criterions;
+	}
+
+	private List<Criterion> generateStandardCriterias() {
+		List<Criterion> criterions = new ArrayList<>();
+
+		if (advancedSearchView.getStandard().getValue().isEmpty()) {
+			if (advancedSearchView.getStandardSearchFilterComboBox().getValue().equals(SearchFilter.ISEMPTY)) {
+				criterions.add(Restrictions.eq("resourceStr", LogoResConstants.ISEMPTY_CONTROL));
+			} else if (advancedSearchView.getStandardSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
+				criterions.add(generateCriterion(SearchFilter.CONTAINS, "resourceStr", "", isMatchCase()));
+			}
+		} else {
+			String standard = advancedSearchView.getStandard().getValue();
+			criterions.add(generateCriterion(advancedSearchView.getStandardSearchFilterComboBox().getValue(), "resourceStr", standard, isMatchCase()));
+		}
+
 		return criterions;
 	}
 

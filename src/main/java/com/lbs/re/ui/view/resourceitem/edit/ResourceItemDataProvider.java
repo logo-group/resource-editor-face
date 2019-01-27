@@ -65,8 +65,10 @@ public class ResourceItemDataProvider extends AbstractDataProvider<ReResourceite
 		buildListDataProvider(loadItemGridTransientData(resourceItemService.getLimitedItemList()));
 	}
 
-	public List<ReResourceitem> provideSearchedResourceItems(List<Criterion> resourceItemCriterias, List<Criterion> resourceCriterias) throws LocalizedException {
-		return loadItemGridTransientData(resourceItemService.getAdvancedSearchedItemList(resourceItemCriterias, resourceCriterias));
+	public List<ReResourceitem> provideSearchedResourceItems(List<Criterion> resourceItemCriterias, List<Criterion> resourceCriterias, List<Criterion> turkishCriterias,
+			List<Criterion> englishCriterias, List<Criterion> standardCriterias) throws LocalizedException {
+		return loadItemGridTransientData(
+				resourceItemService.getAdvancedSearchedItemList(resourceItemCriterias, resourceCriterias, turkishCriterias, englishCriterias, standardCriterias));
 	}
 
 	public List<ReResourceitem> loadItemGridTransientData(List<ReResourceitem> resourceItemList) {
