@@ -46,14 +46,13 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 	}
 
 	protected void search() {
-		List<Criterion> resourceCriterias = generateResourceCriterias();
 		List<Criterion> resourceItemCriterias = generateResourceItemCriterias();
 		List<Criterion> turkishCriterias = generateTurkishCriterias();
 		List<Criterion> englishCriterias = generateEnglishCriterias();
 		List<Criterion> standardCriterias = generateStandardCriterias();
 		try {
 			resourceItemGridPresenter.getDataPovider().refreshDataProviderByItems(
-					resourceItemDataProvider.provideSearchedResourceItems(resourceItemCriterias, resourceCriterias, turkishCriterias, englishCriterias, standardCriterias));
+					resourceItemDataProvider.provideSearchedResourceItems(resourceItemCriterias, turkishCriterias, englishCriterias, standardCriterias));
 		} catch (LocalizedException e) {
 			e.printStackTrace();
 		}
@@ -70,6 +69,29 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 	private List<Criterion> generateResourceItemCriterias() {
 		List<Criterion> criterions = new ArrayList<>();
 		try {
+			if (!advancedSearchView.getResourceNrStart().getValue().isEmpty()) {
+				int resourceNumberStart = Integer.parseInt(advancedSearchView.getResourceNrStart().getValue());
+				criterions.add(Restrictions.ge("resource.resourceNr", resourceNumberStart));
+			}
+			if (!advancedSearchView.getResourceNrEnd().getValue().isEmpty()) {
+				int resourceNumberEnd = Integer.parseInt(advancedSearchView.getResourceNrEnd().getValue());
+				criterions.add(Restrictions.le("resource.resourceNr", resourceNumberEnd));
+			}
+			if (!advancedSearchView.getResourceDescription().getValue().isEmpty() || advancedSearchView.getDescriptionSearchFilterComboBox().getValue().equals(SearchFilter.ISEMPTY)
+					|| advancedSearchView.getDescriptionSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
+				String resourceDescription = advancedSearchView.getResourceDescription().getValue();
+				criterions.add(generateCriterion(advancedSearchView.getDescriptionSearchFilterComboBox().getValue(), "resource.description", resourceDescription, isMatchCase()));
+			}
+			if (advancedSearchView.getResourceGroupComboBox().getValue() != null) {
+				ReResourceGroup resourceGroup = advancedSearchView.getResourceGroupComboBox().getValue();
+				criterions.add(Restrictions.eq("resource.resourcegroup", resourceGroup));
+			}
+			ResourceType resourceType = advancedSearchView.getResourceTypeComboBox().getValue();
+			criterions.add(Restrictions.eq("resource.resourcetype", resourceType));
+			if (advancedSearchView.getStateComboBox().getValue() != null) {
+				ResourceState state = advancedSearchView.getStateComboBox().getValue();
+				criterions.add(Restrictions.eq("resource.active", state));
+			}
 			if (!advancedSearchView.getOrderNrStart().getValue().isEmpty()) {
 				int orderNumberStart = Integer.parseInt(advancedSearchView.getOrderNrStart().getValue());
 				criterions.add(Restrictions.ge("ordernr", orderNumberStart));
@@ -110,38 +132,6 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 		} catch (NumberFormatException e) {
 			// TODO: handle exception
 		} catch (LocalizedException e) {
-			// TODO: handle exception
-		}
-		return criterions;
-	}
-
-	private List<Criterion> generateResourceCriterias() {
-		List<Criterion> criterions = new ArrayList<>();
-		try {
-			if (!advancedSearchView.getResourceNrStart().getValue().isEmpty()) {
-				int resourceNumberStart = Integer.parseInt(advancedSearchView.getResourceNrStart().getValue());
-				criterions.add(Restrictions.ge("resourceNr", resourceNumberStart));
-			}
-			if (!advancedSearchView.getResourceNrEnd().getValue().isEmpty()) {
-				int resourceNumberEnd = Integer.parseInt(advancedSearchView.getResourceNrEnd().getValue());
-				criterions.add(Restrictions.le("resourceNr", resourceNumberEnd));
-			}
-			if (!advancedSearchView.getResourceDescription().getValue().isEmpty() || advancedSearchView.getDescriptionSearchFilterComboBox().getValue().equals(SearchFilter.ISEMPTY)
-					|| advancedSearchView.getDescriptionSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
-				String resourceDescription = advancedSearchView.getResourceDescription().getValue();
-				criterions.add(generateCriterion(advancedSearchView.getDescriptionSearchFilterComboBox().getValue(), "description", resourceDescription, isMatchCase()));
-			}
-			if (advancedSearchView.getResourceGroupComboBox().getValue() != null) {
-				ReResourceGroup resourceGroup = advancedSearchView.getResourceGroupComboBox().getValue();
-				criterions.add(Restrictions.eq("resourcegroup", resourceGroup));
-			}
-			ResourceType resourceType = advancedSearchView.getResourceTypeComboBox().getValue();
-			criterions.add(Restrictions.eq("resourcetype", resourceType));
-			if (advancedSearchView.getStateComboBox().getValue() != null) {
-				ResourceState state = advancedSearchView.getStateComboBox().getValue();
-				criterions.add(Restrictions.eq("active", state));
-			}
-		} catch (NumberFormatException e) {
 			// TODO: handle exception
 		}
 		return criterions;
