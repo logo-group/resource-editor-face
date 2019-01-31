@@ -114,7 +114,6 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 	@Override
 	public void enterView(Map<UIParameter, Object> parameters) throws LocalizedException {
 		subscribeToEventBus();
-		ResourceType resourceType = (ResourceType) parameters.get(UIParameter.RESOURCE_TYPE);
 		if ((Integer) parameters.get(UIParameter.ID) == 0) {
 			resourceItem = new ReResourceitem();
 			resourceItem.setResourceref(Integer.parseInt(parameters.get(UIParameter.RESOURCE_ID).toString()));
@@ -126,6 +125,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 			}
 			loadCreatedAndModifiedInformations(resourceItem);
 		}
+		ResourceType resourceType = resourceService.getById(resourceItem.getResourceref()).getResourcetype();
 		organizeAccordionsByResourceType(resourceType);
 		refreshView(resourceItem, ViewMode.EDIT);
 		getLanguageFields(resourceItem);
