@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,6 +40,7 @@ import com.lbs.re.model.languages.ReRussianru;
 import com.lbs.re.model.languages.ReTurkishtr;
 import com.lbs.re.model.languages.ReTurkmentm;
 import com.lbs.re.ui.AppUI;
+import com.lbs.re.ui.REFaceEvents.ResourceEditRefreshEvent;
 import com.lbs.re.ui.REFaceEvents.ResourceItemEvent;
 import com.lbs.re.ui.components.basic.RETextArea;
 import com.lbs.re.ui.dialog.ConfirmationListener;
@@ -131,11 +130,6 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 		getLanguageFields(resourceItem);
 		getTitleForHeader();
 		organizeComponents(getView().getAccordion(), (ViewMode) parameters.get(UIParameter.MODE) == ViewMode.EDIT);
-	}
-
-	@PostConstruct
-	public void init() {
-		subscribeToEventBus();
 	}
 
 	@Override
@@ -706,6 +700,7 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 				checkLanguageFields(item);
 				RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
 			}
+			getViewEventBus().publish(this, new ResourceEditRefreshEvent());
 		} catch (LocalizedException e) {
 			RENotification.showNotification(getLocaleValue("view.abstractedit.messages.FailedSave"), NotifyType.ERROR);
 			e.printStackTrace();

@@ -70,16 +70,5 @@ public class WindowResourceItem extends REWindow {
 	@Override
 	public void publishCloseSuccessEvent() {
 		getEventBus().publish(this, new ResourceItemEvent(resourceItemEditPresenter.getResourceItem()));
-		// try {
-		// ReResourceitem item = resourceItemEditPresenter.save(resourceItemEditPresenter.getResourceItem());
-		// if (item != null) {
-		// resourceItemEditPresenter.checkLanguageFields(item);
-		// resourceEditPresenter.refreshGrid();
-		// RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
-		// }
-		// } catch (LocalizedException e) {
-		// RENotification.showNotification(getLocaleValue("view.abstractedit.messages.FailedSave"), NotifyType.ERROR);
-		// e.printStackTrace();
-		// }
 	}
 }

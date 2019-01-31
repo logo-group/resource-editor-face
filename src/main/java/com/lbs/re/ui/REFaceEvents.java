@@ -19,4 +19,7 @@ public class REFaceEvents {
 			return resourceItem;
 		}
 	}
+
+	public static final class ResourceEditRefreshEvent {
+	}
 }

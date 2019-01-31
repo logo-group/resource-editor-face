@@ -20,7 +20,7 @@ import com.lbs.re.data.service.impl.language.LanguageServices;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.model.ReResourceitem;
-import com.lbs.re.ui.REFaceEvents.ResourceItemEvent;
+import com.lbs.re.ui.REFaceEvents.ResourceEditRefreshEvent;
 import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.components.grid.RETreeGrid;
 import com.lbs.re.ui.navigation.NavigationManager;
@@ -347,7 +347,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 
 		ResourceGroupType resourceGroupType = getItem().getResourcegroup().getResourceGroupType();
 		ResourceType resourceType = getItem().getResourcetype();
-
+		resourceItemDataProvider.loadTransientData(itemList, getItem().getId());
 		if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.LOCALIZABLE) {
 			getView().getTreeGridResourceItems().getGridDataProvider().refreshDataProviderByItems(itemList);
 		} else if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.LOCALIZABLE) {
@@ -357,7 +357,6 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		} else if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.NONLOCALIZABLE) {
 			getView().getGridResourceItemsStandard().getGridDataProvider().refreshDataProviderByItems(itemList);
 		}
-		resourceItemDataProvider.loadTransientData(itemList, getItem().getId());
 	}
 
 	public void deleteLanguagesByItem(ReResourceitem resourceItem) throws LocalizedException {
@@ -410,7 +409,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 	}
 
 	@EventBusListenerMethod
-	public void resourceItemPreparedEvent(ResourceItemEvent resourceItemEvent) {
+	public void resourceItemPreparedEvent(ResourceEditRefreshEvent resourceEditRefreshEvent) {
 		refreshGrid();
 		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
 	}
