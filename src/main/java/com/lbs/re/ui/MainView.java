@@ -182,7 +182,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		logout.addClickListener(e -> logout());
 
-		menu.addComponents(resources, messages, advancedSearch, userLabel, userSettings, users, logout);
+		menu.addComponents(advancedSearch, resources, messages, userLabel, userSettings, users, logout);
 		return menu;
 	}
 

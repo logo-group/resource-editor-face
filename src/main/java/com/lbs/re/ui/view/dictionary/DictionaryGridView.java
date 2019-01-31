@@ -93,6 +93,6 @@ public class DictionaryGridView extends AbstractGridView<ReResourceitem, Resourc
 
 	@Override
 	public List<Component> buildCustomComponent(ReResourceitem item) {
-		return null;
+		return new ArrayList<>();
 	}
 }
