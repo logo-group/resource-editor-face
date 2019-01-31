@@ -19,7 +19,7 @@ package com.lbs.re.ui.navigation;
 
 import org.springframework.stereotype.Component;
 
-import com.lbs.re.ui.view.resource.ResourceGridView;
+import com.lbs.re.ui.view.resourceitem.ResourceItemGridView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
@@ -39,7 +39,8 @@ public class NavigationManager extends SpringNavigator {
 	/**
 	 * Find the view id (URI fragment) used for a given view class.
 	 *
-	 * @param viewClass the view class to find the id for
+	 * @param viewClass
+	 *            the view class to find the id for
 	 * @return the URI fragment for the view
 	 */
 	public String getViewId(Class<? extends View> viewClass) {
@@ -54,8 +55,8 @@ public class NavigationManager extends SpringNavigator {
 	/**
 	 * Navigate to the given view class.
 	 *
-	 * @param viewClass the class of the target view, must be annotated using
-	 *                  {@link SpringView @SpringView}
+	 * @param viewClass
+	 *            the class of the target view, must be annotated using {@link SpringView @SpringView}
 	 */
 	public void navigateTo(Class<? extends View> targetView) {
 		String viewId = getViewId(targetView);
@@ -74,15 +75,14 @@ public class NavigationManager extends SpringNavigator {
 		if (!getState().isEmpty()) {
 			return;
 		}
-		navigateTo(ResourceGridView.class);
+		navigateTo(ResourceItemGridView.class);
 	}
 
 	/**
-	 * Update the parameter of the the current view without firing any navigation
-	 * events.
+	 * Update the parameter of the the current view without firing any navigation events.
 	 *
-	 * @param parameter the new parameter to set, never <code>null</code>,
-	 *                  <code>""</code> to not use any parameter
+	 * @param parameter
+	 *            the new parameter to set, never <code>null</code>, <code>""</code> to not use any parameter
 	 */
 	public void updateViewParameter(String parameter) {
 		String viewName = getViewId(getCurrentView().getClass());
