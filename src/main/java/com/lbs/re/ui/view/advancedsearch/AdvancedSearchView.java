@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RECheckBox;
+import com.lbs.re.ui.components.basic.REDateTimeField;
 import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.components.combobox.ResourceCaseComboBox;
 import com.lbs.re.ui.components.combobox.ResourceGroupComboBox;
 import com.lbs.re.ui.components.combobox.ResourceTypeComboBox;
 import com.lbs.re.ui.components.combobox.SearchFilterComboBox;
 import com.lbs.re.ui.components.combobox.StateComboBox;
+import com.lbs.re.ui.components.combobox.UserComboBox;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
 import com.lbs.re.ui.components.layout.REVerticalLayout;
 import com.lbs.re.util.HasLogger;
@@ -61,12 +63,16 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 	private StateComboBox stateComboBox;
 	private RECheckBox matchCase;
 	private RECheckBox modifiedByMe;
+	private UserComboBox modifiedUser;
+	private UserComboBox createdUser;
+	private REDateTimeField modifiedDateStart;
+	private REDateTimeField modifiedDateEnd;
 
 	@Autowired
 	public AdvancedSearchView(AdvancedSearchPresenter advancedSearchPresenter, SearchFilterComboBox descriptionSearchFilterComboBox, ResourceGroupComboBox resourceGroupComboBox,
 			ResourceTypeComboBox resourceTypeComboBox, ResourceCaseComboBox resourceCaseComboBox, StateComboBox stateComboBox, SearchFilterComboBox prefixSearchFilterComboBox,
 			SearchFilterComboBox infoSearchFilterComboBox, SearchFilterComboBox turkishSearchFilterComboBox, SearchFilterComboBox englishSearchFilterComboBox,
-			SearchFilterComboBox standardSearchFilterComboBox) {
+			SearchFilterComboBox standardSearchFilterComboBox, UserComboBox modifiedUser, UserComboBox createdUser) {
 		this.advancedSearchPresenter = advancedSearchPresenter;
 		this.descriptionSearchFilterComboBox = descriptionSearchFilterComboBox;
 		this.prefixSearchFilterComboBox = prefixSearchFilterComboBox;
@@ -78,6 +84,8 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		this.resourceTypeComboBox = resourceTypeComboBox;
 		this.resourceCaseComboBox = resourceCaseComboBox;
 		this.stateComboBox = stateComboBox;
+		this.modifiedUser = modifiedUser;
+		this.createdUser = createdUser;
 	}
 
 	@PostConstruct
@@ -157,6 +165,12 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		standardSearchFilterComboBox.setCaption(getLocaleValue("view.advancedsearch.standard"));
 		standardLayout.addComponents(standardSearchFilterComboBox, standard);
 
+		REHorizontalLayout dateLayout = new REHorizontalLayout();
+		modifiedDateStart = new REDateTimeField("view.advancedsearch.modifieddate", "half", false, true);
+		modifiedDateEnd = new REDateTimeField("view.advancedsearch.empty", "half", false, true);
+		dateLayout.setSpacing(true);
+		dateLayout.addComponents(modifiedDateStart, modifiedDateEnd);
+
 		matchCase = new RECheckBox("view.advancedsearch.matchcase", null, true, true);
 
 		modifiedByMe = new RECheckBox("view.advancedsearch.modifiedbyme", null, true, true);
@@ -177,8 +191,11 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		resourceCaseComboBox.setWidth("100%");
 		stateComboBox.setWidth("100%");
 
+		modifiedUser.setCaption(getLocaleValue("view.advancedsearch.modifieduser"));
+		createdUser.setCaption(getLocaleValue("view.advancedsearch.createduser"));
+
 		mainLayout.addComponents(resourceNumberLayout, descriptionLayout, groupAndTypeLayout, caseAndStateLayout, seperator, orderNumberLayout, tagNumberLayout, levelNumberLayout,
-				prefixLayout, infoLayout, turkishLayout, englishLayout, standardLayout, matchCase, modifiedByMe, btnSearch);
+				prefixLayout, infoLayout, turkishLayout, englishLayout, standardLayout, createdUser, modifiedUser, dateLayout, matchCase, modifiedByMe, btnSearch);
 		return mainLayout;
 	}
 
@@ -296,6 +313,22 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 
 	public AdvancedSearchPresenter getAdvancedSearchPresenter() {
 		return advancedSearchPresenter;
+	}
+
+	public UserComboBox getModifiedUser() {
+		return modifiedUser;
+	}
+
+	public UserComboBox getCreatedUser() {
+		return createdUser;
+	}
+
+	public REDateTimeField getModifiedDateStart() {
+		return modifiedDateStart;
+	}
+
+	public REDateTimeField getModifiedDateEnd() {
+		return modifiedDateEnd;
 	}
 
 }

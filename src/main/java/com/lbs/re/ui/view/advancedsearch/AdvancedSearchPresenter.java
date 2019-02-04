@@ -1,6 +1,7 @@
 package com.lbs.re.ui.view.advancedsearch;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResourceGroup;
+import com.lbs.re.model.ReUser;
 import com.lbs.re.ui.view.resourceitem.ResourceItemGridPresenter;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemDataProvider;
 import com.lbs.re.util.EnumsV2.ResourceState;
@@ -125,6 +127,22 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 					|| advancedSearchView.getInfoSearchFilterComboBox().getValue().equals(SearchFilter.ISNOTEMPTY)) {
 				String info = advancedSearchView.getInfo().getValue();
 				criterions.add(generateCriterion(advancedSearchView.getInfoSearchFilterComboBox().getValue(), "info", info, isMatchCase()));
+			}
+			if (advancedSearchView.getCreatedUser().getValue() != null) {
+				ReUser user = advancedSearchView.getCreatedUser().getValue();
+				criterions.add(Restrictions.eq("createdby", user.getId()));
+			}
+			if (advancedSearchView.getModifiedUser().getValue() != null) {
+				ReUser user = advancedSearchView.getModifiedUser().getValue();
+				criterions.add(Restrictions.eq("modifiedby", user.getId()));
+			}
+			if (!advancedSearchView.getModifiedDateStart().isEmpty()) {
+				LocalDateTime modifiedStartDate = advancedSearchView.getModifiedDateStart().getValue();
+				criterions.add(Restrictions.ge("modifiedon", modifiedStartDate));
+			}
+			if (!advancedSearchView.getModifiedDateEnd().isEmpty()) {
+				LocalDateTime modifiedEndDate = advancedSearchView.getModifiedDateEnd().getValue();
+				criterions.add(Restrictions.le("modifiedon", modifiedEndDate));
 			}
 			if (isModifiedByMeSelected()) {
 				criterions.add(Restrictions.eq("modifiedby", SecurityUtils.getCurrentUser(userService).getReUser().getId()));
