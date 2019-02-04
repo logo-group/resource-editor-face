@@ -194,8 +194,10 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		modifiedUser.setCaption(getLocaleValue("view.advancedsearch.modifieduser"));
 		createdUser.setCaption(getLocaleValue("view.advancedsearch.createduser"));
 
-		mainLayout.addComponents(resourceNumberLayout, descriptionLayout, groupAndTypeLayout, caseAndStateLayout, seperator, orderNumberLayout, tagNumberLayout, levelNumberLayout,
-				prefixLayout, infoLayout, turkishLayout, englishLayout, standardLayout, createdUser, modifiedUser, dateLayout, matchCase, modifiedByMe, btnSearch);
+		mainLayout.addComponents(btnSearch, resourceNumberLayout, descriptionLayout, groupAndTypeLayout,
+				caseAndStateLayout, seperator, orderNumberLayout, tagNumberLayout, levelNumberLayout, prefixLayout,
+				infoLayout, turkishLayout, englishLayout, standardLayout, createdUser, modifiedUser, dateLayout,
+				matchCase, modifiedByMe);
 		return mainLayout;
 	}
 
