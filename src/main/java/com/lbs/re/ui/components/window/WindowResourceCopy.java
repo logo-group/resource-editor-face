@@ -83,6 +83,7 @@ public class WindowResourceCopy extends REWindow {
 	@Override
 	protected Component buildContent() throws LocalizedException {
 		initFields();
+		resourcegroup.setCaption(getLocaleValue("view.resource.copy.resourcegroup"));
 		addSection(getLocaleValue("view.viewedit.section.values"), tagStart, tagEnd, tagAll, resourcegroup, resourceNr, btnGenerateResourceNr);
 		return getMainLayout();
 	}
