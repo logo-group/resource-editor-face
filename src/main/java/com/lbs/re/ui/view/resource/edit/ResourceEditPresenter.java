@@ -42,8 +42,7 @@ import com.vaadin.spring.annotation.ViewScope;
 
 @SpringComponent
 @ViewScope
-public class ResourceEditPresenter
-		extends AbstractEditPresenter<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
+public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, ResourceService, ResourceEditPresenter, ResourceEditView> {
 
 	/**
 	 * long serialVersionUID
@@ -57,11 +56,10 @@ public class ResourceEditPresenter
 	private StandardService standardService;
 
 	@Autowired
-	public ResourceEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager,
-			ResourceService resourceService, REUserService userService, BeanFactory beanFactory,
-			BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider,
-			ResourceItemTreeDataProvider resourceItemTreeDataProvider, ResourceitemService resourceitemService,
-			LanguageServices languageServices, StandardService standardService) {
+	public ResourceEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceService resourceService, REUserService userService,
+			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, ResourceItemDataProvider resourceItemDataProvider,
+			ResourceItemTreeDataProvider resourceItemTreeDataProvider, ResourceitemService resourceitemService, LanguageServices languageServices,
+			StandardService standardService) {
 		super(viewEventBus, navigationManager, resourceService, ReResource.class, beanFactory, userService);
 		this.resourceItemDataProvider = resourceItemDataProvider;
 		this.resourceItemTreeDataProvider = resourceItemTreeDataProvider;
@@ -171,8 +169,7 @@ public class ResourceEditPresenter
 					e.printStackTrace();
 				}
 			});
-			treeGrid.getSelectedItems()
-					.forEach(resourceItem -> treeGrid.getGridDataProvider().removeItem((ReResourceitem) resourceItem));
+			treeGrid.getSelectedItems().forEach(resourceItem -> treeGrid.getGridDataProvider().removeItem((ReResourceitem) resourceItem));
 			treeGrid.deselectAll();
 			treeGrid.refreshAll();
 		} else if (resourceGroupType == ResourceGroupType.TREE && resourceType == ResourceType.NONLOCALIZABLE) {
@@ -191,8 +188,7 @@ public class ResourceEditPresenter
 					e.printStackTrace();
 				}
 			});
-			treeGridStandard.getSelectedItems().forEach(
-					resourceItem -> treeGridStandard.getGridDataProvider().removeItem((ReResourceitem) resourceItem));
+			treeGridStandard.getSelectedItems().forEach(resourceItem -> treeGridStandard.getGridDataProvider().removeItem((ReResourceitem) resourceItem));
 			treeGridStandard.deselectAll();
 			treeGridStandard.refreshAll();
 		} else if (resourceGroupType == ResourceGroupType.LIST && resourceType == ResourceType.LOCALIZABLE) {
@@ -212,12 +208,10 @@ public class ResourceEditPresenter
 				}
 			});
 
-			listGrid.getSelectedItems()
-					.forEach(resourceItem -> listGrid.getGridDataProvider().removeItem(resourceItem));
+			listGrid.getSelectedItems().forEach(resourceItem -> listGrid.getGridDataProvider().removeItem(resourceItem));
 			listGrid.deselectAll();
 			listGrid.refreshAll();
-		} else if (resourceGroupType == ResourceGroupType.LIST
-				&& getItem().getResourcetype() == ResourceType.NONLOCALIZABLE) {
+		} else if (resourceGroupType == ResourceGroupType.LIST && getItem().getResourcetype() == ResourceType.NONLOCALIZABLE) {
 			if (listGridStandard.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
@@ -234,8 +228,7 @@ public class ResourceEditPresenter
 				}
 			});
 
-			listGridStandard.getSelectedItems()
-					.forEach(resourceItem -> listGridStandard.getGridDataProvider().removeItem(resourceItem));
+			listGridStandard.getSelectedItems().forEach(resourceItem -> listGridStandard.getGridDataProvider().removeItem(resourceItem));
 			listGridStandard.deselectAll();
 			listGridStandard.refreshAll();
 		}
@@ -320,8 +313,7 @@ public class ResourceEditPresenter
 			});
 			listGrid.deselectAll();
 			listGrid.refreshAll();
-		} else if (resourceGroupType == ResourceGroupType.LIST
-				&& getItem().getResourcetype() == ResourceType.NONLOCALIZABLE) {
+		} else if (resourceGroupType == ResourceGroupType.LIST && getItem().getResourcetype() == ResourceType.NONLOCALIZABLE) {
 			if (listGridStandard.getSelectedItems().isEmpty()) {
 				getView().showGridRowNotSelected();
 				return;
@@ -344,8 +336,7 @@ public class ResourceEditPresenter
 		}
 	}
 
-	public void prepareResourceItemWindow(ReResourceitem item, ViewMode mode, ResourceType type)
-			throws LocalizedException {
+	public void prepareResourceItemWindow(ReResourceitem item, ViewMode mode, ResourceType type) throws LocalizedException {
 		Map<UIParameter, Object> windowParameters = REStatic.getUIParameterMap(item.getId(), ViewMode.VIEW);
 		windowParameters.put(UIParameter.RESOURCE_ID, getItem().getId());
 		windowParameters.put(UIParameter.RESOURCE_TYPE, type);
@@ -412,7 +403,12 @@ public class ResourceEditPresenter
 
 	public void generateResourceNumber() {
 		if (getView().getViewMode() == ViewMode.NEW || getView().getViewMode() == ViewMode.EDIT) {
-			Integer newNumber = getService().getMaxResourceNumber() + 1;
+			Integer newNumber = null;
+			if (getView().getResourceNr().getValue().isEmpty()) {
+				newNumber = getService().getMaxResourceNumber() + 1;
+			} else {
+				newNumber = getService().getFirstAvailableResourceNumber(Integer.parseInt(getView().getResourceNr().getValue()));
+			}
 			getView().getResourceNr().setValue(newNumber.toString());
 		} else {
 			getView().showSelectEditMode();
@@ -422,7 +418,6 @@ public class ResourceEditPresenter
 	@EventBusListenerMethod
 	public void resourceItemPreparedEvent(ResourceEditRefreshEvent resourceEditRefreshEvent) {
 		refreshGrid();
-		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"),
-				NotifyType.SUCCESS);
+		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
 	}
 }
