@@ -63,7 +63,8 @@ import com.vaadin.ui.Component;
 
 @SpringComponent
 @ViewScope
-public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
+public class ResourceItemEditPresenter extends
+		AbstractEditPresenter<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
 
 	/**
 	 * long serialVersionUID
@@ -97,8 +98,10 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 	private ReUser user = null;
 
 	@Autowired
-	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceitemService resourceItemService, REUserService userService,
-			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices, ResourceService resourceService, StandardService standardService) {
+	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager,
+			ResourceitemService resourceItemService, REUserService userService, BeanFactory beanFactory,
+			BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices, ResourceService resourceService,
+			StandardService standardService) {
 		super(viewEventBus, navigationManager, resourceItemService, ReResourceitem.class, beanFactory, userService);
 		this.languageServices = languageServices;
 		this.resourceService = resourceService;
@@ -284,7 +287,8 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 		}
 	}
 
-	private <T extends ReLanguageTable> void persistLanguage(T language, ReResourceitem item) throws LocalizedException {
+	private <T extends ReLanguageTable> void persistLanguage(T language, ReResourceitem item)
+			throws LocalizedException {
 		language.setResourceref(item.getResourceref());
 		language.setResourceitemref(item.getId());
 		if (language.getId() == 0) {
@@ -672,7 +676,8 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 			public void onCancel() {
 			}
 
-		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"), getLocaleValue("general.button.cancel"));
+		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
+				getLocaleValue("general.button.cancel"));
 	}
 
 	private void organizeAccordionsByResourceType(ResourceType resourceType) {
@@ -698,7 +703,8 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 			ReResourceitem item = save(getItem());
 			if (item != null) {
 				checkLanguageFields(item);
-				RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
+				RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"),
+						NotifyType.SUCCESS);
 			}
 			getViewEventBus().publish(this, new ResourceEditRefreshEvent());
 		} catch (LocalizedException e) {
