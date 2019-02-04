@@ -88,6 +88,7 @@ public class ResourceGridView extends AbstractGridView<ReResource, ResourceServi
 					return;
 				}
 				try {
+					getPresenter().checkForAddOperation();
 					getPresenter().prepareCopyWindow(getGrid().getSelectedItems().iterator().next());
 				} catch (LocalizedException e) {
 					logError(e);
