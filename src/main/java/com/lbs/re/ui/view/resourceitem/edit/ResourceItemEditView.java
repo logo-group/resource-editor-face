@@ -14,6 +14,7 @@ import com.lbs.re.model.ReResourceitem;
 import com.lbs.re.model.ReUser;
 import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
 import com.lbs.re.ui.components.basic.REButton;
+import com.lbs.re.ui.components.basic.RENumberField;
 import com.lbs.re.ui.components.basic.RETextArea;
 import com.lbs.re.ui.components.basic.RETextField;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
@@ -100,6 +101,7 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 	private RETextField levelnr;
 	private RETextField prefixstr;
 	private RETextArea info;
+	private RENumberField count;
 	private RETextArea albanianKv;
 	private RETextArea arabicEg;
 	private RETextArea arabicJo;
@@ -201,7 +203,7 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 		REHorizontalLayoutWithState[] standardArray = new REHorizontalLayoutWithState[standardList.size()];
 		list.toArray(array);
 		standardList.toArray(standardArray);
-		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, info, btnDictionary, dictionaryId);
+		addSection(getLocaleValue("view.viewedit.section.general"), 0, null, ordernr, tagnr, levelnr, prefixstr, count, info, btnDictionary, dictionaryId);
 		addSection("languages", getLocaleValue("view.viewedit.section.languages"), 1, null, array);
 		addSection("standards", getLocaleValue("view.viewedit.section.standard"), 2, null, standardArray);
 	}
@@ -218,12 +220,13 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 	}
 
 	private void initTextFields() {
-		ordernr = new RETextField("column.resource.item.order.number", "full", true, true, 10);
-		tagnr = new RETextField("column.resource.item.tag.number", "full", true, true, 10);
-		levelnr = new RETextField("column.resource.item.level.number", "full", true, true, 10);
-		prefixstr = new RETextField("column.resource.item.prefix", "full", true, true);
+		ordernr = new RETextField("column.resource.item.order.number", "half", true, true, 10);
+		tagnr = new RETextField("column.resource.item.tag.number", "half", true, true, 10);
+		levelnr = new RETextField("column.resource.item.level.number", "half", true, true, 10);
+		prefixstr = new RETextField("column.resource.item.prefix", "half", true, true);
 		info = new RETextArea("column.resource.item.info", "full", true, true);
 		dictionaryId = new RETextField("column.resource.item.dictionary", "full", true, false);
+		count = new RENumberField("column.resource.item.count", "full", true, true);
 	}
 
 	private void initButtonHorizontalLayouts() {
@@ -532,6 +535,10 @@ public class ResourceItemEditView extends AbstractEditView<ReResourceitem, Resou
 
 	public RETextArea getStandard() {
 		return standard;
+	}
+
+	public RENumberField getCount() {
+		return count;
 	}
 
 	@Override

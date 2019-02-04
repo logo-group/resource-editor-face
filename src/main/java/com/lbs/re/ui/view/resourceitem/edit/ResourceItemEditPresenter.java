@@ -113,12 +113,13 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 	@Override
 	public void enterView(Map<UIParameter, Object> parameters) throws LocalizedException {
 		subscribeToEventBus();
-		if ((Integer) parameters.get(UIParameter.ID) == 0) {
+		Integer id = (Integer) parameters.get(UIParameter.ID);
+		if (id == 0) {
 			resourceItem = new ReResourceitem();
 			int resourceId = Integer.parseInt(parameters.get(UIParameter.RESOURCE_ID).toString());
 			resourceItem.setResourceref(resourceId);
 		} else {
-			resourceItem = getService().getById((Integer) parameters.get(UIParameter.ID));
+			resourceItem = getService().getById(id);
 			if (resourceItem == null) {
 				getView().showNotFound();
 				return;
@@ -129,7 +130,10 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 		organizeAccordionsByResourceType(resourceType);
 		refreshView(resourceItem, ViewMode.EDIT);
 		getLanguageFields(resourceItem);
-		setNextOrderAndTagNr(resourceItem);
+		if (id == 0) {
+			setNextOrderAndTagNr(resourceItem);
+		}
+		setCountValue();
 		getTitleForHeader();
 		organizeComponents(getView().getAccordion(), (ViewMode) parameters.get(UIParameter.MODE) == ViewMode.EDIT);
 	}
@@ -705,10 +709,21 @@ public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourcei
 		}
 	}
 
+	private void setCountValue() {
+		getView().getCount().setValue("1");
+	}
+
 	@EventBusListenerMethod
 	public void resourceItemPreparedEvent(ResourceItemEvent resourceItemEvent) {
 		try {
-			ReResourceitem item = save(getItem());
+			ReResourceitem item = null;
+			ReResourceitem tempItem = getItem();
+			int count = Integer.parseInt(getView().getCount().getValue());
+			for (int i = 0; i < count; i++) {
+				tempItem.setOrdernr(tempItem.getOrdernr() + i);
+				tempItem.setTagnr(tempItem.getTagnr() + i);
+				item = save(tempItem);
+			}
 			if (item != null) {
 				checkLanguageFields(item);
 				RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
