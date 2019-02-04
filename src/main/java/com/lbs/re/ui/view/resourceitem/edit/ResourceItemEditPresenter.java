@@ -63,8 +63,7 @@ import com.vaadin.ui.Component;
 
 @SpringComponent
 @ViewScope
-public class ResourceItemEditPresenter extends
-		AbstractEditPresenter<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
+public class ResourceItemEditPresenter extends AbstractEditPresenter<ReResourceitem, ResourceitemService, ResourceItemEditPresenter, ResourceItemEditView> {
 
 	/**
 	 * long serialVersionUID
@@ -98,10 +97,8 @@ public class ResourceItemEditPresenter extends
 	private ReUser user = null;
 
 	@Autowired
-	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager,
-			ResourceitemService resourceItemService, REUserService userService, BeanFactory beanFactory,
-			BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices, ResourceService resourceService,
-			StandardService standardService) {
+	public ResourceItemEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, ResourceitemService resourceItemService, REUserService userService,
+			BeanFactory beanFactory, BCryptPasswordEncoder passwordEncoder, LanguageServices languageServices, ResourceService resourceService, StandardService standardService) {
 		super(viewEventBus, navigationManager, resourceItemService, ReResourceitem.class, beanFactory, userService);
 		this.languageServices = languageServices;
 		this.resourceService = resourceService;
@@ -118,7 +115,8 @@ public class ResourceItemEditPresenter extends
 		subscribeToEventBus();
 		if ((Integer) parameters.get(UIParameter.ID) == 0) {
 			resourceItem = new ReResourceitem();
-			resourceItem.setResourceref(Integer.parseInt(parameters.get(UIParameter.RESOURCE_ID).toString()));
+			int resourceId = Integer.parseInt(parameters.get(UIParameter.RESOURCE_ID).toString());
+			resourceItem.setResourceref(resourceId);
 		} else {
 			resourceItem = getService().getById((Integer) parameters.get(UIParameter.ID));
 			if (resourceItem == null) {
@@ -131,6 +129,7 @@ public class ResourceItemEditPresenter extends
 		organizeAccordionsByResourceType(resourceType);
 		refreshView(resourceItem, ViewMode.EDIT);
 		getLanguageFields(resourceItem);
+		setNextOrderAndTagNr(resourceItem);
 		getTitleForHeader();
 		organizeComponents(getView().getAccordion(), (ViewMode) parameters.get(UIParameter.MODE) == ViewMode.EDIT);
 	}
@@ -287,8 +286,7 @@ public class ResourceItemEditPresenter extends
 		}
 	}
 
-	private <T extends ReLanguageTable> void persistLanguage(T language, ReResourceitem item)
-			throws LocalizedException {
+	private <T extends ReLanguageTable> void persistLanguage(T language, ReResourceitem item) throws LocalizedException {
 		language.setResourceref(item.getResourceref());
 		language.setResourceitemref(item.getId());
 		if (language.getId() == 0) {
@@ -676,8 +674,7 @@ public class ResourceItemEditPresenter extends
 			public void onCancel() {
 			}
 
-		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"),
-				getLocaleValue("general.button.cancel"));
+		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"), getLocaleValue("general.button.cancel"));
 	}
 
 	private void organizeAccordionsByResourceType(ResourceType resourceType) {
@@ -697,14 +694,24 @@ public class ResourceItemEditPresenter extends
 		}
 	}
 
+	private void setNextOrderAndTagNr(ReResourceitem item) {
+		Integer maxOrderNumber = getService().getMaximumOrderNumberByResourceRef(item.getResourceref());
+		Integer maxTagNumber = getService().getMaximumTagNumberByResourceRef(item.getResourceref());
+		if (maxOrderNumber != null) {
+			getView().getOrdernr().setValue(String.valueOf(maxOrderNumber + 1));
+		}
+		if (maxOrderNumber != null) {
+			getView().getTagnr().setValue(String.valueOf(maxTagNumber + 1));
+		}
+	}
+
 	@EventBusListenerMethod
 	public void resourceItemPreparedEvent(ResourceItemEvent resourceItemEvent) {
 		try {
 			ReResourceitem item = save(getItem());
 			if (item != null) {
 				checkLanguageFields(item);
-				RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"),
-						NotifyType.SUCCESS);
+				RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
 			}
 			getViewEventBus().publish(this, new ResourceEditRefreshEvent());
 		} catch (LocalizedException e) {
