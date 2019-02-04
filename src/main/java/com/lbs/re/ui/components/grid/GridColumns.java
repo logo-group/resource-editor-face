@@ -49,6 +49,9 @@ public class GridColumns {
 		ITEM_STANDARD("standard", "column.resource.item.standard", DataType.TEXT, null, false, false, true),
 
 		// ADVANCED SEARCH ALTERNATIVES
+		SEARCHED_ORDER_NUMBER("ordernr", "column.resource.item.order.number", DataType.INTEGER, null, false, true, true),
+		SEARCHED_TAG_NUMBER("tagnr", "column.resource.item.tag.number", DataType.INTEGER, null, false, true, true),
+		SEARCHED_RESOURCENR("resourceNr", "column.resource.item.resourcenr", DataType.INTEGER, null, false, false, true),
 		SEARCHED_LEVEL_NUMBER("levelnr", "column.resource.item.level.number", DataType.INTEGER, null, false, true, true),
 		SEARCHED_PREFIX("prefixstr", "column.resource.item.prefix", DataType.TEXT, null, false, true, true),
 		SEARCHED_INFO("info", "column.resource.item.info", DataType.TEXT, null, false, true, true),
@@ -64,8 +67,8 @@ public class GridColumns {
 		public static final List<GridColumn> MESSAGE_COLUMNS = Arrays.asList(MESSAGE_TYPE, MESSAGE_CONSTANT, MESSAGE_MODULE);
 		public static final List<GridColumn> DICTIONARY_COLUMNS = Arrays.asList(ITEM_TURKISH, ITEM_ENGLISH, ITEM_ALBANIANKV, ITEM_ARABICEG, ITEM_ARABICJO, ITEM_ARABICSA,
 				ITEM_AZERBAIJANIAZ, ITEM_BULGARIANBG, ITEM_FRENCHFR, ITEM_GEORGIANGE, ITEM_GERMANDE, ITEM_PERSIANIR, ITEM_ROMANIANRO, ITEM_RUSSIANRU, ITEM_TURKMENTM);
-		public static final List<GridColumn> ADVANCED_SEARCH_GRIDS = Arrays.asList(ITEM_ORDER_NUMBER, ITEM_TAG_NUMBER, ITEM_TURKISH, ITEM_ENGLISH, ITEM_STANDARD,
-				SEARCHED_LEVEL_NUMBER, SEARCHED_PREFIX, SEARCHED_INFO, SEARCHED_DICTIONARY_ID);
+		public static final List<GridColumn> ADVANCED_SEARCH_GRIDS = Arrays.asList(SEARCHED_RESOURCENR, SEARCHED_ORDER_NUMBER, SEARCHED_TAG_NUMBER, ITEM_TURKISH, ITEM_ENGLISH,
+				ITEM_STANDARD, SEARCHED_LEVEL_NUMBER, SEARCHED_PREFIX, SEARCHED_INFO, SEARCHED_DICTIONARY_ID);
 
 		private final String columnName;
 		private final String resourceName;

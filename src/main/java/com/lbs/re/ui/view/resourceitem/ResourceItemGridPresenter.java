@@ -17,6 +17,7 @@ import com.lbs.re.ui.util.Enums.UIParameter;
 import com.lbs.re.ui.util.Enums.ViewMode;
 import com.lbs.re.ui.util.REStatic;
 import com.lbs.re.ui.view.AbstractGridPresenter;
+import com.lbs.re.ui.view.resource.edit.ResourceEditView;
 import com.lbs.re.ui.view.resourceitem.edit.ResourceItemDataProvider;
 import com.lbs.re.util.EnumsV2.ResourceType;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -28,10 +29,13 @@ public class ResourceItemGridPresenter extends AbstractGridPresenter<ReResourcei
 
 	private static final long serialVersionUID = 1L;
 
+	private NavigationManager navigationManager;
+
 	@Autowired
 	public ResourceItemGridPresenter(ResourceItemDataProvider resourceItemDataProvider, NavigationManager navigationManager, ResourceitemService service, BeanFactory beanFactory,
 			ViewEventBus viewEventBus, REUserService userService) throws LocalizedException {
 		super(navigationManager, service, resourceItemDataProvider, beanFactory, viewEventBus, userService);
+		this.navigationManager = navigationManager;
 		resourceItemDataProvider.provideLimitedResourceItems();
 	}
 
@@ -45,6 +49,10 @@ public class ResourceItemGridPresenter extends AbstractGridPresenter<ReResourcei
 		windowParameters.put(UIParameter.RESOURCE_ID, item.getId());
 		windowParameters.put(UIParameter.RESOURCE_TYPE, ResourceType.LOCALIZABLE);
 		getView().openResourceItemWindow(windowParameters);
+	}
+
+	public void navigateToItemResource(ReResourceitem item) throws LocalizedException {
+		navigationManager.navigateTo(ResourceEditView.class, item.getResourceref());
 	}
 
 	@EventBusListenerMethod

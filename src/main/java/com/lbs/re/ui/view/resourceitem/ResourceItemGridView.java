@@ -149,7 +149,27 @@ public class ResourceItemGridView extends AbstractGridView<ReResourceitem, Resou
 				}
 			}
 		});
+
+		REButton resourceButton = new REButton("view.advancedsearch.resources", VaadinIcons.MODAL_LIST);
+		resourceButton.setId(itemButton.getId() + "." + item.getId());
+		resourceButton.setSizeUndefined();
+		resourceButton.setCaption("");
+
+		resourceButton.addClickListener(new ClickListener() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				try {
+					getPresenter().navigateToItemResource(item);
+				} catch (LocalizedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		List<Component> componentList = new ArrayList<>();
+		componentList.add(resourceButton);
 		componentList.add(itemButton);
 		return componentList;
 	}
