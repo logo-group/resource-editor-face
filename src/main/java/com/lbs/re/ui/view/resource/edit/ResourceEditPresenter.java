@@ -164,7 +164,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			treeGrid.getSelectedItems().forEach(resourceItem -> {
 				try {
 					deleteLanguagesByItem((ReResourceitem) resourceItem);
-					resourceitemService.delete((ReResourceitem) resourceItem);
+					deleteItem((ReResourceitem) resourceItem);
 				} catch (LocalizedException e) {
 					e.printStackTrace();
 				}
@@ -183,7 +183,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			treeGridStandard.getSelectedItems().forEach(resourceItem -> {
 				try {
 					deleteLanguagesByItem((ReResourceitem) resourceItem);
-					resourceitemService.delete((ReResourceitem) resourceItem);
+					deleteItem((ReResourceitem) resourceItem);
 				} catch (LocalizedException e) {
 					e.printStackTrace();
 				}
@@ -202,7 +202,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			listGrid.getSelectedItems().forEach(resourceItem -> {
 				try {
 					deleteLanguagesByItem(resourceItem);
-					resourceitemService.delete(resourceItem);
+					deleteItem(resourceItem);
 				} catch (LocalizedException e) {
 					e.printStackTrace();
 				}
@@ -222,7 +222,7 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			listGridStandard.getSelectedItems().forEach(resourceItem -> {
 				try {
 					deleteLanguagesByItem(resourceItem);
-					resourceitemService.delete(resourceItem);
+					deleteItem(resourceItem);
 				} catch (LocalizedException e) {
 					e.printStackTrace();
 				}
@@ -232,6 +232,12 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			listGridStandard.deselectAll();
 			listGridStandard.refreshAll();
 		}
+	}
+
+	private void deleteItem(ReResourceitem resourceItem) throws LocalizedException {
+		getItem().getReResourceitem().remove(resourceItem);
+		getItem().orderResourceItems();
+		save(getItem());
 	}
 
 	private boolean isActiveItemExists(Set<ReResourceitem> itemSet) {
