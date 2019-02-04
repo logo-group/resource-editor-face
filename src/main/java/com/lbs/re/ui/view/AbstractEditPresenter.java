@@ -19,19 +19,24 @@ package com.lbs.re.ui.view;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 
 import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.BaseService;
+import com.lbs.re.data.service.GridPreferenceService;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
 import com.lbs.re.model.AbstractBaseEntity;
+import com.lbs.re.model.GridPreference;
 import com.lbs.re.model.ReUser;
 import com.lbs.re.ui.components.ConfirmPopup;
 import com.lbs.re.ui.components.basic.REButton;
@@ -81,6 +86,9 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 	private BeanValidationBinder<T> binder;
 	private ViewEventBus viewEventBus;
 	private boolean hasChanges;
+
+	@Autowired
+	private GridPreferenceService gridPreferenceService;
 
 	protected AbstractEditPresenter(ViewEventBus viewEventBus, NavigationManager navigationManager, S service, Class<T> entityType, BeanFactory beanFactory,
 			REUserService userService) {
@@ -369,6 +377,58 @@ public abstract class AbstractEditPresenter<T extends AbstractBaseEntity, S exte
 		}
 		getView().getDateCreated().setValue(entity.getCreatedon());
 		getView().getDateUpdated().setValue(entity.getModifiedon());
+	}
+
+	private List<GridPreference> findGridPreference(List<REGrid<?>> gridList) throws LocalizedException {
+		Integer userId = SecurityUtils.getUser().getId();
+		String viewId = this.getClass().getName();
+		List<GridPreference> gridPreferenceList = new ArrayList<>();
+		for (REGrid<?> grid : gridList) {
+			GridPreference gridPreference = gridPreferenceService.findByUserIdAndViewIdAndGridId(userId, viewId, grid.getId());
+			if (gridPreference != null) {
+				gridPreferenceList.add(gridPreference);
+			}
+		}
+		return gridPreferenceList;
+	}
+
+	protected void saveGridPreference(List<REGrid<?>> gridList) {
+		try {
+			List<GridPreference> gridPreferenceList = findGridPreference(gridList);
+			if (gridPreferenceList.isEmpty()) {
+				for (REGrid<?> grid : gridList) {
+					GridPreference gridPreference = grid.saveGridPreferenceByGrid(grid);
+					gridPreference.setUserId(SecurityUtils.getUser().getId());
+					gridPreference.setViewId(this.getClass().getName());
+					gridPreferenceList.add(gridPreference);
+				}
+			} else {
+				for (GridPreference gridPreference : gridPreferenceList) {
+					for (REGrid<?> grid : gridList) {
+						if (grid.getId().equals(gridPreference.getGridId())) {
+							gridPreference = grid.saveGridPreference(gridPreference);
+							break;
+						}
+					}
+				}
+			}
+			gridPreferenceService.save(gridPreferenceList);
+		} catch (LocalizedException e) {
+		}
+	}
+
+	protected void laodGridPreference(List<REGrid<?>> gridList) {
+		try {
+			for (GridPreference gridPreference : findGridPreference(gridList)) {
+				for (REGrid<?> grid : gridList) {
+					if (grid.getId().equals(gridPreference.getGridId())) {
+						grid.loadGridPreference(gridPreference);
+						break;
+					}
+				}
+			}
+		} catch (LocalizedException e) {
+		}
 	}
 
 }

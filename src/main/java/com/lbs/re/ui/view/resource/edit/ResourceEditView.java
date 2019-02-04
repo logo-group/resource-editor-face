@@ -321,6 +321,8 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	@Override
 	protected void collectGrids() {
 		super.collectGrids();
+		getGridList().add(gridResourceItems);
+		getGridList().add(gridResourceItemsStandard);
 	}
 
 	@Override

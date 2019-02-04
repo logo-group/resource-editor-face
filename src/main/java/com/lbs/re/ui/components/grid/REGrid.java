@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
+import com.lbs.re.model.ColumnPreference;
+import com.lbs.re.model.GridPreference;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
 import com.lbs.re.ui.view.AbstractDataProvider;
 import com.vaadin.data.HasValue.ValueChangeEvent;
@@ -19,6 +21,8 @@ public class REGrid<T> extends Grid<T> implements ResourceEditorLocalizerWrapper
 
 	private REGridWrapper<T> wrapper;
 
+	private GridPreference gridPreference;
+
 	public REGrid(REGridConfig<T> config, AbstractDataProvider<T> gridDataProvider, SelectionMode selectionMode) {
 		wrapper = new REGridWrapper<T>(config, gridDataProvider, selectionMode, this);
 		init();
@@ -33,6 +37,82 @@ public class REGrid<T> extends Grid<T> implements ResourceEditorLocalizerWrapper
 	public void init() {
 		setBeanType(getConfig().getBeanType());
 		wrapper.init();
+	}
+
+	public GridPreference saveGridPreference() {
+		if (gridPreference == null) {
+			gridPreference = new GridPreference();
+		}
+		gridPreference.setGridId(getId());
+		for (Column<T, ?> column : getColumns()) {
+			if (column.getId() == null)
+				continue;
+			ColumnPreference columnPreference = createNewColumnPreference(column);
+			gridPreference.getColumnPreferenceList().add(columnPreference);
+		}
+		return gridPreference;
+	}
+
+	public GridPreference saveGridPreferenceByGrid(REGrid grid) {
+		if (gridPreference == null) {
+			gridPreference = new GridPreference();
+		}
+		gridPreference.setGridId(grid.getId());
+		for (Column<T, ?> column : getColumns()) {
+			if (column.getId() == null)
+				continue;
+			ColumnPreference columnPreference = createNewColumnPreference(column);
+			gridPreference.getColumnPreferenceList().add(columnPreference);
+		}
+		return gridPreference;
+	}
+
+	public GridPreference saveGridPreference(GridPreference gridPreference) {
+		for (Column<T, ?> column : getColumns()) {
+			if (column.getId() == null) {
+				continue;
+			}
+			boolean found = false;
+			for (ColumnPreference columnPreference : gridPreference.getColumnPreferenceList()) {
+				if (columnPreference.getColumnId().equals(column.getId())) {
+					columnPreference.setHidden(column.isHidden());
+					columnPreference.setColumnWidth(column.getWidth());
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				ColumnPreference columnPreference = createNewColumnPreference(column);
+				gridPreference.getColumnPreferenceList().add(columnPreference);
+			}
+		}
+		return gridPreference;
+	}
+
+	private ColumnPreference createNewColumnPreference(Column<T, ?> column) {
+		ColumnPreference columnPreference = new ColumnPreference();
+		columnPreference.setColumnId(column.getId());
+		columnPreference.setHidden(column.isHidden());
+		columnPreference.setColumnWidth(column.getWidth());
+		return columnPreference;
+	}
+
+	public void loadGridPreference(GridPreference gridPreference) {
+		if (gridPreference == null)
+			return;
+		this.gridPreference = gridPreference;
+		List<ColumnPreference> preferenceList = gridPreference.getColumnPreferenceList();
+		for (ColumnPreference preference : preferenceList) {
+			for (Column<T, ?> column : getColumns()) {
+				if (column.getId().equals(preference.getColumnId())) {
+					column.setHidden(preference.isHidden());
+					if (preference.getColumnWidth() > 0) {
+						column.setWidth(preference.getColumnWidth());
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	public void onCopyRow() {

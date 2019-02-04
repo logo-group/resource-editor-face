@@ -6,10 +6,15 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.BaseService;
+import com.lbs.re.data.service.GridPreferenceService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
 import com.lbs.re.model.AbstractBaseEntity;
+import com.lbs.re.model.GridPreference;
 import com.lbs.re.ui.AppUI;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RELabel;
@@ -116,6 +121,9 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	 * selectionMode for grid
 	 */
 	private SelectionMode selectionMode;
+
+	@Autowired
+	private GridPreferenceService gridPreferenceService;
 
 	public AbstractGridView(P presenter, SelectionMode selectionMode) {
 		this.presenter = presenter;
@@ -360,10 +368,12 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 	@Override
 	public void beforeLeave(ViewBeforeLeaveEvent event) {
 		getPresenter().beforeLeavingView(event);
+		saveGridPreference();
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
+		laodGridPreference();
 		View.super.enter(event);
 		try {
 			getPresenter().checkForListOperation();
@@ -429,6 +439,39 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 			public void onCancel() {
 			}
 		}, getLocaleValue("confirm.message.delete"), getLocaleValue("general.button.ok"), getLocaleValue("general.button.cancel"));
+	}
+
+	private void saveGridPreference() {
+		try {
+			GridPreference gridPreference = findGridPreference();
+			if (gridPreference == null) {
+				gridPreference = grid.saveGridPreference();
+				gridPreference.setUserId(SecurityUtils.getUser().getId());
+				gridPreference.setViewId(this.getClass().getName());
+			} else {
+				gridPreference = grid.saveGridPreference(gridPreference);
+			}
+			gridPreferenceService.save(gridPreference);
+		} catch (LocalizedException e) {
+			logError(e);
+		}
+	}
+
+	private void laodGridPreference() {
+		try {
+			GridPreference gridPreference = findGridPreference();
+			grid.loadGridPreference(gridPreference);
+		} catch (LocalizedException e) {
+			logError(e);
+		}
+	}
+
+	private GridPreference findGridPreference() throws LocalizedException {
+		Integer userId = SecurityUtils.getUser().getId();
+		String viewId = this.getClass().getName();
+		String gridId = grid.getId();
+		GridPreference gridPreference = gridPreferenceService.findByUserIdAndViewIdAndGridId(userId, viewId, gridId);
+		return gridPreference;
 	}
 
 	/**

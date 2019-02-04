@@ -31,8 +31,7 @@ import com.lbs.re.model.ReUser;
 import com.lbs.re.ui.view.Operation;
 
 /**
- * SecurityUtils takes care of all such static operations that have to do with
- * security and querying rights from different beans of the UI.
+ * SecurityUtils takes care of all such static operations that have to do with security and querying rights from different beans of the UI.
  */
 public class SecurityUtils {
 
@@ -53,8 +52,7 @@ public class SecurityUtils {
 	 */
 	public static Set<String> getUserRoles() {
 		SecurityContext context = SecurityContextHolder.getContext();
-		return context.getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority)
-				.collect(Collectors.toSet());
+		return context.getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
 	}
 
 	public static UserSessionAttr getCurrentUser(REUserService userService) throws LocalizedException {
@@ -62,7 +60,11 @@ public class SecurityUtils {
 		ReUser reUser = userService.getUserListByUsername((userSessionAttr.getUsername()));
 		userSessionAttr.setReUser(reUser);
 		return userSessionAttr;
+	}
 
+	public static ReUser getUser() {
+		UserSessionAttr userSessionAttr = getUserSessionAttr();
+		return userSessionAttr.getReUser();
 	}
 
 	public static void checkForOperation(REUserService userService, String operationName) throws LocalizedException {

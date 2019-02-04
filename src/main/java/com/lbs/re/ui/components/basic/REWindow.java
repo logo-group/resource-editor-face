@@ -23,10 +23,14 @@ package com.lbs.re.ui.components.basic;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 
+import com.lbs.re.app.security.SecurityUtils;
+import com.lbs.re.data.service.GridPreferenceService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
+import com.lbs.re.model.GridPreference;
 import com.lbs.re.ui.components.CustomExceptions.REWindowNotAbleToOpenException;
 import com.lbs.re.ui.components.grid.REGrid;
 import com.lbs.re.ui.util.Enums.UIParameter;
@@ -50,150 +54,191 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public abstract class REWindow extends Window implements ResourceEditorLocalizerWrapper, Serializable, HasLogger {
 
-    /**
-     * long serialVersionUID
-     */
-    private static final long serialVersionUID = 1L;
-    private final EventBus eventBus;
-    private VerticalLayout cssFormLayout;
-    private REButton btnOk;
-    private REButton btnCancel;
+	/**
+	 * long serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+	private final EventBus eventBus;
+	private VerticalLayout cssFormLayout;
+	private REButton btnOk;
+	private REButton btnCancel;
+
+	@Autowired
+	private GridPreferenceService gridPreferenceService;
 
 	public REWindow(WindowSize windowSize, EventBus eventBus) {
-        this.eventBus = eventBus;
-        setStyleName(windowSize.getSize());
-        setCaption(getHeader());
-        removeAllCloseShortcuts();
-    }
+		this.eventBus = eventBus;
+		setStyleName(windowSize.getSize());
+		setCaption(getHeader());
+		removeAllCloseShortcuts();
+	}
 
 	protected void initWindow() throws REWindowNotAbleToOpenException, LocalizedException {
-        cssFormLayout = new VerticalLayout();
-        cssFormLayout.setResponsive(true);
-        cssFormLayout.setWidth(100f, Unit.PERCENTAGE);
+		cssFormLayout = new VerticalLayout();
+		cssFormLayout.setResponsive(true);
+		cssFormLayout.setWidth(100f, Unit.PERCENTAGE);
 
-        VerticalLayout layRoot = new VerticalLayout();
-        layRoot.setMargin(true);
-        layRoot.setSpacing(true);
+		VerticalLayout layRoot = new VerticalLayout();
+		layRoot.setMargin(true);
+		layRoot.setSpacing(true);
 
-        Component footer = buildFooter();
-        Component customContent = buildContent();
-        Panel contentPanel = new Panel();
-        contentPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
-        contentPanel.addStyleName(ValoTheme.PANEL_SCROLL_INDICATOR);
-        contentPanel.setSizeFull();
-        contentPanel.setContent(customContent);
-        layRoot.addComponent(contentPanel);
-        layRoot.addComponent(footer);
-        layRoot.setSizeFull();
-        layRoot.setExpandRatio(contentPanel, 1);
-        setContent(layRoot);
-    }
+		Component footer = buildFooter();
+		Component customContent = buildContent();
+		Panel contentPanel = new Panel();
+		contentPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
+		contentPanel.addStyleName(ValoTheme.PANEL_SCROLL_INDICATOR);
+		contentPanel.setSizeFull();
+		contentPanel.setContent(customContent);
+		layRoot.addComponent(contentPanel);
+		layRoot.addComponent(footer);
+		layRoot.setSizeFull();
+		layRoot.setExpandRatio(contentPanel, 1);
+		setContent(layRoot);
+		if (getWindowGrid() != null) {
+			laodGridPreference();
+		}
+	}
 
-    private Component buildFooter() {
-        HorizontalLayout footer = new HorizontalLayout();
-        footer.setWidth("100%");
-        footer.setSpacing(true);
-        footer.addStyleName("v-window-bottom-toolbar");
+	private Component buildFooter() {
+		HorizontalLayout footer = new HorizontalLayout();
+		footer.setWidth("100%");
+		footer.setSpacing(true);
+		footer.addStyleName("v-window-bottom-toolbar");
 
-        RELabel footerText = new RELabel();
-        footerText.setSizeUndefined();
+		RELabel footerText = new RELabel();
+		footerText.setSizeUndefined();
 
 		btnOk = new REButton("general.button.save", VaadinIcons.CHECK);
-        btnOk.addStyleName("primary");
-        btnOk.setWidthUndefined();
+		btnOk.addStyleName("primary");
+		btnOk.setWidthUndefined();
 		btnOk.setDisableOnClick(true);
 
-        btnCancel = new REButton("general.button.cancel", VaadinIcons.CROSS_CUTLERY);
-        btnCancel.setWidthUndefined();
+		btnCancel = new REButton("general.button.cancel", VaadinIcons.CROSS_CUTLERY);
+		btnCancel.setWidthUndefined();
 
-        btnCancel.addClickListener(new Button.ClickListener() {
+		btnCancel.addClickListener(new Button.ClickListener() {
 
-            private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                try {
-                    cancelButtonPressed();
-                } catch (LocalizedException e) {
-                    logError(e);
-                }
-            }
-        });
+			@Override
+			public void buttonClick(ClickEvent event) {
+				try {
+					cancelButtonPressed();
+				} catch (LocalizedException e) {
+					logError(e);
+				}
+			}
+		});
 
-        btnOk.addClickListener(new Button.ClickListener() {
+		btnOk.addClickListener(new Button.ClickListener() {
 
-            private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                try {
-                    okButtonPressed();
-                } catch (LocalizedException e) {
-                    logError(e);
-                }
-            }
-        });
+			@Override
+			public void buttonClick(ClickEvent event) {
+				try {
+					okButtonPressed();
+				} catch (LocalizedException e) {
+					logError(e);
+				}
+			}
+		});
 
-        footer.addComponents(footerText, btnOk, btnCancel);
-        footer.setExpandRatio(footerText, 1);
-        return footer;
-    }
+		footer.addComponents(footerText, btnOk, btnCancel);
+		footer.setExpandRatio(footerText, 1);
+		return footer;
+	}
 
-	public abstract void open(Map<UIParameter, Object> parameters)
-			throws REWindowNotAbleToOpenException, LocalizedException;
+	public abstract void open(Map<UIParameter, Object> parameters) throws REWindowNotAbleToOpenException, LocalizedException;
 
 	protected abstract Component buildContent() throws REWindowNotAbleToOpenException, LocalizedException;
 
-    protected abstract String getHeader();
+	protected abstract String getHeader();
 
-    public EventBus getEventBus() {
-        return eventBus;
-    }
+	public EventBus getEventBus() {
+		return eventBus;
+	}
 
-    protected void okButtonPressed() throws LocalizedException {
-        if (!readyToClose()) {
-            return;
-        }
-        publishCloseSuccessEvent();
-        windowClose();
-        close();
-    }
+	protected void okButtonPressed() throws LocalizedException {
+		if (!readyToClose()) {
+			return;
+		}
+		publishCloseSuccessEvent();
+		windowClose();
+		close();
+		if (getWindowGrid() != null) {
+			saveGridPreference();
+		}
+	}
 
-    protected void cancelButtonPressed() throws LocalizedException {
-        windowClose();
-        close();
-    }
+	protected void cancelButtonPressed() throws LocalizedException {
+		windowClose();
+		close();
+	}
 
 	protected abstract void windowClose();
 
-    protected abstract boolean readyToClose();
+	protected abstract boolean readyToClose();
 
-    protected void addSection(String title, Component... c) {
-        VerticalLayout vlay = new VerticalLayout();
-        vlay.setMargin(false);
-        vlay.setSpacing(true);
-        vlay.setWidth("100%");
-        RELabel sectionHeader = new RELabel(title);
-        sectionHeader.addStyleName("sectionHeader");
-        sectionHeader.setWidth("100%");
-        vlay.addComponent(sectionHeader);
-        for (int i = 0; i < c.length; i++) {
-            vlay.addComponent(c[i]);
-        }
-        cssFormLayout.addComponent(vlay);
-        cssFormLayout.setComponentAlignment(vlay, Alignment.TOP_LEFT);
-    }
+	protected void addSection(String title, Component... c) {
+		VerticalLayout vlay = new VerticalLayout();
+		vlay.setMargin(false);
+		vlay.setSpacing(true);
+		vlay.setWidth("100%");
+		RELabel sectionHeader = new RELabel(title);
+		sectionHeader.addStyleName("sectionHeader");
+		sectionHeader.setWidth("100%");
+		vlay.addComponent(sectionHeader);
+		for (int i = 0; i < c.length; i++) {
+			vlay.addComponent(c[i]);
+		}
+		cssFormLayout.addComponent(vlay);
+		cssFormLayout.setComponentAlignment(vlay, Alignment.TOP_LEFT);
+	}
 
-    public VerticalLayout getMainLayout() {
-        return cssFormLayout;
-    }
+	public VerticalLayout getMainLayout() {
+		return cssFormLayout;
+	}
 
-    public abstract void publishCloseSuccessEvent();
+	private GridPreference findGridPreference() throws LocalizedException {
+		Integer userId = SecurityUtils.getUser().getId();
+		String viewId = this.getClass().getName();
+		String gridId = getWindowGrid().getId();
+		GridPreference gridPreference = gridPreferenceService.findByUserIdAndViewIdAndGridId(userId, viewId, gridId);
+		return gridPreference;
+	}
 
-    protected void logError(LocalizedException e) {
-        getLogger().error(e.getLocalizedMessage(), e);
+	private void saveGridPreference() {
+		try {
+			GridPreference gridPreference = findGridPreference();
+			if (gridPreference == null) {
+				gridPreference = getWindowGrid().saveGridPreference();
+				gridPreference.setUserId(SecurityUtils.getUser().getId());
+				gridPreference.setViewId(this.getClass().getName());
+			} else {
+				gridPreference = getWindowGrid().saveGridPreference(gridPreference);
+			}
+			gridPreferenceService.save(gridPreference);
+		} catch (LocalizedException e) {
+			logError(e);
+		}
+	}
+
+	private void laodGridPreference() {
+		try {
+			GridPreference gridPreference = findGridPreference();
+			getWindowGrid().loadGridPreference(gridPreference);
+		} catch (LocalizedException e) {
+			logError(e);
+		}
+	}
+
+	public abstract void publishCloseSuccessEvent();
+
+	protected void logError(LocalizedException e) {
+		getLogger().error(e.getLocalizedMessage(), e);
 		RENotification.showNotification(e.getLocalizedMessage(), NotifyType.ERROR);
-    }
+	}
 
 	public REGrid<?> getWindowGrid() {
 		return null;

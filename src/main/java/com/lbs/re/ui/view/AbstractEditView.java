@@ -76,6 +76,7 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 	@Override
 	public void enter(ViewChangeEvent event) {
 		collectGrids();
+		getPresenter().laodGridPreference(gridList);
 		String parameter = event.getParameters();
 		try {
 			if (parameter.contains("new")) {
@@ -238,6 +239,7 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 	@Override
 	public void beforeLeave(ViewBeforeLeaveEvent event) {
 		getPresenter().beforeLeavingView(event);
+		getPresenter().saveGridPreference(gridList);
 	}
 
 	public REButton getCancel() {
