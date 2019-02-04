@@ -92,8 +92,9 @@ public class ResourceItemGridView extends AbstractGridView<ReResourceitem, Resou
 
 	@Override
 	public void buildGridColumnDescription() {
-		// TODO Auto-generated method stub
-
+		getGrid().getColumn(GridColumn.ITEM_TURKISH.getColumnName()).setDescriptionGenerator(ReResourceitem::getTurkishTr);
+		getGrid().getColumn(GridColumn.ITEM_ENGLISH.getColumnName()).setDescriptionGenerator(ReResourceitem::getEnglishUs);
+		getGrid().getColumn(GridColumn.ITEM_STANDARD.getColumnName()).setDescriptionGenerator(ReResourceitem::getStandard);
 	}
 
 	private void buildAdvancedSearch() {
