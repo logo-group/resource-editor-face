@@ -238,8 +238,8 @@ public abstract class AbstractEditView<T extends AbstractBaseEntity, S extends B
 
 	@Override
 	public void beforeLeave(ViewBeforeLeaveEvent event) {
-		getPresenter().beforeLeavingView(event);
 		getPresenter().saveGridPreference(gridList);
+		getPresenter().beforeLeavingView(event);
 	}
 
 	public REButton getCancel() {
