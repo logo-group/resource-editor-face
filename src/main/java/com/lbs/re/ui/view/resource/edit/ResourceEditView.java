@@ -1,7 +1,9 @@
 package com.lbs.re.ui.view.resource.edit;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -125,10 +127,6 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 			getPresenter().setActiveItems(false);
 		});
 		return hLayButtons;
-	}
-
-	public void setResourceNumber(int value) {
-		resourceNr.setValue(String.valueOf(value));
 	}
 
 	protected void organizeResourceItemsGrid(AbstractDataProvider<ReResourceitem> dataProvider) {
@@ -309,8 +307,14 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 
 	@Override
 	public void bindFormFields(BeanValidationBinder<ReResource> binder) {
-		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")))
-				.bind(ReResource::getResourcenr, ReResource::setResourcenr);
+		binder.forField(resourceNr).withNullRepresentation("").withConverter(new StringToIntegerConverter(getLocaleValue("message.enterIntegerValue")) {
+			@Override
+			protected NumberFormat getFormat(Locale locale) {
+				NumberFormat format = super.getFormat(locale);
+				format.setGroupingUsed(false);
+				return format;
+			};
+		}).bind(ReResource::getResourcenr, ReResource::setResourcenr);
 		super.bindFormFields(binder);
 		binder.forField(resourcegroup).asRequired().bind("resourcegroup");
 		binder.forField(resourcecase).asRequired().bind("resourcecase");
