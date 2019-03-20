@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.vaadin.spring.events.EventBus.ViewEventBus;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
+import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.data.service.ResourceitemService;
@@ -37,6 +38,7 @@ import com.lbs.re.util.EnumsV2.ResourceGroupType;
 import com.lbs.re.util.EnumsV2.ResourceType;
 import com.lbs.re.util.ResourceItemComparator;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 
@@ -407,6 +409,17 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		getView().getBtnDeActive().setVisible(isVisible);
 	}
 
+	@Override
+	public void beforeLeavingView(ViewBeforeLeaveEvent event) {
+		if (getItem().getResourcetype().equals(ResourceType.LOCALIZABLE)) {
+			saveFilters(getView().getGridResourceItems());
+		} else if (getItem().getResourcetype().equals(ResourceType.NONLOCALIZABLE)) {
+			saveFilters(getView().getGridResourceItemsStandard());
+
+		}
+		super.beforeLeavingView(event);
+	}
+
 	public void generateResourceNumber() {
 		if (getView().getViewMode() == ViewMode.NEW || getView().getViewMode() == ViewMode.EDIT) {
 			Integer newNumber = null;
@@ -418,6 +431,12 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 			getView().getResourceNr().setValue(newNumber.toString());
 		} else {
 			getView().showSelectEditMode();
+		}
+	}
+
+	private void saveFilters(REFilterGrid<?> grid) {
+		if (getView().getViewMode() == ViewMode.VIEW) {
+			SecurityUtils.saveFilterValue(getView().getClass().getName(), grid.saveFilterValues());
 		}
 	}
 

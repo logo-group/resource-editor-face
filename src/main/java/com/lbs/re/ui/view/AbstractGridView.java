@@ -18,6 +18,7 @@ import com.lbs.re.model.GridPreference;
 import com.lbs.re.ui.AppUI;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RELabel;
+import com.lbs.re.ui.components.grid.GridFilterValue;
 import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
@@ -367,12 +368,14 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 
 	@Override
 	public void beforeLeave(ViewBeforeLeaveEvent event) {
-		saveGridPreference();
 		getPresenter().beforeLeavingView(event);
+		saveGridPreference();
+		saveFilterValues();
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
+		laodFilterValues();
 		laodGridPreference();
 		View.super.enter(event);
 		try {
@@ -472,6 +475,15 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 		String gridId = grid.getId();
 		GridPreference gridPreference = gridPreferenceService.findByUserIdAndViewIdAndGridId(userId, viewId, gridId);
 		return gridPreference;
+	}
+
+	private void saveFilterValues() {
+		SecurityUtils.saveFilterValue(this.getClass().getName(), grid.saveFilterValues());
+	}
+
+	private void laodFilterValues() {
+		GridFilterValue filterValues = SecurityUtils.loadFilterValue(this.getClass().getName(), grid.getId());
+		grid.laodFilterValues(filterValues);
 	}
 
 	/**

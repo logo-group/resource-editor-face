@@ -28,6 +28,7 @@ import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.exception.localized.OperationNotAuthedException;
 import com.lbs.re.model.ReUser;
+import com.lbs.re.ui.components.grid.GridFilterValue;
 import com.lbs.re.ui.view.Operation;
 
 /**
@@ -78,4 +79,18 @@ public class SecurityUtils {
 		}
 	}
 
+	public static void saveFilterValue(String viewName, GridFilterValue gridFilterValue) {
+		UserSessionAttr userSessionAttr = getUserSessionAttr();
+		userSessionAttr.saveFilterValue(viewName, gridFilterValue);
+	}
+
+	public static GridFilterValue loadFilterValue(String viewName, String filterId) {
+		UserSessionAttr userSessionAttr = getUserSessionAttr();
+		return userSessionAttr.loadFilterValue(viewName, filterId);
+	}
+
+	public static void clearFilterValue(String viewName, String filterId) {
+		UserSessionAttr userSessionAttr = getUserSessionAttr();
+		userSessionAttr.clearFilterValue(viewName, filterId);
+	}
 }

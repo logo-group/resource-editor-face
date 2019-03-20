@@ -17,13 +17,19 @@
 
 package com.lbs.re.app.security;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import com.lbs.re.model.ReUser;
+import com.lbs.re.ui.components.grid.GridFilterValue;
 import com.lbs.re.util.EnumsV2.ResourceEditorUserRole;
 
 public class UserSessionAttr extends User {
@@ -36,6 +42,8 @@ public class UserSessionAttr extends User {
 	private ReUser reUser;
 
 	private Locale locale;
+
+	private Map<String, List<GridFilterValue>> userFilterValues = new HashMap<>();
 
 	public UserSessionAttr(ReUser reUser, Locale locale) {
 		super(reUser.getUsername(), reUser.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(ResourceEditorUserRole.values().toString())));
@@ -57,6 +65,46 @@ public class UserSessionAttr extends User {
 
 	public void setLocale(Locale locale) {
 		this.locale = locale;
+	}
+
+	public void saveFilterValue(String viewName, GridFilterValue gridFilterValue) {
+		if (!userFilterValues.containsKey(viewName)) {
+			userFilterValues.put(viewName, new ArrayList<>());
+		}
+		List<GridFilterValue> filterList = userFilterValues.get(viewName);
+		Iterator<GridFilterValue> iterator = filterList.iterator();
+		while (iterator.hasNext()) {
+			GridFilterValue next = iterator.next();
+			if (next.getGridId().equals(gridFilterValue.getGridId())) {
+				iterator.remove();
+			}
+		}
+		filterList.add(gridFilterValue);
+	}
+
+	public GridFilterValue loadFilterValue(String viewName, String filterId) {
+		List<GridFilterValue> filterList = userFilterValues.get(viewName);
+		if (filterList != null) {
+			for (GridFilterValue gridFilterValue : filterList) {
+				if (gridFilterValue.getGridId().equals(filterId)) {
+					return gridFilterValue;
+				}
+			}
+		}
+		return null;
+	}
+
+	public void clearFilterValue(String viewName, String filterId) {
+		List<GridFilterValue> filterList = userFilterValues.get(viewName);
+		if (filterList != null) {
+			Iterator<GridFilterValue> iterator = filterList.iterator();
+			while (iterator.hasNext()) {
+				GridFilterValue next = iterator.next();
+				if (next.getGridId().equals(filterId)) {
+					iterator.remove();
+				}
+			}
+		}
 	}
 
 }

@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.model.ReResource;
@@ -24,6 +25,7 @@ import com.lbs.re.ui.components.combobox.ResourceGroupComboBox;
 import com.lbs.re.ui.components.combobox.ResourceTypeComboBox;
 import com.lbs.re.ui.components.grid.GridColumns;
 import com.lbs.re.ui.components.grid.GridColumns.GridColumn;
+import com.lbs.re.ui.components.grid.GridFilterValue;
 import com.lbs.re.ui.components.grid.REFilterGrid;
 import com.lbs.re.ui.components.grid.REGridConfig;
 import com.lbs.re.ui.components.grid.RETreeGrid;
@@ -132,11 +134,13 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 	protected void organizeResourceItemsGrid(AbstractDataProvider<ReResourceitem> dataProvider) {
 		gridResourceItems.setGridDataProvider(dataProvider);
 		gridResourceItems.initFilters();
+		fetchSavedFilters(gridResourceItems);
 	}
 
 	protected void organizeResourceItemsStandardGrid(AbstractDataProvider<ReResourceitem> dataProvider) {
 		gridResourceItemsStandard.setGridDataProvider(dataProvider);
 		gridResourceItemsStandard.initFilters();
+		fetchSavedFilters(gridResourceItemsStandard);
 	}
 
 	protected void organizeResourceItemsTreeGrid(ResourceItemTreeDataProvider dataProvider) {
@@ -327,6 +331,11 @@ public class ResourceEditView extends AbstractEditView<ReResource, ResourceServi
 		super.collectGrids();
 		getGridList().add(gridResourceItems);
 		getGridList().add(gridResourceItemsStandard);
+	}
+
+	protected void fetchSavedFilters(REFilterGrid<?> grid) {
+		GridFilterValue filterValues = SecurityUtils.loadFilterValue(this.getClass().getName(), grid.getId());
+		grid.laodFilterValues(filterValues);
 	}
 
 	@Override
