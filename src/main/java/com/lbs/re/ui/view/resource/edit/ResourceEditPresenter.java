@@ -426,4 +426,8 @@ public class ResourceEditPresenter extends AbstractEditPresenter<ReResource, Res
 		refreshGrid();
 		RENotification.showNotification(getLocaleValue("view.abstractedit.messages.SuccessfulSave"), NotifyType.SUCCESS);
 	}
+
+	public void goResource() {
+		System.out.println("hi there!");
+	}
 }

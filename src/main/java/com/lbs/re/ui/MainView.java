@@ -27,15 +27,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.lbs.re.app.routing.PreferredDatabaseSession;
 import com.lbs.re.app.security.SecurityUtils;
 import com.lbs.re.data.service.REUserService;
+import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
+import com.lbs.re.model.ReResource;
 import com.lbs.re.ui.components.basic.REButton;
 import com.lbs.re.ui.components.basic.RELabel;
+import com.lbs.re.ui.components.basic.RETextField;
+import com.lbs.re.ui.components.combobox.ResourceGroupComboBox;
 import com.lbs.re.ui.components.layout.RECssLayout;
 import com.lbs.re.ui.components.layout.REVerticalLayout;
 import com.lbs.re.ui.navigation.NavigationManager;
 import com.lbs.re.ui.view.message.MessageGridView;
 import com.lbs.re.ui.view.resource.ResourceGridView;
+import com.lbs.re.ui.view.resource.edit.ResourceEditView;
 import com.lbs.re.ui.view.resourceitem.ResourceItemGridView;
 import com.lbs.re.ui.view.user.UserGridView;
 import com.lbs.re.ui.view.usersettings.UserSettingsView;
@@ -68,6 +73,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 	private final NavigationManager navigationManager;
 	private final SecuredViewAccessControl viewAccessControl;
 	private final REUserService userService;
+	private final ResourceService resourceService;
 	private PreferredDatabaseSession preferredDatabaseSession;
 
 	private REVerticalLayout content;
@@ -79,14 +85,18 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 	private REButton advancedSearch;
 	private REButton userSettings;
 	private REButton logout;
+	private REButton goResource;
+	private ResourceGroupComboBox resourceGroupComboBox;
 
 	@Autowired
-	public MainView(NavigationManager navigationManager, SecuredViewAccessControl viewAccessControl, REUserService userService, PreferredDatabaseSession preferredDatabaseSession)
-			throws LocalizedException {
+	public MainView(NavigationManager navigationManager, SecuredViewAccessControl viewAccessControl, REUserService userService, PreferredDatabaseSession preferredDatabaseSession,
+			ResourceGroupComboBox resourceGroupComboBox, ResourceService resourceService) throws LocalizedException {
 		this.navigationManager = navigationManager;
 		this.viewAccessControl = viewAccessControl;
 		this.userService = userService;
+		this.resourceService = resourceService;
 		this.preferredDatabaseSession = preferredDatabaseSession;
+		this.resourceGroupComboBox = resourceGroupComboBox;
 	}
 
 	@PostConstruct
@@ -163,6 +173,10 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		userLabel.setStyleName("menuLabel");
 		userLabel.setWidth("100%");
 
+		RELabel mainLabel = new RELabel("Menu");
+		mainLabel.setStyleName("menuLabel");
+		mainLabel.setWidth("100%");
+
 		resources = new REButton("view.mainview.resources", VaadinIcons.FOLDER);
 		resources.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 
@@ -178,11 +192,26 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		userSettings = new REButton("view.mainview.usersettingsview", VaadinIcons.USER);
 		userSettings.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 
+		REVerticalLayout quickSearch = new REVerticalLayout();
+		RETextField resourceNr = new RETextField("view.advancedsearch.resourcenumber", "half", false, true);
+		resourceNr.setWidth("80%");
+		goResource = new REButton("view.mainview.go", VaadinIcons.SIGN_OUT_ALT);
+		goResource.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		goResource.setWidth("80%");
+		quickSearch.setSpacing(true);
+		quickSearch.addComponents(resourceGroupComboBox, resourceNr, goResource);
+
 		logout = new REButton("view.mainview.logout", VaadinIcons.EXIT);
 		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		logout.addClickListener(e -> logout());
 
-		menu.addComponents(advancedSearch, resources, messages, userLabel, userSettings, users, logout);
+		goResource.addClickListener(e -> {
+			int resourceNo = Integer.parseInt(resourceNr.getValue());
+			ReResource resource = resourceService.getResourceByNumberAndGroup(resourceNo, resourceGroupComboBox.getValue());
+			navigationManager.navigateTo(ResourceEditView.class, resource.getId());
+		});
+
+		menu.addComponents(quickSearch, mainLabel, advancedSearch, resources, messages, userLabel, userSettings, users, logout);
 		return menu;
 	}
 
