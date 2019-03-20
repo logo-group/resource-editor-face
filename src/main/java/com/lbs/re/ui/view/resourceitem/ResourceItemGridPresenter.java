@@ -52,7 +52,8 @@ public class ResourceItemGridPresenter extends AbstractGridPresenter<ReResourcei
 	}
 
 	public void navigateToItemResource(ReResourceitem item) throws LocalizedException {
-		navigationManager.navigateTo(ResourceEditView.class, item.getResourceref());
+		Integer resourceRef = getService().getById(item.getId()).getResourceref();
+		navigationManager.navigateTo(ResourceEditView.class, resourceRef);
 	}
 
 	@EventBusListenerMethod
