@@ -38,6 +38,8 @@ import com.lbs.re.ui.components.combobox.ResourceGroupComboBox;
 import com.lbs.re.ui.components.layout.RECssLayout;
 import com.lbs.re.ui.components.layout.REVerticalLayout;
 import com.lbs.re.ui.navigation.NavigationManager;
+import com.lbs.re.ui.util.RENotification;
+import com.lbs.re.ui.util.RENotification.NotifyType;
 import com.lbs.re.ui.view.message.MessageGridView;
 import com.lbs.re.ui.view.resource.ResourceGridView;
 import com.lbs.re.ui.view.resource.edit.ResourceEditView;
@@ -208,7 +210,11 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		goResource.addClickListener(e -> {
 			int resourceNo = Integer.parseInt(resourceNr.getValue());
 			ReResource resource = resourceService.getResourceByNumberAndGroup(resourceNo, resourceGroupComboBox.getValue());
-			navigationManager.navigateTo(ResourceEditView.class, resource.getId());
+			if (resource == null) {
+				RENotification.showNotification(getLocaleValue("view.quicksearch.notfound"), NotifyType.WARNING);
+			} else {
+				navigationManager.navigateTo(ResourceEditView.class, resource.getId());
+			}
 		});
 
 		menu.addComponents(quickSearch, mainLabel, advancedSearch, resources, messages, userLabel, userSettings, users, logout);
