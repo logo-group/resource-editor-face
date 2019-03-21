@@ -205,31 +205,36 @@ public class AdvancedSearchPresenter implements HasLogger, Serializable {
 	}
 
 	public Criterion generateCriterion(SearchFilter searchFilter, String propertyName, String parameter, boolean matchCase) {
+		String q;
 		switch (searchFilter) {
 		case BEGINSWITH:
-			return matchCase ? Restrictions.ilike(propertyName, parameter, MatchMode.START) : Restrictions.like(propertyName, parameter, MatchMode.START);
+			q = propertyName + " LIKE '%" + parameter + "' collate Latin1_General_CS_AS";
+			return matchCase ? Restrictions.sqlRestriction(q) : Restrictions.like(propertyName, parameter, MatchMode.START);
 		case CONTAINS:
-			return matchCase ? Restrictions.ilike(propertyName, parameter, MatchMode.ANYWHERE) : Restrictions.like(propertyName, parameter, MatchMode.ANYWHERE);
+			q = propertyName + " LIKE '%" + parameter + "%' collate Latin1_General_CS_AS";
+			return matchCase ? Restrictions.sqlRestriction(q) : Restrictions.like(propertyName, parameter, MatchMode.ANYWHERE);
 		case ENDSWITH:
-			return matchCase ? Restrictions.like(propertyName, parameter, MatchMode.END) : Restrictions.like(propertyName, parameter, MatchMode.END);
+			q = propertyName + " LIKE '" + parameter + "%' collate Latin1_General_CS_AS";
+			return matchCase ? Restrictions.sqlRestriction(q) : Restrictions.like(propertyName, parameter, MatchMode.END);
 		case ISEMPTY:
 			return Restrictions.eq(propertyName, "");
 		case ISEQUALTO:
-			return matchCase ? Restrictions.ilike(propertyName, parameter, MatchMode.EXACT) : Restrictions.like(propertyName, parameter, MatchMode.EXACT);
+			q = propertyName + " = '" + parameter + "' collate Latin1_General_CS_AS";
+			return matchCase ? Restrictions.sqlRestriction(q) : Restrictions.like(propertyName, parameter, MatchMode.EXACT);
 		case ISNOTEMPTY:
 			return Restrictions.not(Restrictions.eq(propertyName, ""));
 		case ISNOTEQUALTO:
-			return matchCase ? Restrictions.not(Restrictions.ilike(propertyName, parameter, MatchMode.EXACT))
-					: Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.EXACT));
+			q = propertyName + " = '" + parameter + "' collate Latin1_General_CS_AS";
+			return matchCase ? Restrictions.not(Restrictions.sqlRestriction(q)) : Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.EXACT));
 		case NOTBEGINSWITH:
-			return matchCase ? Restrictions.not(Restrictions.ilike(propertyName, parameter, MatchMode.START))
-					: Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.START));
+			q = propertyName + " LIKE '%" + parameter + "' collate Latin1_General_CS_AS";
+			return matchCase ? Restrictions.not(Restrictions.sqlRestriction(q)) : Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.START));
 		case NOTCONTAIN:
-			return matchCase ? Restrictions.not(Restrictions.ilike(propertyName, parameter, MatchMode.ANYWHERE))
-					: Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.ANYWHERE));
+			q = propertyName + " LIKE '%" + parameter + "%' collate Latin1_General_CS_AS";
+			return matchCase ? Restrictions.not(Restrictions.sqlRestriction(q)) : Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.ANYWHERE));
 		case NOTENDSWITH:
-			return matchCase ? Restrictions.not(Restrictions.ilike(propertyName, parameter, MatchMode.END))
-					: Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.END));
+			q = propertyName + " LIKE '" + parameter + "%' collate Latin1_General_CS_AS";
+			return matchCase ? Restrictions.not(Restrictions.sqlRestriction(q)) : Restrictions.not(Restrictions.like(propertyName, parameter, MatchMode.END));
 		}
 		return null;
 	}
