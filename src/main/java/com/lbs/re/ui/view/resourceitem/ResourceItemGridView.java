@@ -174,4 +174,9 @@ public class ResourceItemGridView extends AbstractGridView<ReResourceitem, Resou
 		componentList.add(itemButton);
 		return componentList;
 	}
+
+	public AdvancedSearchView getAdvancedSearchView() {
+		return advancedSearchView;
+	}
+
 }

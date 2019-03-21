@@ -368,9 +368,9 @@ public abstract class AbstractGridView<T extends AbstractBaseEntity, S extends B
 
 	@Override
 	public void beforeLeave(ViewBeforeLeaveEvent event) {
-		getPresenter().beforeLeavingView(event);
 		saveGridPreference();
 		saveFilterValues();
+		getPresenter().beforeLeavingView(event);
 	}
 
 	@Override

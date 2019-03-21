@@ -28,6 +28,7 @@ import com.lbs.re.data.service.REUserService;
 import com.lbs.re.exception.localized.LocalizedException;
 import com.lbs.re.exception.localized.OperationNotAuthedException;
 import com.lbs.re.model.ReUser;
+import com.lbs.re.ui.components.grid.AdvancedSearchFilterValue;
 import com.lbs.re.ui.components.grid.GridFilterValue;
 import com.lbs.re.ui.view.Operation;
 
@@ -92,5 +93,10 @@ public class SecurityUtils {
 	public static void clearFilterValue(String viewName, String filterId) {
 		UserSessionAttr userSessionAttr = getUserSessionAttr();
 		userSessionAttr.clearFilterValue(viewName, filterId);
+	}
+
+	public static AdvancedSearchFilterValue getAdvancedSearchFilterValue() {
+		UserSessionAttr userSessionAttr = getUserSessionAttr();
+		return userSessionAttr.getAdvancedSearchFilterValue();
 	}
 }

@@ -29,6 +29,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import com.lbs.re.model.ReUser;
+import com.lbs.re.ui.components.grid.AdvancedSearchFilterValue;
 import com.lbs.re.ui.components.grid.GridFilterValue;
 import com.lbs.re.util.EnumsV2.ResourceEditorUserRole;
 
@@ -44,6 +45,8 @@ public class UserSessionAttr extends User {
 	private Locale locale;
 
 	private Map<String, List<GridFilterValue>> userFilterValues = new HashMap<>();
+
+	private AdvancedSearchFilterValue advancedSearchFilterValue;
 
 	public UserSessionAttr(ReUser reUser, Locale locale) {
 		super(reUser.getUsername(), reUser.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(ResourceEditorUserRole.values().toString())));
@@ -105,6 +108,13 @@ public class UserSessionAttr extends User {
 				}
 			}
 		}
+	}
+
+	public AdvancedSearchFilterValue getAdvancedSearchFilterValue() {
+		if (advancedSearchFilterValue == null) {
+			advancedSearchFilterValue = new AdvancedSearchFilterValue();
+		}
+		return advancedSearchFilterValue;
 	}
 
 }
