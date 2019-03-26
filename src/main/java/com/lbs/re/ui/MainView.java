@@ -18,6 +18,7 @@
 package com.lbs.re.ui;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -26,9 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lbs.re.app.routing.PreferredDatabaseSession;
 import com.lbs.re.app.security.SecurityUtils;
+import com.lbs.re.app.security.UserSessionAttr;
 import com.lbs.re.data.service.REUserService;
 import com.lbs.re.data.service.ResourceService;
 import com.lbs.re.exception.localized.LocalizedException;
+import com.lbs.re.localization.LocaleConstants;
+import com.lbs.re.localization.LocalizerManager;
 import com.lbs.re.localization.ResourceEditorLocalizerWrapper;
 import com.lbs.re.model.ReResource;
 import com.lbs.re.ui.components.basic.REButton;
@@ -88,7 +92,10 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 	private REButton userSettings;
 	private REButton logout;
 	private REButton goResource;
+	private REButton language;
 	private ResourceGroupComboBox resourceGroupComboBox;
+
+	private UserSessionAttr userSession;
 
 	@Autowired
 	public MainView(NavigationManager navigationManager, SecuredViewAccessControl viewAccessControl, REUserService userService, PreferredDatabaseSession preferredDatabaseSession,
@@ -99,6 +106,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		this.resourceService = resourceService;
 		this.preferredDatabaseSession = preferredDatabaseSession;
 		this.resourceGroupComboBox = resourceGroupComboBox;
+		userSession = SecurityUtils.getCurrentUser(userService);
 	}
 
 	@PostConstruct
@@ -207,6 +215,16 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		logout.addClickListener(e -> logout());
 
+		language = new REButton("view.mainview.otherLanguage", VaadinIcons.GLOBE);
+		language.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+		language.addClickListener(e -> {
+			try {
+				changeLanguage(userSession.getLocale());
+			} catch (LocalizedException e1) {
+				e1.printStackTrace();
+			}
+		});
+
 		goResource.addClickListener(e -> {
 			int resourceNo = Integer.parseInt(resourceNr.getValue());
 			ReResource resource = resourceService.getResourceByNumberAndGroup(resourceNo, resourceGroupComboBox.getValue());
@@ -217,7 +235,7 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 			}
 		});
 
-		menu.addComponents(quickSearch, mainLabel, advancedSearch, resources, messages, userLabel, userSettings, users, logout);
+		menu.addComponents(quickSearch, mainLabel, advancedSearch, resources, messages, userLabel, userSettings, users, language, logout);
 		return menu;
 	}
 
@@ -251,4 +269,15 @@ public class MainView extends HorizontalLayout implements ViewDisplay, ResourceE
 		navigationManager.runAfterLeaveConfirmation(doLogout);
 	}
 
+	public void changeLanguage(Locale defaultLanguage) throws LocalizedException {
+		UI ui = getUI();
+		if (defaultLanguage.equals(LocaleConstants.LOCALE_TRTR)) {
+			LocalizerManager.loadLocaleForAll(LocaleConstants.LOCALE_ENUS);
+			userSession.setLocale(LocaleConstants.LOCALE_ENUS);
+		} else if (defaultLanguage.equals(LocaleConstants.LOCALE_ENUS)) {
+			LocalizerManager.loadLocaleForAll(LocaleConstants.LOCALE_TRTR);
+			userSession.setLocale(LocaleConstants.LOCALE_TRTR);
+		}
+		ui.getPage().reload();
+	}
 }
