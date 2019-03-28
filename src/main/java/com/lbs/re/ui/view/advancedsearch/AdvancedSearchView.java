@@ -20,6 +20,7 @@ import com.lbs.re.ui.components.combobox.UserComboBox;
 import com.lbs.re.ui.components.layout.REHorizontalLayout;
 import com.lbs.re.ui.components.layout.REVerticalLayout;
 import com.lbs.re.util.HasLogger;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Sizeable;
@@ -179,6 +180,7 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		btnSearch.addClickListener(e -> {
 			advancedSearchPresenter.search();
 		});
+		btnSearch.setClickShortcut(KeyCode.ENTER);
 
 		descriptionSearchFilterComboBox.setWidth("100%");
 		prefixSearchFilterComboBox.setWidth("100%");
@@ -194,10 +196,8 @@ public class AdvancedSearchView extends CssLayout implements Serializable, View,
 		modifiedUser.setCaption(getLocaleValue("view.advancedsearch.modifieduser"));
 		createdUser.setCaption(getLocaleValue("view.advancedsearch.createduser"));
 
-		mainLayout.addComponents(btnSearch, resourceNumberLayout, descriptionLayout, groupAndTypeLayout,
-				caseAndStateLayout, seperator, orderNumberLayout, tagNumberLayout, levelNumberLayout, prefixLayout,
-				infoLayout, turkishLayout, englishLayout, standardLayout, createdUser, modifiedUser, dateLayout,
-				matchCase, modifiedByMe);
+		mainLayout.addComponents(btnSearch, resourceNumberLayout, descriptionLayout, groupAndTypeLayout, caseAndStateLayout, seperator, orderNumberLayout, tagNumberLayout,
+				levelNumberLayout, prefixLayout, infoLayout, turkishLayout, englishLayout, standardLayout, createdUser, modifiedUser, dateLayout, matchCase, modifiedByMe);
 		return mainLayout;
 	}
 
